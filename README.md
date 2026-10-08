@@ -57,9 +57,11 @@ Package code: see `python/pyshape/*` and `python/README.md`.
 
 ## Citation
 
-If you use SHAPE, please cite the original work. The BibTeX entry is available in `Matlab/CITATION.bib`.
+The original SHAPE project was created by Vasileios Angelidakis. This repository builds on that work and includes a Python port. See the [original SHAPE GitHub repository](https://github.com/vsangelidakis/SHAPE).
 
-Angelidakis, V., Nadimi, S. and Utili, S., 2021. SHape Analyser for Particle Engineering (SHAPE): Seamless characterisation and simplification of particle morphology from imaging data. Computer Physics Communications 265, 107983.
+If you use SHAPE, please cite the original paper. The BibTeX entry is available in `Matlab/CITATION.bib`.
+
+Angelidakis, V., Nadimi, S. and Utili, S., 2021. [SHape Analyser for Particle Engineering (SHAPE): Seamless characterisation and simplification of particle morphology from imaging data](https://doi.org/10.1016/j.cpc.2021.107983). *Computer Physics Communications*, 265, 107983.
 
 ## License
 
