@@ -1,3 +1,17 @@
+Derivative-work notice
+----------------------
+This distribution is a derivative work based on SHAPE (SHape Analyser for
+Particle Engineering), originally created by Vasileios Angelidakis, Sadegh
+Nadimi, and Stefano Utili. It contains a Python port and subsequent
+reorganization and modifications. The repository was reorganized into its
+current Python-only layout on 2026-10-09. The original project is available at:
+https://github.com/vsangelidakis/SHAPE
+
+The original authors retain attribution for their work. This derivative
+distribution is made available under the GNU General Public License, version 3,
+whose complete text follows.
+
+
                     GNU GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007
 

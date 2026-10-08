@@ -115,13 +115,12 @@ def test_form_wrappers():
 
 
 def test_load_stl_and_area():
-    import os
     from pathlib import Path
     from pyshape import load_stl, surface_area
 
     # Resolve repository root from this test file location
-    repo_root = Path(__file__).resolve().parents[2]
-    stl_path = repo_root / "examples" / "Platonic_solids" / "Tetrahedron.stl"
+    repo_root = Path(__file__).resolve().parents[1]
+    stl_path = repo_root / "examples" / "assets" / "Tetrahedron_ascii.stl"
     assert stl_path.exists(), f"Missing STL for test: {stl_path}"
 
     nodes, faces = load_stl(stl_path)
