@@ -55,6 +55,36 @@ python examples/shapes_gallery.py
 
 The optional GUI viewer is in `examples/gui_shape_viewer.py`; it requires Tk and Matplotlib.
 
+## GUI
+
+A desktop viewer is available in `pyshape/gui.py` (requires Tk, Matplotlib, and
+for non-STL formats or the convexity metric, `trimesh` and `scipy`):
+
+```bash
+python -m pyshape.gui
+# or
+python examples/gui_shape_viewer.py
+```
+
+It lets you:
+
+- **Load compatible geometry** — STL natively, plus OBJ, PLY, OFF, glTF/GLB,
+  3MF and DAE via `trimesh`, which are transparently unified into the same
+  triangle-mesh representation used for STL.
+- **Review result parameters and tick which to export** — clicking
+  "Calculate results" computes surface area, volume, centroid, Wadell and
+  Krumbein sphericity, the surface orientation tensor (C, F, R), Potticary,
+  Kong & Fonseca and Zingg form parameters, convexity, and PCA-estimated
+  axes, each shown with a checkbox.
+- **Export to CSV** — by default the file is written next to the input as
+  `<name><suffix>.csv` (suffix defaults to `_SHAPE`, and is editable). Toggle
+  "Avoid overwrite" to automatically append a progressive counter
+  (`<name>_SHAPE_1.csv`, `_2.csv`, ...) instead of overwriting an existing
+  export.
+- **Preview the geometry** — a 3D view with an XYZ axes triad scaled to the
+  mesh's bounding box and a slow auto-rotation (pauses while you drag to
+  rotate manually).
+
 ## Tests
 
 Run the tests from the repository root:
