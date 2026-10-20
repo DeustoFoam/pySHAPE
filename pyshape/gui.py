@@ -26,6 +26,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolb
 from matplotlib.figure import Figure
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 
+from .analysis import UNIT_SCALES, prepare_mesh, scale_nodes
 from .gui_core import (
     LoadedGeometry,
     Metric,
@@ -36,8 +37,6 @@ from .gui_core import (
     make_export_path,
     write_csv,
 )
-
-UNIT_SCALES = {"as-is": 1.0, "mm": 1e-3, "cm": 1e-2, "m": 1.0, "inch": 0.0254}
 
 ROTATION_DEG_PER_TICK = 0.6
 ROTATION_INTERVAL_MS = 40
@@ -226,27 +225,14 @@ class ShapeGUI(tk.Tk):
             return
         try:
             geo = load_geometry(path)
+            nodes, _ = scale_nodes(geo.nodes, self.units_var.get())
+            nodes, faces = prepare_mesh(nodes, geo.faces)
         except Exception as exc:
             messagebox.showerror("Load error", str(exc))
             return
 
-        nodes = geo.nodes
-        units = self.units_var.get()
-        if units == "auto":
-            span = float((nodes.max(axis=0) - nodes.min(axis=0)).max())
-            if span > 10000:
-                scale = 1e-6
-            elif span > 10:
-                scale = 1e-3
-            else:
-                scale = 1.0
-        else:
-            scale = UNIT_SCALES.get(units, 1.0)
-        if scale != 1.0:
-            nodes = nodes * scale
-
         self.geo = geo
-        self.nodes, self.faces = nodes, geo.faces
+        self.nodes, self.faces = nodes, faces
         self.metrics = []
         self._clear_results()
 
@@ -254,7 +240,7 @@ class ShapeGUI(tk.Tk):
             f"{geo.source_path.name}\n"
             f"format: {geo.source_format.upper()}"
             + (" (converted to a triangle mesh)" if geo.converted_from_native else "")
-            + f"\nvertices: {nodes.shape[0]}  faces: {geo.faces.shape[0]}"
+            + f"\nvertices: {nodes.shape[0]}  faces: {faces.shape[0]}"
         )
         self.file_info_var.set(info)
         self._update_export_preview()

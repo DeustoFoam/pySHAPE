@@ -1,0 +1,4 @@
+include CITATION.bib
+include requirements.txt
+recursive-include examples *.py
+include examples/assets/Tetrahedron_ascii.stl

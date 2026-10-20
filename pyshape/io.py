@@ -1,16 +1,66 @@
 from __future__ import annotations
+from dataclasses import dataclass
+from importlib.util import find_spec
 from pathlib import Path
 from typing import Tuple
 import struct
 
 import numpy as np
 
-try:
-    import trimesh  # type: ignore
-    HAS_TRIMESH = True
-except Exception:
-    trimesh = None
-    HAS_TRIMESH = False
+HAS_TRIMESH = find_spec("trimesh") is not None
+
+
+def _get_trimesh():
+    if not HAS_TRIMESH:
+        return None
+    import trimesh
+
+    return trimesh
+
+
+NATIVE_EXTENSIONS = (".stl",)
+TRIMESH_EXTENSIONS = (".obj", ".ply", ".off", ".glb", ".gltf", ".3mf", ".dae")
+SUPPORTED_EXTENSIONS = NATIVE_EXTENSIONS + TRIMESH_EXTENSIONS
+
+
+@dataclass
+class LoadedGeometry:
+    """A triangle mesh and its source metadata; coordinates are not rescaled."""
+
+    nodes: np.ndarray
+    faces: np.ndarray
+    source_path: Path
+    source_format: str
+    converted_from_native: bool
+
+
+def load_geometry(path: str | Path) -> LoadedGeometry:
+    """Load STL, or another supported format with the ``mesh`` extra.
+
+    Some formats need additional trimesh format-specific dependencies.
+    Loader errors propagate to the caller.
+    """
+    p = Path(path)
+    if not p.is_file():
+        raise FileNotFoundError(f"File not found: {p}")
+    ext = p.suffix.lower()
+    if ext in NATIVE_EXTENSIONS:
+        nodes, faces = load_stl(p)
+    elif ext in TRIMESH_EXTENSIONS:
+        trimesh = _get_trimesh()
+        if trimesh is None:
+            raise ImportError(f"Loading '{ext}' requires pyshape[mesh].")
+        mesh = trimesh.load(str(p), process=True, force="mesh")
+        if not isinstance(mesh, trimesh.Trimesh):
+            mesh = mesh.dump(concatenate=True)
+        mesh.merge_vertices()
+        nodes = np.asarray(mesh.vertices, dtype=float)
+        faces = np.asarray(mesh.faces, dtype=np.int32)
+    else:
+        raise ValueError(
+            f"Unsupported file type '{ext}'. Supported: {', '.join(SUPPORTED_EXTENSIONS)}"
+        )
+    return LoadedGeometry(nodes, faces, p, ext.lstrip("."), ext not in NATIVE_EXTENSIONS)
 
 
 def _unique_rows_tol(points: np.ndarray, decimals: int = 12) -> Tuple[np.ndarray, np.ndarray]:
@@ -54,15 +104,17 @@ def _parse_stl_ascii(text: str) -> np.ndarray:
         if line.lower().startswith('vertex'):
             parts = line.split()
             # Format: vertex x y z
-            if len(parts) >= 4:
-                try:
-                    x, y, z = float(parts[1]), float(parts[2]), float(parts[3])
-                    cur.append((x, y, z))
-                except ValueError:
-                    continue
+            if len(parts) != 4:
+                raise ValueError("STL vertex must contain exactly three coordinates")
+            x, y, z = float(parts[1]), float(parts[2]), float(parts[3])
+            if not np.isfinite([x, y, z]).all():
+                raise ValueError("STL coordinates must be finite")
+            cur.append((x, y, z))
             if len(cur) == 3:
                 tris.append(cur)
                 cur = []
+    if cur:
+        raise ValueError("Incomplete triangle in ASCII STL")
     if not tris:
         raise ValueError("No triangles found in ASCII STL")
     return np.asarray(tris, dtype=np.float64)
@@ -94,7 +146,8 @@ def load_stl(path: str | Path, merge_vertices: bool = True, decimals: int = 12) 
         raise FileNotFoundError(f"STL not found: {p}")
 
     # Preferred: trimesh loader
-    if HAS_TRIMESH:
+    trimesh = _get_trimesh()
+    if trimesh is not None:
         mesh = trimesh.load(str(p), process=True, force="mesh")
         if not isinstance(mesh, trimesh.Trimesh):
             # Combine scene geometries
@@ -111,14 +164,14 @@ def load_stl(path: str | Path, merge_vertices: bool = True, decimals: int = 12) 
     if len(data) >= 84:
         try:
             triangles = _parse_stl_binary(data)
-        except Exception:
+        except ValueError:
             triangles = None
     if triangles is None:
         try:
-            text = data.decode('utf-8', errors='ignore')
+            text = data.decode('utf-8')
             triangles = _parse_stl_ascii(text)
-        except Exception as e:
-            raise ValueError(f"Could not parse STL file: {e}")
+        except (UnicodeDecodeError, ValueError) as e:
+            raise ValueError(f"Could not parse STL file: {e}") from e
 
     verts = triangles.reshape(-1, 3)
     if merge_vertices:

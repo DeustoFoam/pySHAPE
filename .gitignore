@@ -25,6 +25,7 @@ coverage.xml
 venv/
 env/
 pip-wheel-metadata/
+*.egg-info/
 dist/
 build/
 site/

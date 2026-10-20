@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>pySHAPE | Particle analysis</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <script src="/static/app.js" defer></script>
+</head>
+<body>
+  <header>
+    <h1>pySHAPE <span>Particle analysis</span></h1>
+    <a href="/docs">API documentation</a>
+  </header>
+  <main>
+    <section class="controls" aria-label="Analysis controls">
+      <form id="analyze-form">
+        <h2>Load geometry</h2>
+        <label for="file">STL file (up to 32 MiB)</label>
+        <input id="file" name="file" type="file" accept=".stl" required>
+        <label for="units">Input units</label>
+        <select id="units" name="units">
+          <option value="as-is">As-is (no conversion)</option>
+          <option value="mm">Millimetres</option>
+          <option value="cm">Centimetres</option>
+          <option value="m">Metres</option>
+          <option value="inch">Inches</option>
+          <option value="auto">Auto (legacy size heuristic)</option>
+        </select>
+        <p class="hint">Explicit units convert lengths to metres, areas to m², and volumes to m³.
+          Auto is a guess, not unit detection.</p>
+        <button id="analyze" type="submit">Calculate results</button>
+      </form>
+      <p id="status" role="status" aria-live="polite">Choose an STL file to begin.</p>
+      <section aria-labelledby="export-heading">
+        <h2 id="export-heading">Export results</h2>
+        <label for="suffix">Filename suffix</label>
+        <input id="suffix" value="_SHAPE">
+        <button id="export" type="button" disabled>Download selected CSV</button>
+        <p class="hint">Downloads use your browser's save and duplicate-filename settings.</p>
+      </section>
+    </section>
+    <section class="workspace" aria-label="Geometry and results">
+      <section class="preview-panel">
+        <div class="preview-heading">
+          <h2>Geometry preview</h2>
+          <label><input id="rotate" type="checkbox" checked> Auto-rotate</label>
+        </div>
+        <canvas id="preview" width="800" height="360"
+          aria-label="3D mesh preview. Drag to rotate, scroll to zoom."></canvas>
+        <p id="preview-info" class="hint">Drag to rotate. Scroll to zoom.</p>
+      </section>
+      <section aria-labelledby="results-heading">
+        <div class="preview-heading">
+          <h2 id="results-heading">Results</h2>
+          <div>
+            <button id="select-all" type="button">Select all</button>
+            <button id="select-none" type="button">Select none</button>
+          </div>
+        </div>
+        <p id="metadata" class="hint"></p>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Export</th><th>Parameter</th><th>Value</th></tr></thead>
+            <tbody id="results"></tbody>
+          </table>
+        </div>
+      </section>
+    </section>
+  </main>
+</body>
+</html>
