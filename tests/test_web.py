@@ -22,10 +22,11 @@ def client():
 def test_static_app_and_health(client):
     assert client.get("/api/health").json() == {"status": "ok"}
     assert "Calculate results" in client.get("/").text
-    for name in ["app.js", "style.css"]:
+    for name in ["app.js", "style.css", "pyshape-icon.svg", "pyshape-logo.svg"]:
         response = client.get(f"/static/{name}")
         assert response.status_code == 200
         assert response.text
+    assert 'rel="icon"' in client.get("/").text
     assert client.get("/docs").status_code == 200
     assert "/api/analyze" in client.get("/openapi.json").json()["paths"]
 

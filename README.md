@@ -1,4 +1,8 @@
-# SHAPE Python
+![pySHAPE: particle geometry for Python](pyshape/static/pyshape-logo.svg)
+
+# pySHAPE
+
+[Features](#features) · [Project layout](#project-layout) · [Installation](#requirements-and-installation) · [Quick start](#quick-start) · [Input and results](#input-and-result-contract) · [HTTP API & Web GUI](#optional-http-api-and-html-gui) · [Examples](#examples) · [Desktop GUI](#desktop-gui) · [Tests](#tests) · [Publishing](#building-and-publishing) · [Citation](#citation-and-acknowledgement) · [License](#license) · [Branding](#logo-and-branding)
 
 This repository contains a lightweight Python port of selected functionality from SHAPE, the SHape Analyser for Particle Engineering. It is derivative work based on the original project by Vasileios Angelidakis, Sadegh Nadimi, and Stefano Utili. Visit the [original SHAPE GitHub repository](https://github.com/vsangelidakis/SHAPE) for the full MATLAB toolbox and project history.
 
@@ -171,6 +175,11 @@ mesh preview supports drag rotation, zoom, an XYZ triad, and auto-rotation.
 For large meshes only the preview is sampled (at most 5000 triangles);
 analysis always uses the full mesh.
 
+![pySHAPE browser interface showing a generated multi-sphere particle, its solid-union preview, and grouped analysis results](docs/images/web-viewer.png)
+
+*Browser viewer analyzing a generated three-sphere demonstration mesh as one
+solid particle. The logo, mesh, and screenshot shown here were created for pySHAPE.*
+
 The optional HTTP adapter accepts **self-contained STL files only**, up to
 32 MiB. Other formats remain available through Python and the desktop viewer.
 Uploads use temporary files that are removed after each request; no server-side
@@ -301,3 +310,24 @@ The package also implements descriptors and methods reported by Wadell (1932), K
 ## License
 
 This is derivative work based on the original SHAPE project and is distributed under the GNU General Public License, version 3. See [LICENSE](LICENSE) for the license terms and attribution.
+
+### Logo and branding
+
+The [pySHAPE wordmark](pyshape/static/pyshape-logo.svg) and
+[particle icon](pyshape/static/pyshape-icon.svg) are new vector artwork created
+for this project in 2026 and distributed under GPL-3.0-only with the repository.
+They use a generic triangulated-particle theme, not a traced or edited copy of
+the original SHAPE logo. The SVG files are the editable source artwork.
+
+The upstream [SHAPE license](https://github.com/vsangelidakis/SHAPE/blob/master/LICENSE)
+is GPLv3. At the time of review (2026-10-20), no logo-specific license or
+trademark policy was found in the upstream README or figures directory.
+GPLv3 permits modification of works covered by it, subject to its conditions,
+but that alone does not establish that a particular logo is covered or clear
+trademark rights. Section 7(e) explicitly permits withholding trademark rights.
+Direct reuse or adaptation of the upstream mark should therefore be confirmed
+with its rights holders before public branding use.
+
+pySHAPE is a separate derivative project; its name and artwork do not imply
+endorsement by the original SHAPE authors or Newcastle University. This is a
+record of the licensing checks made, not legal advice or trademark clearance.

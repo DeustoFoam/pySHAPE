@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 150" width="600" height="150" role="img" aria-labelledby="title desc">
+  <title id="title">pySHAPE</title>
+  <desc id="desc">A blue and teal triangulated particle beside the pySHAPE wordmark. Particle geometry for Python.</desc>
+  <metadata>Original pySHAPE artwork, 2026. SPDX-License-Identifier: GPL-3.0-only. Not the upstream SHAPE logo.</metadata>
+  <rect width="600" height="150" rx="16" fill="#f3f6fa"/>
+  <g transform="translate(12 11)">
+    <path d="M49 10 96 23 119 66 89 109 41 119 9 83 15 38Z" fill="#172e48"/>
+    <path d="m49 16 43 12-26 24Z" fill="#6cd9d0"/>
+    <path d="m49 16 17 36-45-11Z" fill="#37b8bd"/>
+    <path d="m21 41 45 11-51 29Z" fill="#218da8"/>
+    <path d="m15 81 51-29-20 60Z" fill="#17629b"/>
+    <path d="m46 112 20-60 20 52Z" fill="#244d80"/>
+    <path d="m66 52 26-24 21 38Z" fill="#3fb8bd"/>
+    <path d="m66 52 47 14-27 38Z" fill="#23899f"/>
+    <g fill="none" stroke="#e6ffff" stroke-opacity=".45" stroke-width="1.5" stroke-linejoin="round">
+      <path d="m49 16 17 36 26-24M21 41l45 11-51 29m31 31 20-60 20 52m27-38L66 52"/>
+    </g>
+    <circle cx="66" cy="52" r="6" fill="#ffca65" stroke="#172e48" stroke-width="2"/>
+  </g>
+  <text x="155" y="91" font-family="DejaVu Sans, Arial, sans-serif" font-size="66" font-weight="600" letter-spacing="-2"><tspan fill="#17629b">py</tspan><tspan fill="#172e48">SHAPE</tspan></text>
+  <text x="159" y="121" fill="#526478" font-family="DejaVu Sans, Arial, sans-serif" font-size="17" letter-spacing="1.2">PARTICLE GEOMETRY FOR PYTHON</text>
+</svg>

@@ -33,4 +33,4 @@ pyshape-web = "pyshape.web:main"
 include = ["pyshape*"]
 
 [tool.setuptools.package-data]
-pyshape = ["static/*.html", "static/*.css", "static/*.js"]
+pyshape = ["static/*.html", "static/*.css", "static/*.js", "static/*.svg"]

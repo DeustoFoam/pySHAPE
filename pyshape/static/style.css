@@ -3,7 +3,8 @@
 body { margin: 0; }
 header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1rem 2rem; background: #172e48; color: white; }
 header a { color: #bfe1ff; }
-h1 { margin: 0; font-size: 1.7rem; }
+h1 { display: flex; align-items: center; flex-wrap: wrap; gap: .6rem; margin: 0; font-size: 1.7rem; }
+.brand-icon { flex: none; }
 h1 span { font-size: 1rem; font-weight: 400; margin-left: .7rem; }
 h2 { font-size: 1.1rem; margin: 0 0 .8rem; }
 main { max-width: 1500px; display: grid; grid-template-columns: 320px minmax(0, 1fr); gap: 1.5rem; margin: auto; padding: 1.5rem; }
