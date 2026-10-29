@@ -11,7 +11,7 @@ The Python package provides tools for 3D particle geometry and form analysis. It
 ## Features
 
 - Geometry: triangle-mesh surface area and tetrahedral-mesh volume, centroid, and inertia
-- Form: convexity, Wadell and Krumbein sphericities, Zingg ratios, and Potticary and Kong-Fonseca flatness/elongation parameters
+- Form: convexity, Wadell and Krumbein sphericities, Zingg ratios, and Potticary, Kong-Fonseca and Angelidakis et al. (2021) flatness/elongation parameters
 - Surface orientation tensor
 - Surface roughness statistics
 - STL loading, with `trimesh` support and a built-in fallback
@@ -129,7 +129,7 @@ does not derive surface roughness or tetrahedral inertia automatically.
   existing `"auto"` default.
 - Results contain mesh counts, surface area, volume, centroid, Wadell and
   Krumbein sphericity, orientation indices/eigenvalues, PCA-estimated axes,
-  Potticary/Kong-Fonseca/Zingg parameters, and convexity. PCA axes are
+  Potticary/Kong-Fonseca/Angelidakis/Zingg parameters, and convexity. PCA axes are
   estimates, not exact minimum bounding-box dimensions.
 - Closed, orientable mesh shells have their triangle winding corrected
   automatically, including wholly reversed shells; the original arrays/files
@@ -305,7 +305,7 @@ Angelidakis, V., Nadimi, S. and Utili, S., 2021. [SHape Analyser for Particle En
 
 The BibTeX citation is available in [CITATION.bib](CITATION.bib). The original MATLAB project and its development are credited to Vasileios Angelidakis, Sadegh Nadimi, and Stefano Utili at [vsangelidakis/SHAPE](https://github.com/vsangelidakis/SHAPE).
 
-The package also implements descriptors and methods reported by Wadell (1932), Krumbein (1941), Zingg (1935), Potticary et al. (2015), Kong and Fonseca (2018), and Bagi and Orosz (2020), as applicable.
+The package also implements descriptors and methods reported by Wadell (1932), Krumbein (1941), Zingg (1935), Potticary et al. (2015), Kong and Fonseca (2018), Angelidakis et al. (2021), and Bagi and Orosz (2020), as applicable.
 
 ## License
 

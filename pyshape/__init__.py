@@ -11,6 +11,7 @@ from .form import (
 	form_functions_2,
 	form_parameters_kong_and_fonseca,
 	form_parameters_potticary_et_al,
+	form_parameters_angelidakis_et_al,
 	form_parameters_zingg,
 )
 from .io import LoadedGeometry, load_geometry, load_stl
@@ -34,6 +35,7 @@ __all__ = [
 	"form_functions_2",
 	"form_parameters_kong_and_fonseca",
 	"form_parameters_potticary_et_al",
+	"form_parameters_angelidakis_et_al",
 	"form_parameters_zingg",
 	"load_stl",
 	"sa",

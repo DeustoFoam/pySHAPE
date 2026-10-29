@@ -13,6 +13,7 @@ from .export import csv_text
 from .form import (
     form_parameters_kong_and_fonseca,
     form_parameters_potticary_et_al,
+    form_parameters_angelidakis_et_al,
     form_parameters_zingg,
     sphericity_krumbein,
     sphericity_wadell,
@@ -337,6 +338,7 @@ def compute_metrics(nodes: ArrayLike, faces: ArrayLike) -> list[Metric]:
     for prefix, label, function in (
         ("potticary", "Potticary et al.", form_parameters_potticary_et_al),
         ("kongfonseca", "Kong & Fonseca", form_parameters_kong_and_fonseca),
+        ("angelidakis", "Angelidakis et al.", form_parameters_angelidakis_et_al),
     ):
         flatness, elongation = function(short, intermediate, long)
         add(f"{prefix}_flatness", f"Flatness ({label})", flatness, "Form parameters")
