@@ -96,6 +96,7 @@ def test_form_wrappers():
         form_functions_2,
         form_parameters_kong_and_fonseca,
         form_parameters_potticary_et_al,
+        form_parameters_angelidakis_et_al,
         form_parameters_zingg,
     )
     con, spW = form_functions_1(surface_area=10.0, volume=5.0, volume_convex_hull=6.25)
@@ -112,6 +113,12 @@ def test_form_wrappers():
     denom = 1.0+2.0+4.0
     assert np.allclose(form_parameters_potticary_et_al(1.0, 2.0, 4.0), (2*(2-1)/denom, (4-2)/denom))
     assert np.allclose(form_parameters_zingg(1.0, 2.0, 4.0), (0.5, 0.5))
+    # SHAPE: flatness = b²/(ac+b²) - c/(a+c), elongation = ac/(ac+b²) - c/(a+c).
+    assert np.allclose(form_parameters_angelidakis_et_al(1.0, 2.0, 4.0), (4/8 - 1/5, 4/8 - 1/5))
+    assert np.allclose(form_parameters_angelidakis_et_al(1.0, 1.0, 1.0), (0.0, 0.0))
+    flat, elong = form_parameters_angelidakis_et_al(1.0, 3.0, 5.0)
+    assert np.isclose(flat + elong, (5.0 - 1.0) / (5.0 + 1.0))
+    assert np.allclose(form_parameters_angelidakis_et_al(1.0, 5.0, 5.0), (25/30 - 1/6, 5/30 - 1/6))
 
 
 def test_load_stl_and_area():

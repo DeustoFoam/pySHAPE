@@ -139,6 +139,22 @@ def form_parameters_potticary_et_al(S: float, I: float, L: float) -> Tuple[float
     return float(flatness), float(elongation)
 
 
+def form_parameters_angelidakis_et_al(S: float, I: float, L: float) -> Tuple[float, float]:
+    """Flatness and elongation of Angelidakis et al. (2021), as in SHAPE's
+    Form_parameters_Angelidakis_et_al.m, with c, b, a = S, I, L.
+
+    Both lie in [0, 1] and flatness + elongation = (L - S) / (L + S), so the
+    feasible chart domain is the triangle below flatness + elongation = 1.
+    A sphere (S = I = L) maps to the origin.
+    """
+    if L <= 0 or I < 0 or S < 0:
+        raise ValueError("dimensions must be non-negative and L > 0")
+    a, b, c = L, I, S
+    flatness = b * b / (a * c + b * b) - c / (a + c)
+    elongation = a * c / (a * c + b * b) - c / (a + c)
+    return float(flatness), float(elongation)
+
+
 def form_parameters_zingg(S: float, I: float, L: float) -> Tuple[float, float]:
     c_over_b = S / I if I != 0 else 0.0
     b_over_a = I / L if L != 0 else 0.0

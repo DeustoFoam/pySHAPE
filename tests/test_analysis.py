@@ -28,7 +28,7 @@ def test_public_api_and_result_shape(tetra_mesh):
     assert result.values["surface_area"] == pytest.approx((3 + np.sqrt(3)) / 2)
     assert result.values["volume"] == pytest.approx(1 / 6)
     assert result.values["centroid_x"] == pytest.approx(0.25)
-    assert len(result.metrics) == len(result.values) == 25
+    assert len(result.metrics) == len(result.values) == 27
     assert set(result.values) == {
         "n_vertices", "n_faces", "surface_area", "volume",
         "centroid_x", "centroid_y", "centroid_z", "sphericity_wadell",
@@ -37,6 +37,7 @@ def test_public_api_and_result_shape(tetra_mesh):
         "axis_S", "axis_I", "axis_L", "sphericity_krumbein",
         "potticary_flatness", "potticary_elongation",
         "kongfonseca_flatness", "kongfonseca_elongation",
+        "angelidakis_flatness", "angelidakis_elongation",
         "zingg_SI", "zingg_IL", "convexity",
     }
     assert not any(metric.error for metric in result.metrics if metric.key != "convexity")
@@ -105,7 +106,7 @@ def test_open_mesh_volume_is_explicit(tetra_mesh):
     faces = faces[:-1]
     result = analyze_mesh(nodes, faces)
     assert result.values["surface_area"] > 0
-    assert len(result.metrics) == 25
+    assert len(result.metrics) == 27
     for key in ["volume", "centroid_x", "centroid_y", "centroid_z", "sphericity_wadell", "convexity"]:
         metric = next(m for m in result.metrics if m.key == key)
         assert metric.value is None
