@@ -45,3 +45,6 @@ logs/
 # Windows
 ehthumbs.db
 Desktop.ini
+# Validation work files
+validation/_work/
+validation/_work_performance/

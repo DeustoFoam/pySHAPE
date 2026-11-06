@@ -1,0 +1,62 @@
+cff-version: 1.2.0
+message: >-
+  If you use pySHAPE, please cite this software and the original SHAPE paper
+  (Angelidakis, Nadimi and Utili, 2021), from which pySHAPE is derived.
+title: "pySHAPE: a Python library and graphical interfaces for three-dimensional particle shape characterisation"
+type: software
+version: 0.2.0
+date-released: 2026-11-06
+license: GPL-3.0-only
+repository-code: "https://github.com/DeustoFoam/pySHAPE"
+keywords:
+  - particle shape
+  - morphology
+  - sphericity
+  - oriented bounding box
+  - discrete element method
+  - Python
+authors:
+  - family-names: Pedrolli
+    given-names: Lorenzo
+    affiliation: University of Deusto
+    orcid: "https://orcid.org/0000-0001-7120-3401"
+    email: l.pedrolli@deusto.es
+  - family-names: Lopez
+    given-names: Alejandro
+    affiliation: University of Deusto
+    orcid: "https://orcid.org/0000-0001-5498-1746"
+  - family-names: Achiaga
+    given-names: Beatriz
+    affiliation: University of Deusto
+    orcid: "https://orcid.org/0000-0002-5184-7944"
+  - family-names: Angelidakis
+    given-names: Vasileios
+    affiliation: "Queen's University Belfast"
+    orcid: "https://orcid.org/0000-0002-0788-115X"
+references:
+  - type: article
+    title: "SHape Analyser for Particle Engineering (SHAPE): Seamless characterisation and simplification of particle morphology from imaging data"
+    authors:
+      - family-names: Angelidakis
+        given-names: Vasileios
+      - family-names: Nadimi
+        given-names: Sadegh
+      - family-names: Utili
+        given-names: Stefano
+    journal: Computer Physics Communications
+    volume: 265
+    start: 107983
+    year: 2021
+    doi: 10.1016/j.cpc.2021.107983
+  - type: software
+    title: "SHape Analyser for Particle Engineering (SHAPE)"
+    authors:
+      - family-names: Angelidakis
+        given-names: Vasileios
+      - family-names: Nadimi
+        given-names: Sadegh
+      - family-names: Utili
+        given-names: Stefano
+    doi: 10.5281/zenodo.4001670
+    repository-code: "https://github.com/vsangelidakis/SHAPE"
+    year: 2020
