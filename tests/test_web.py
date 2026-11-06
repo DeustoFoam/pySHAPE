@@ -1,4 +1,5 @@
 import csv
+import numpy as np
 import io
 import sys
 
@@ -135,3 +136,41 @@ def test_multisolid_api_and_preview_use_union(client, cube_mesh, monkeypatch):
         unavailable = client.post(endpoint, files=files)
         assert unavailable.status_code == 503
         assert "pyshape[mesh]" in unavailable.json()["detail"]
+
+
+def test_api_axes_method(client, stl_path):
+    response = client.post(
+        "/api/analyze",
+        files={"file": (stl_path.name, stl_path.read_bytes())},
+        data={"axes": "min_volume"},
+    )
+    assert response.status_code == 200
+    assert response.json() == analyze_file(stl_path, axes="min_volume").to_dict()
+    assert response.json()["axes_method"] == "min_volume"
+    bad = client.post(
+        "/api/analyze",
+        files={"file": (stl_path.name, stl_path.read_bytes())},
+        data={"axes": "feret"},
+    )
+    assert bad.status_code == 422
+    assert "Unknown axes method" in bad.json()["detail"]
+
+
+def test_large_preview_is_simplified_not_sampled(client, tmp_path, monkeypatch):
+    trimesh = pytest.importorskip("trimesh")
+    mesh = trimesh.creation.icosphere(subdivisions=4)  # 5120 faces
+    path = tmp_path / "sphere.stl"
+    mesh.export(path)
+    monkeypatch.setattr(web, "MAX_PREVIEW_FACES", 1000)
+    result = client.post(
+        "/api/analyze",
+        files={"file": (path.name, path.read_bytes())},
+        data={"include_preview": "true"},
+    ).json()
+    preview = result["preview"]
+    assert preview["total_faces"] == 5120
+    assert 0 < preview["shown_faces"] <= 1000
+    # Simplified (most of the budget used), not a sparse subset of faces.
+    assert preview["shown_faces"] > 500
+    corners = np.asarray(preview["triangles"]).reshape(-1, 3)
+    assert np.abs(np.linalg.norm(corners, axis=1)).max() <= 0.51

@@ -28,10 +28,11 @@ def test_public_api_and_result_shape(tetra_mesh):
     assert result.values["surface_area"] == pytest.approx((3 + np.sqrt(3)) / 2)
     assert result.values["volume"] == pytest.approx(1 / 6)
     assert result.values["centroid_x"] == pytest.approx(0.25)
-    assert len(result.metrics) == len(result.values) == 27
+    assert len(result.metrics) == len(result.values) == 30
     assert set(result.values) == {
         "n_vertices", "n_faces", "surface_area", "volume",
-        "centroid_x", "centroid_y", "centroid_z", "sphericity_wadell",
+        "centroid_x", "centroid_y", "centroid_z",
+        "inertia_I1", "inertia_I2", "inertia_I3", "sphericity_wadell",
         "orientation_C", "orientation_F", "orientation_R",
         "orientation_eig1", "orientation_eig2", "orientation_eig3",
         "axis_S", "axis_I", "axis_L", "sphericity_krumbein",
@@ -42,7 +43,8 @@ def test_public_api_and_result_shape(tetra_mesh):
     }
     assert not any(metric.error for metric in result.metrics if metric.key != "convexity")
     payload = json.loads(json.dumps(result.to_dict(), allow_nan=False))
-    assert set(payload) == {"source_name", "input_units", "scale_factor", "metrics"}
+    assert set(payload) == {"source_name", "input_units", "scale_factor", "axes_method", "metrics"}
+    assert payload["axes_method"] == "pca"
     assert set(payload["metrics"][0]) == {
         "key", "label", "value", "group", "default_selected", "error",
     }
@@ -106,8 +108,9 @@ def test_open_mesh_volume_is_explicit(tetra_mesh):
     faces = faces[:-1]
     result = analyze_mesh(nodes, faces)
     assert result.values["surface_area"] > 0
-    assert len(result.metrics) == 27
-    for key in ["volume", "centroid_x", "centroid_y", "centroid_z", "sphericity_wadell", "convexity"]:
+    assert len(result.metrics) == 30
+    for key in ["volume", "centroid_x", "centroid_y", "centroid_z", "inertia_I1",
+                "sphericity_wadell", "convexity"]:
         metric = next(m for m in result.metrics if m.key == key)
         assert metric.value is None
         assert "requires" in metric.error
@@ -192,3 +195,54 @@ def test_csv_selection_and_default_export(tetra_mesh, tmp_path):
         result.to_csv([])
     with pytest.raises(ValueError, match="unavailable"):
         analyze_mesh(tetra_mesh[0], tetra_mesh[1][:-1]).to_csv(["volume"])
+
+
+def test_inertia_matches_tetrahedral_reference(tetra_mesh):
+    from pyshape import volume_centroid_inertia_tensor
+
+    nodes, faces = tetra_mesh
+    expected = volume_centroid_inertia_tensor(nodes, [[0, 1, 2, 3]])[3].diagonal()
+    values = analyze_mesh(nodes + [2, -1, 5], faces).values
+    got = [values[f"inertia_I{i}"] for i in (1, 2, 3)]
+    assert got == pytest.approx(expected, rel=1e-12)
+
+
+def test_inertia_of_cuboid_and_units(cube_mesh):
+    nodes, faces = cube_mesh
+    a, b, c = 1.0, 2.0, 3.0
+    values = analyze_mesh(nodes * [a, b, c], faces, units="mm").values
+    mass = a * b * c
+    expected = sorted([mass * (b * b + c * c) / 12, mass * (a * a + c * c) / 12,
+                       mass * (a * a + b * b) / 12])
+    got = [values[f"inertia_I{i}"] for i in (1, 2, 3)]
+    assert got == pytest.approx([e * 1e-15 for e in expected], rel=1e-12)
+
+
+def test_fast_and_general_orientation_paths_agree(cube_mesh, monkeypatch):
+    nodes, faces = cube_mesh
+    two_shells = (np.vstack((nodes, nodes + 5)), np.vstack((faces, faces + len(nodes))))
+    for mesh in ((nodes, faces), (nodes, faces[:, ::-1]), two_shells):
+        expected = analysis.prepare_mesh(*mesh) if mesh is not two_shells else None
+        fast = analysis._consistent_components(
+            len(mesh[1]), *_edge_pairs(mesh[1]))
+        assert fast is not None
+        if expected is None:
+            assert len(fast) == 2
+            continue
+        with monkeypatch.context() as patch:
+            patch.setitem(sys.modules, "scipy.sparse", None)
+            general = analysis.prepare_mesh(*mesh)
+        np.testing.assert_array_equal(expected[1], general[1])
+
+
+def _edge_pairs(faces):
+    faces = np.asarray(faces)
+    edges = np.concatenate((faces[:, [0, 1]], faces[:, [1, 2]], faces[:, [2, 0]]))
+    _, inverse = np.unique(np.sort(edges, axis=1), axis=0, return_inverse=True)
+    return edges, np.argsort(inverse.ravel(), kind="stable").reshape(-1, 2)
+
+
+def test_micrometre_units(tetra_mesh):
+    result = analyze_mesh(*tetra_mesh, units="um")
+    assert result.scale_factor == 1e-6
+    assert result.values["volume"] == pytest.approx(1e-18 / 6)

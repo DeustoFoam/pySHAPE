@@ -23,10 +23,12 @@ from typing import Dict, Optional
 import numpy as np
 
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
+from matplotlib.colors import to_rgb
 from matplotlib.figure import Figure
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 
 from .analysis import UNIT_SCALES, prepare_mesh, scale_nodes
+from .bounding import AXES_METHODS
 from .gui_core import (
     LoadedGeometry,
     Metric,
@@ -39,7 +41,18 @@ from .gui_core import (
 )
 
 ROTATION_DEG_PER_TICK = 0.6
+EDGE_FACE_LIMIT = 4000
 ROTATION_INTERVAL_MS = 40
+
+
+def _shaded_colors(nodes: np.ndarray, faces: np.ndarray, base: str = "lightsteelblue") -> np.ndarray:
+    """Lambertian face colours for outward-oriented triangles (fixed light)."""
+    normals = np.cross(nodes[faces[:, 1]] - nodes[faces[:, 0]], nodes[faces[:, 2]] - nodes[faces[:, 0]])
+    lengths = np.linalg.norm(normals, axis=1)
+    normals = np.divide(normals, lengths[:, None], out=np.zeros_like(normals), where=lengths[:, None] > 0)
+    light = np.array([0.15, -1.1, 0.95])
+    intensity = 0.3 + 0.7 * np.clip(normals @ (light / np.linalg.norm(light)), 0.0, 1.0)
+    return np.clip(np.asarray(to_rgb(base))[None, :] * intensity[:, None], 0.0, 1.0)
 
 
 class ShapeGUI(tk.Tk):
@@ -73,7 +86,7 @@ class ShapeGUI(tk.Tk):
         left.grid(row=0, column=0, sticky="nsw")
         right = ttk.Frame(self, padding=0)
         right.grid(row=0, column=1, sticky="nsew")
-        right.rowconfigure(0, weight=1)
+        right.rowconfigure(0, weight=0)
         right.columnconfigure(0, weight=1)
 
         self._build_file_section(left)
@@ -95,8 +108,16 @@ class ShapeGUI(tk.Tk):
         ttk.Label(parent, text="Units").grid(row=row, column=0, sticky="w", pady=(6, 0))
         self.units_var = tk.StringVar(value="auto")
         ttk.Combobox(
-            parent, textvariable=self.units_var, state="readonly", width=10,
+            parent, textvariable=self.units_var, state="readonly", width=12,
             values=["auto", *UNIT_SCALES.keys()],
+        ).grid(row=row, column=1, sticky="w", pady=(6, 0))
+        row += 1
+
+        ttk.Label(parent, text="Principal axes").grid(row=row, column=0, sticky="w", pady=(6, 0))
+        self.axes_var = tk.StringVar(value="pca")
+        ttk.Combobox(
+            parent, textvariable=self.axes_var, state="readonly", width=12,
+            values=list(AXES_METHODS),
         ).grid(row=row, column=1, sticky="w", pady=(6, 0))
         row += 1
 
@@ -260,7 +281,7 @@ class ShapeGUI(tk.Tk):
             messagebox.showwarning("No mesh", "Load a geometry file first.")
             return
         try:
-            self.metrics = compute_metrics(self.nodes, self.faces)
+            self.metrics = compute_metrics(self.nodes, self.faces, axes=self.axes_var.get())
         except Exception as exc:
             messagebox.showerror("Compute error", str(exc))
             return
@@ -354,8 +375,11 @@ class ShapeGUI(tk.Tk):
             self.canvas.draw()
             return
         verts = [self.nodes[idx] for idx in self.faces]
+        # Edges help on coarse meshes but turn dense meshes black; shade instead.
+        dense = len(self.faces) > EDGE_FACE_LIMIT
         coll = Poly3DCollection(
-            verts, facecolors="lightsteelblue", edgecolors="k", linewidths=0.4, alpha=0.9
+            verts, facecolors=_shaded_colors(self.nodes, self.faces),
+            edgecolors="none" if dense else "k", linewidths=0.3,
         )
         self.ax.add_collection3d(coll)
 

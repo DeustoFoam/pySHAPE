@@ -1,7 +1,10 @@
 """Particle analysis as a Python library; UI dependencies are optional."""
 
+__version__ = "0.2.0"
+
 from .analysis import AnalysisResult, Metric, analyze_file, analyze_mesh, compute_metrics
-from .geometry import surface_area, volume_centroid_inertia_tensor
+from .bounding import AXES_METHODS, OrientedBox, min_volume_box, oriented_box, pca_box
+from .geometry import closed_surface_inertia_tensor, surface_area, volume_centroid_inertia_tensor
 from .form import (
 	convexity,
 	sphericity_wadell,
@@ -25,8 +28,14 @@ __all__ = [
 	"analyze_mesh",
 	"compute_metrics",
 	"load_geometry",
+	"AXES_METHODS",
+	"OrientedBox",
+	"min_volume_box",
+	"oriented_box",
+	"pca_box",
 	"surface_area",
 	"volume_centroid_inertia_tensor",
+	"closed_surface_inertia_tensor",
 	"convexity",
 	"sphericity_wadell",
 	"sphericity_krumbein",
