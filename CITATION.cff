@@ -4,7 +4,7 @@ message: >-
   (Angelidakis, Nadimi and Utili, 2021), from which pySHAPE is derived.
 title: "pySHAPE: a Python library and graphical interfaces for three-dimensional particle shape characterisation"
 type: software
-version: 0.1.0
+version: 0.1.1
 doi: 10.5281/zenodo.24004679
 date-released: 2026-11-06
 license: GPL-3.0-only
