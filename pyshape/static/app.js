@@ -3,6 +3,7 @@
 const $ = (id) => document.getElementById(id);
 let analysisFile = null;
 let analysisUnits = "as-is";
+let analysisAxes = "pca";
 let busy = false;
 let triangles = [];
 let yaw = -0.6, pitch = 0.4, zoom = 1;
@@ -55,7 +56,7 @@ function renderResults(metrics) {
       const value = document.createElement("td");
       value.textContent = metric.value === null
         ? `n/a (${metric.error || "unavailable"})`
-        : Number(metric.value).toPrecision(6);
+        : Number.isInteger(metric.value) ? String(metric.value) : Number(metric.value).toPrecision(6);
       if (metric.value === null) value.className = "unavailable";
       row.append(selection, label, value);
       $("results").append(row);
@@ -81,22 +82,27 @@ $("analyze-form").addEventListener("submit", async (event) => {
   setBusy(true);
   status("Calculating...");
   const units = $("units").value;
+  const axes = $("axes").value;
   const data = new FormData();
   data.append("file", file);
   data.append("units", units);
+  data.append("axes", axes);
   data.append("include_preview", "true");
   try {
     const result = await (await post("/api/analyze", data)).json();
     renderResults(result.metrics);
     analysisFile = file;
     analysisUnits = units;
+    analysisAxes = axes;
     triangles = result.preview.triangles;
     zoom = 1;
-    $("metadata").textContent = `${result.source_name} | Input: ${result.input_units} | Scale: ${result.scale_factor}. `
+    $("metadata").textContent = `${result.source_name} | Input: ${result.input_units} | Scale: ${result.scale_factor}`
+      + ` | Axes: ${result.axes_method === "min_volume" ? "minimum-volume box" : "PCA"}. `
       + (units === "as-is" ? "Results use input length units." : "Results use metres (area: m², volume: m³).")
       + (units === "auto" ? " Units were guessed using the legacy size heuristic." : "");
     $("preview-info").textContent = `Showing ${result.preview.shown_faces} of ${result.preview.total_faces} faces. `
-      + "Preview may be sampled; calculations always use the full mesh. Drag to rotate, scroll to zoom.";
+      + "Large meshes are simplified for display only; calculations always use the full mesh. "
+      + "Drag to rotate, scroll to zoom.";
     const failed = result.metrics.filter((metric) => metric.error).length;
     status(failed ? `Analysis complete. ${failed} parameters unavailable; see results.` : "Analysis complete.");
     draw();
@@ -125,6 +131,7 @@ $("export").addEventListener("click", async () => {
   const data = new FormData();
   data.append("file", analysisFile);
   data.append("units", analysisUnits);
+  data.append("axes", analysisAxes);
   data.append("keys", keys.join(","));
   setBusy(true);
   status("Preparing CSV...");

@@ -9,6 +9,7 @@ from typing import Iterable, Optional
 import numpy as np
 from numpy.typing import ArrayLike
 
+from .bounding import AXES_METHODS, oriented_box
 from .export import csv_text
 from .form import (
     form_parameters_kong_and_fonseca,
@@ -19,10 +20,12 @@ from .form import (
     sphericity_wadell,
     surface_orientation_tensor,
 )
-from .geometry import surface_area
+from .geometry import closed_surface_inertia_tensor, surface_area
 from .io import load_geometry
 
-UNIT_SCALES = {"as-is": 1.0, "mm": 1e-3, "cm": 1e-2, "m": 1.0, "inch": 0.0254}
+UNIT_SCALES = {"as-is": 1.0, "um": 1e-6, "mm": 1e-3, "cm": 1e-2, "m": 1.0, "inch": 0.0254}
+AXES_LABELS = {"pca": ("PCA", "Axes (PCA estimate)"),
+               "min_volume": ("min. volume box", "Axes (minimum-volume box)")}
 
 
 @dataclass
@@ -51,6 +54,7 @@ class AnalysisResult:
     source_name: Optional[str] = None
     input_units: str = "as-is"
     scale_factor: float = 1.0
+    axes_method: str = "pca"
 
     @property
     def values(self) -> dict[str, Optional[float]]:
@@ -197,15 +201,20 @@ def prepare_mesh(nodes: ArrayLike, faces: ArrayLike) -> tuple[np.ndarray, np.nda
     if np.any(counts != 2):
         return nodes, faces
 
+    pairs = np.argsort(inverse, kind="stable").reshape(-1, 2)
+    components = _consistent_components(len(faces), edges, pairs)
+    if components is not None:
+        return _orient_and_union(nodes, faces, np.zeros(len(faces), dtype=np.int8), components)
+
     adjacency: list[list[tuple[int, bool]]] = [[] for _ in faces]
-    for first, second in np.argsort(inverse).reshape(-1, 2):
+    for first, second in pairs:
         i, j = int(first % len(faces)), int(second % len(faces))
         same_direction = bool(np.array_equal(edges[first], edges[second]))
         adjacency[i].append((j, same_direction))
         adjacency[j].append((i, same_direction))
 
     flips = np.full(len(faces), -1, dtype=np.int8)
-    components: list[list[int]] = []
+    components = []
     for root in range(len(faces)):
         if flips[root] != -1:
             continue
@@ -223,7 +232,35 @@ def prepare_mesh(nodes: ArrayLike, faces: ArrayLike) -> tuple[np.ndarray, np.nda
                 elif flips[neighbor] != flip:
                     raise ValueError("mesh surface is not orientable")
         components.append(component)
+    return _orient_and_union(nodes, faces, flips, components)
 
+
+def _consistent_components(
+    n_faces: int, edges: np.ndarray, pairs: np.ndarray,
+) -> Optional[list[np.ndarray]]:
+    """Edge-connected face components of an already consistently wound mesh.
+
+    Fast path for the common case, using SciPy when available. Returns None
+    when any shared edge is traversed twice in the same direction (faces need
+    flipping) or SciPy is missing; the caller then uses the general search.
+    """
+    if np.any(np.all(edges[pairs[:, 0]] == edges[pairs[:, 1]], axis=1)):
+        return None
+    try:
+        from scipy.sparse import coo_matrix
+        from scipy.sparse.csgraph import connected_components
+    except ModuleNotFoundError:
+        return None
+    first, second = pairs[:, 0] % n_faces, pairs[:, 1] % n_faces
+    graph = coo_matrix((np.ones(len(first)), (first, second)), shape=(n_faces, n_faces))
+    count, labels = connected_components(graph, directed=False)
+    order = np.argsort(labels, kind="stable")
+    return np.split(order, np.cumsum(np.bincount(labels, minlength=count))[:-1])
+
+
+def _orient_and_union(
+    nodes: np.ndarray, faces: np.ndarray, flips: np.ndarray, components: list,
+) -> tuple[np.ndarray, np.ndarray]:
     oriented = faces.copy()
     mask = flips == 1
     oriented[mask] = oriented[mask, ::-1]
@@ -276,14 +313,22 @@ def _union_shells(
     return vertices, indices
 
 
-def compute_metrics(nodes: ArrayLike, faces: ArrayLike) -> list[Metric]:
+def compute_metrics(nodes: ArrayLike, faces: ArrayLike, *, axes: str = "pca") -> list[Metric]:
     """Calculate mesh descriptors with a stable set of keys.
 
     Closed shells are oriented and combined as a solid union. Open meshes retain
     surface and form descriptors but expose volume-dependent metrics as errors.
-    Missing SciPy makes only convexity unavailable. Multiple closed shells need
-    the ``mesh`` extra; overlap is counted once and internal surfaces excluded.
+    Missing SciPy makes only convexity unavailable with the default PCA axes.
+    Multiple closed shells need the ``mesh`` extra; overlap is counted once and
+    internal surfaces excluded.
+
+    ``axes`` selects how the short/intermediate/long dimensions S, I, L used by
+    the axis-based form indices are measured: ``"pca"`` (principal directions
+    of the vertices; default) or ``"min_volume"`` (minimum-volume oriented
+    bounding box, which requires SciPy). See :mod:`pyshape.bounding`.
     """
+    if axes not in AXES_METHODS:
+        raise ValueError(f"Unknown axes method '{axes}'. Choose one of: {', '.join(AXES_METHODS)}")
     nodes, faces = prepare_mesh(nodes, faces)
     metrics: list[Metric] = []
 
@@ -315,6 +360,13 @@ def compute_metrics(nodes: ArrayLike, faces: ArrayLike) -> list[Metric]:
         add(f"centroid_{axis}", f"Centroid {axis.upper()}",
             float(centroid[i]) if centroid is not None else None,
             "Geometry", False, volume_error)
+    moments = (
+        closed_surface_inertia_tensor(nodes, faces, centroid)[1]
+        if volume is not None else [None, None, None]
+    )
+    for i, value in enumerate(moments, 1):
+        add(f"inertia_I{i}", f"Principal inertia I{i} (unit density)", value,
+            "Inertia (unit density)", False, volume_error)
     add("sphericity_wadell", "Sphericity (Wadell)",
         sphericity_wadell(volume, area) if volume is not None else None,
         "Sphericity", error=volume_error)
@@ -328,11 +380,20 @@ def compute_metrics(nodes: ArrayLike, faces: ArrayLike) -> list[Metric]:
     for i, value in enumerate(eigenvalues, 1):
         add(f"orientation_eig{i}", f"Orientation eigenvalue {i}", value, "Orientation", False)
 
-    short, intermediate, long, _ = estimate_axes(nodes)
+    try:
+        box = oriented_box(nodes, axes)
+    except ModuleNotFoundError as exc:
+        if exc.name not in {"scipy", "scipy.spatial"}:
+            raise
+        raise ImportError(
+            "axes='min_volume' requires scipy; install with: pip install 'pyshape[analysis]'"
+        ) from exc
+    short, intermediate, long = box.short, box.intermediate, box.long
+    method_label, axes_group = AXES_LABELS[axes]
     for axis, label, value in (
         ("S", "Short", short), ("I", "Intermediate", intermediate), ("L", "Long", long),
     ):
-        add(f"axis_{axis}", f"{label} axis {axis} (PCA)", value, "Axes (PCA estimate)", False)
+        add(f"axis_{axis}", f"{label} axis {axis} ({method_label})", value, axes_group, False)
     add("sphericity_krumbein", "Sphericity (Krumbein)",
         sphericity_krumbein(short, intermediate, long), "Sphericity")
     for prefix, label, function in (
@@ -367,17 +428,23 @@ def compute_metrics(nodes: ArrayLike, faces: ArrayLike) -> list[Metric]:
 
 
 def analyze_mesh(
-    nodes: ArrayLike, faces: ArrayLike, *, units: str = "as-is",
+    nodes: ArrayLike, faces: ArrayLike, *, units: str = "as-is", axes: str = "pca",
 ) -> AnalysisResult:
-    """Analyze arrays; explicit physical units convert lengths to metres."""
+    """Analyze arrays; explicit physical units convert lengths to metres.
+
+    ``axes`` is ``"pca"`` (default) or ``"min_volume"``; see :func:`compute_metrics`.
+    """
     vertices, indices = validate_mesh(nodes, faces)
     vertices, scale = scale_nodes(vertices, units)
-    return AnalysisResult(compute_metrics(vertices, indices), input_units=units, scale_factor=scale)
+    return AnalysisResult(
+        compute_metrics(vertices, indices, axes=axes),
+        input_units=units, scale_factor=scale, axes_method=axes,
+    )
 
 
-def analyze_file(path: str | Path, *, units: str = "as-is") -> AnalysisResult:
+def analyze_file(path: str | Path, *, units: str = "as-is", axes: str = "pca") -> AnalysisResult:
     """Load and analyze a supported mesh file; no GUI or server is needed."""
     geometry = load_geometry(path)
-    result = analyze_mesh(geometry.nodes, geometry.faces, units=units)
+    result = analyze_mesh(geometry.nodes, geometry.faces, units=units, axes=axes)
     result.source_name = geometry.source_path.name
     return result

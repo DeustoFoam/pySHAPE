@@ -166,3 +166,44 @@ def volume_centroid_inertia_tensor(
     evals, evecs = np.linalg.eigh(current_inertia)
     inertia_diag = np.diag(evals)
     return volume, centroid, current_inertia, inertia_diag, evecs
+
+
+def closed_surface_inertia_tensor(
+    nodes: np.ndarray, faces: np.ndarray, centroid: Iterable[float],
+) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """Unit-density inertia tensor of the solid bounded by a closed surface.
+
+    The solid is decomposed into signed tetrahedra joining each outward-oriented
+    triangle to the centroid, and the discrete integrals of Tonon (2005) used by
+    :func:`volume_centroid_inertia_tensor` are summed with their signs. This is
+    exact for any closed, consistently oriented (outward) triangle mesh and
+    does not require a tetrahedral mesh.
+
+    Parameters
+    ----------
+    nodes : (N, 3) array_like of float
+    faces : (M, 3) array_like of int, 0-based, oriented outward
+    centroid : (3,) array_like
+        Reference point, normally the volume centroid of the solid.
+
+    Returns
+    -------
+    inertia_tensor : (3, 3) ndarray
+        Inertia tensor about ``centroid`` (diagonal: moments; off-diagonal:
+        negative products of inertia), per unit density (units length**5).
+    principal_moments : (3,) ndarray
+        Eigenvalues in ascending order.
+    principal_axes : (3, 3) ndarray
+        Columns are the unit eigenvectors matching ``principal_moments``.
+    """
+    points = np.asarray(nodes, dtype=float) - np.asarray(centroid, dtype=float)
+    tri = points[np.asarray(faces, dtype=int)]  # (M, 3 vertices, 3 coordinates)
+    signed = np.einsum("ij,ij->i", tri[:, 0], np.cross(tri[:, 1], tri[:, 2])) / 6.0
+    sums = tri.sum(axis=1)
+    second = (
+        np.einsum("t,ti,tj->ij", signed, sums, sums)
+        + np.einsum("t,tki,tkj->ij", signed, tri, tri)
+    ) / 20.0
+    inertia = np.trace(second) * np.eye(3) - second
+    moments, axes = np.linalg.eigh(inertia)
+    return inertia, moments, axes

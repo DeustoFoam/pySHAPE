@@ -73,11 +73,7 @@ def surface_orientation_tensor(nodes: np.ndarray, faces: np.ndarray) -> Tuple[fl
         raise ValueError("total surface area is zero; mesh may be degenerate")
 
     # Orientation tensor f = (1/A) sum_k A_k n_k n_k^T
-    f = np.zeros((3, 3), dtype=float)
-    for k in range(n.shape[0]):
-        nk = n[k][:, None]
-        f += areas[k] * (nk @ nk.T)
-    f /= total_area
+    f = np.einsum("k,ki,kj->ij", areas, n, n) / total_area
 
     # Eigen decomposition and sort descending
     vals, vecs = np.linalg.eig(f)
