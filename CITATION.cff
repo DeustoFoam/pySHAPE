@@ -6,6 +6,13 @@ title: "pySHAPE: a Python library and graphical interfaces for three-dimensional
 type: software
 version: 0.1.1
 doi: 10.5281/zenodo.24005718
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.24004678
+    description: Concept DOI (all versions, resolves to the latest)
+  - type: doi
+    value: 10.5281/zenodo.24005718
+    description: Version 0.1.1
 date-released: 2026-11-06
 license: GPL-3.0-only
 repository-code: "https://github.com/DeustoFoam/pySHAPE"
