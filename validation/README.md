@@ -43,6 +43,6 @@ also exports geodesic spheres to `validation/_work_performance/`; run
 `shape_crosscheck` on that folder with output
 `validation/results/shape_performance.json`.
 
-The committed `results/` were produced with pySHAPE 0.2.0 (Python 3.12,
+The committed `results/` were produced with pySHAPE 0.1.0 (Python 3.12,
 NumPy 2.5, SciPy 1.18, trimesh 4.x, manifold3d 3.x) and SHAPE (last commit of
 the MATLAB code, run in MATLAB R2024b) on Windows 11.

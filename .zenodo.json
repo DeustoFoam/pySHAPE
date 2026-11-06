@@ -1,7 +1,7 @@
 {
   "title": "pySHAPE: a Python library and graphical interfaces for three-dimensional particle shape characterisation",
   "upload_type": "software",
-  "version": "0.2.0",
+  "version": "0.1.0",
   "description": "<p>pySHAPE is a Python port of SHAPE (SHape Analyser for Particle Engineering; Angelidakis, Nadimi and Utili, Computer Physics Communications 265 (2021) 107983), the MATLAB code for the morphological characterisation of particles. It computes, from closed triangulated surfaces (STL, OBJ, PLY, OFF, glTF, 3MF, DAE), the surface area, volume, centroid and principal inertia, Wadell and Krumbein sphericity, convexity, the surface orientation tensor of Bagi and Orosz, the principal dimensions S, I, L (PCA-aligned or minimum-volume oriented bounding box) and the flatness/elongation indices of Zingg, Potticary et al., Kong and Fonseca and Angelidakis et al., together with areal roughness parameters. Multi-sphere and multi-component particles are analysed as solid unions.</p><p>The same analysis core is available as an importable, headless Python module with JSON/CSV output, as a desktop graphical interface (Tk), and as a local browser interface with an HTTP API (FastAPI). The validation folder reproduces the verification against exact solutions and against the original MATLAB SHAPE.</p>",
   "creators": [
     {"name": "Pedrolli, Lorenzo", "affiliation": "University of Deusto", "orcid": "0000-0001-7120-3401"},
