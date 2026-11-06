@@ -10,7 +10,10 @@ The Python package provides tools for 3D particle geometry and form analysis. It
 
 ## Features
 
-- Geometry: triangle-mesh surface area and tetrahedral-mesh volume, centroid, and inertia
+- Geometry: surface area, enclosed volume, centroid and principal moments of inertia of closed
+  triangle meshes (and of tetrahedral meshes)
+- Principal dimensions S, I, L from a PCA-aligned box (fast) or a minimum-volume oriented
+  bounding box (orientation-independent), as in the original SHAPE
 - Form: convexity, Wadell and Krumbein sphericities, Zingg ratios, and Potticary, Kong-Fonseca and Angelidakis et al. (2021) flatness/elongation parameters
 - Surface orientation tensor
 - Surface roughness statistics
@@ -41,12 +44,12 @@ python -m pip install .
 python -m pip install -e ".[mesh,analysis,web,dev]"
 ```
 
-From another project, **after the `module` branch has been pushed to GitHub**:
+From another project, directly from GitHub:
 
 ```bash
-python -m pip install "pyshape @ git+https://github.com/Lollum89/pySHAPE.git@module"
-# Include all file loaders and convexity:
-python -m pip install "pyshape[mesh,analysis] @ git+https://github.com/Lollum89/pySHAPE.git@module"
+python -m pip install "pyshape @ git+https://github.com/DeustoFoam/pySHAPE.git"
+# Include all file loaders, convexity and the minimum-volume bounding box:
+python -m pip install "pyshape[mesh,analysis] @ git+https://github.com/DeustoFoam/pySHAPE.git"
 ```
 
 Pin a release tag or commit instead of a moving branch for reproducible
@@ -89,7 +92,7 @@ json_text = json.dumps(result.to_dict(), allow_nan=False)
 ```
 
 `analyze_file` loads geometry and delegates to `analyze_mesh(nodes, faces)`.
-Both return an `AnalysisResult` containing 25 metric records. No window or
+Both return an `AnalysisResult` containing 30 metric records. No window or
 server is started. `load_geometry(path)` is also public when you need the
 mesh arrays and source metadata.
 
@@ -121,16 +124,27 @@ does not derive surface roughness or tetrahedral inertia automatically.
 - Indices should be zero-based. One-based MATLAB-style indices are converted
   only when the minimum is 1 and the maximum equals the vertex count.
   Ambiguous arrays must be converted explicitly by the caller.
-- Units default to `"as-is"`: coordinates are unchanged. `"mm"`, `"cm"`,
+- Units default to `"as-is"`: coordinates are unchanged. `"um"`, `"mm"`, `"cm"`,
   `"m"`, and `"inch"` convert lengths to metres; area and volume then use
   m² and m³. `"auto"` explicitly opts into the old desktop heuristic:
   maximum span > 10000 scales by 1e-6, > 10 by 1e-3, otherwise by 1.
   This guesses a scale; it does not detect units. The desktop retains its
   existing `"auto"` default.
-- Results contain mesh counts, surface area, volume, centroid, Wadell and
-  Krumbein sphericity, orientation indices/eigenvalues, PCA-estimated axes,
-  Potticary/Kong-Fonseca/Angelidakis/Zingg parameters, and convexity. PCA axes are
-  estimates, not exact minimum bounding-box dimensions.
+- Results contain mesh counts, surface area, volume, centroid, principal moments
+  of inertia (unit density), Wadell and Krumbein sphericity, orientation
+  indices/eigenvalues, the principal dimensions S, I, L,
+  Potticary/Kong-Fonseca/Angelidakis/Zingg parameters, and convexity.
+- `axes="pca"` (default) measures S, I, L on the box aligned with the principal
+  directions of the vertices, as SHAPE's `PCA_points` option. These directions
+  are not unique for shapes with isotropic vertex covariance (cubes, regular
+  tetrahedra, octahedra, icosahedra, spheres), so the box then depends on mesh
+  orientation. `axes="min_volume"` uses the minimum-volume oriented bounding box
+  (SHAPE's default `minVolume` option; requires SciPy), searched over hull-facet
+  normals, hull-edge directions and, for small hulls, directions normal to pairs
+  of hull edges. It is orientation-independent but its cost grows roughly
+  quadratically with the number of convex-hull vertices (about 1 s for 2,500
+  and 12 s for 10,000 hull vertices on a laptop); for very dense meshes use
+  a decimated copy or the PCA box.
 - Closed, orientable mesh shells have their triangle winding corrected
   automatically, including wholly reversed shells; the original arrays/files
   are not changed. Volume requires nonzero enclosed volume. Open/non-manifold
@@ -276,7 +290,7 @@ checks that the installed wheel imports and analyzes without UI dependencies.
 
 ## Building and publishing
 
-The initial package version is `0.1.0`. To build wheel and source archives:
+The package version is defined once, in `pyshape/__init__.py` (`__version__`). To build wheel and source archives:
 
 ```bash
 python -m pip install ".[dev]"
@@ -290,7 +304,6 @@ name `pyshape` (change `project.name` if needed), update the version in
 `pyproject.toml` and the API metadata, run tests, and create a release tag.
 An import name and a distribution name can differ.
 
-Once the branch is ready, publish it with `git push -u origin module`.
 For a registry release, install Twine, run `python -m twine check dist/*`,
 then upload to TestPyPI or PyPI using credentials configured outside this
 repository. No branch push or registry publication is performed automatically.
@@ -299,13 +312,22 @@ and attribution.
 
 ## Citation and acknowledgement
 
-Please cite the original SHAPE paper when using this derivative project:
+If you use pySHAPE, please cite the software release you used (see
+[CITATION.cff](CITATION.cff); a Zenodo DOI is minted for every GitHub release)
+and the original SHAPE paper, on which this derivative project is based:
 
 Angelidakis, V., Nadimi, S. and Utili, S., 2021. [SHape Analyser for Particle Engineering (SHAPE): Seamless characterisation and simplification of particle morphology from imaging data](https://doi.org/10.1016/j.cpc.2021.107983). *Computer Physics Communications*, 265, 107983.
 
 The BibTeX citation is available in [CITATION.bib](CITATION.bib). The original MATLAB project and its development are credited to Vasileios Angelidakis, Sadegh Nadimi, and Stefano Utili at [vsangelidakis/SHAPE](https://github.com/vsangelidakis/SHAPE).
 
-The package also implements descriptors and methods reported by Wadell (1932), Krumbein (1941), Zingg (1935), Potticary et al. (2015), Kong and Fonseca (2018), Angelidakis et al. (2021), and Bagi and Orosz (2020), as applicable.
+The package also implements descriptors and methods reported by Wadell (1932), Krumbein (1941), Zingg (1935), Potticary et al. (2015), Kong and Fonseca (2018), Angelidakis et al. (2022, *Powder Technology* 396, 689–695), and Bagi and Orosz (2020), as applicable.
+
+## Validation
+
+The [validation/](validation/) folder reproduces the verification of pySHAPE
+against exact solutions (Platonic solids, ellipsoids, the torus of Table 3 of the
+SHAPE paper, multi-sphere unions) and against the original MATLAB SHAPE on the
+same meshes. See [validation/README.md](validation/README.md).
 
 ## License
 

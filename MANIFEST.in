@@ -3,3 +3,6 @@ include requirements.txt
 recursive-include docs/images *.png
 recursive-include examples *.py
 include examples/assets/Tetrahedron_ascii.stl
+include CITATION.cff
+include .zenodo.json
+recursive-include validation *.py *.m *.md *.csv *.json

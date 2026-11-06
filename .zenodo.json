@@ -1,0 +1,32 @@
+{
+  "title": "pySHAPE: a Python library and graphical interfaces for three-dimensional particle shape characterisation",
+  "upload_type": "software",
+  "version": "0.2.0",
+  "description": "<p>pySHAPE is a Python port of SHAPE (SHape Analyser for Particle Engineering; Angelidakis, Nadimi and Utili, Computer Physics Communications 265 (2021) 107983), the MATLAB code for the morphological characterisation of particles. It computes, from closed triangulated surfaces (STL, OBJ, PLY, OFF, glTF, 3MF, DAE), the surface area, volume, centroid and principal inertia, Wadell and Krumbein sphericity, convexity, the surface orientation tensor of Bagi and Orosz, the principal dimensions S, I, L (PCA-aligned or minimum-volume oriented bounding box) and the flatness/elongation indices of Zingg, Potticary et al., Kong and Fonseca and Angelidakis et al., together with areal roughness parameters. Multi-sphere and multi-component particles are analysed as solid unions.</p><p>The same analysis core is available as an importable, headless Python module with JSON/CSV output, as a desktop graphical interface (Tk), and as a local browser interface with an HTTP API (FastAPI). The validation folder reproduces the verification against exact solutions and against the original MATLAB SHAPE.</p>",
+  "creators": [
+    {"name": "Pedrolli, Lorenzo", "affiliation": "University of Deusto", "orcid": "0000-0001-7120-3401"},
+    {"name": "Lopez, Alejandro", "affiliation": "University of Deusto", "orcid": "0000-0001-5498-1746"},
+    {"name": "Achiaga, Beatriz", "affiliation": "University of Deusto", "orcid": "0000-0002-5184-7944"},
+    {"name": "Angelidakis, Vasileios", "affiliation": "Queen's University Belfast", "orcid": "0000-0002-0788-115X"}
+  ],
+  "contributors": [
+    {"name": "Nadimi, Sadegh", "affiliation": "Newcastle University", "type": "Other"},
+    {"name": "Utili, Stefano", "affiliation": "Newcastle University", "type": "Other"}
+  ],
+  "license": "GPL-3.0-only",
+  "access_right": "open",
+  "language": "eng",
+  "keywords": [
+    "particle shape", "morphology", "sphericity", "convexity", "flatness", "elongation",
+    "oriented bounding box", "surface orientation tensor", "discrete element method",
+    "Python", "graphical user interface", "SHAPE"
+  ],
+  "related_identifiers": [
+    {"identifier": "10.1016/j.cpc.2021.107983", "relation": "isDerivedFrom", "scheme": "doi", "resource_type": "publication-article"},
+    {"identifier": "10.5281/zenodo.4001670", "relation": "isDerivedFrom", "scheme": "doi", "resource_type": "software"},
+    {"identifier": "https://github.com/vsangelidakis/SHAPE", "relation": "isDerivedFrom", "scheme": "url", "resource_type": "software"},
+    {"identifier": "10.1016/j.powtec.2021.11.027", "relation": "references", "scheme": "doi", "resource_type": "publication-article"},
+    {"identifier": "https://github.com/DeustoFoam/pySHAPE", "relation": "isSupplementTo", "scheme": "url"}
+  ],
+  "notes": "Derivative work of SHAPE by V. Angelidakis, S. Nadimi and S. Utili (GPLv3). Please cite both this software and the original SHAPE paper."
+}
