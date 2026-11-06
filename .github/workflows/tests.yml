@@ -4,8 +4,11 @@ on: [push, pull_request]
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    # Pinned: ubuntu-latest (Ubuntu 26.04 since 2026-10-19) has no Python 3.9
+    # build in actions/setup-python, and 3.9 is the declared minimum.
+    runs-on: ubuntu-24.04
     strategy:
+      fail-fast: false
       matrix:
         python: ["3.9", "3.13"]
     steps:
