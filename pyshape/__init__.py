@@ -1,6 +1,6 @@
 """Particle analysis as a Python library; UI dependencies are optional."""
 
-__version__ = "0.2.0"
+__version__ = "0.1.0"
 
 from .analysis import AnalysisResult, Metric, analyze_file, analyze_mesh, compute_metrics
 from .bounding import AXES_METHODS, OrientedBox, min_volume_box, oriented_box, pca_box
