@@ -2,6 +2,8 @@
 
 # pySHAPE
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24004679.svg)](https://doi.org/10.5281/zenodo.24004679)
+
 [Features](#features) · [Project layout](#project-layout) · [Installation](#requirements-and-installation) · [Quick start](#quick-start) · [Input and results](#input-and-result-contract) · [HTTP API & Web GUI](#optional-http-api-and-html-gui) · [Examples](#examples) · [Desktop GUI](#desktop-gui) · [Tests](#tests) · [Publishing](#building-and-publishing) · [Citation](#citation-and-acknowledgement) · [License](#license) · [Branding](#logo-and-branding)
 
 This repository contains a lightweight Python port of selected functionality from SHAPE, the SHape Analyser for Particle Engineering. It is derivative work based on the original project by Vasileios Angelidakis, Sadegh Nadimi, and Stefano Utili. Visit the [original SHAPE GitHub repository](https://github.com/vsangelidakis/SHAPE) for the full MATLAB toolbox and project history.
