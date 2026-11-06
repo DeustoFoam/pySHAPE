@@ -33,8 +33,10 @@ The Python package provides tools for 3D particle geometry and form analysis. It
 
 ## Requirements and installation
 
-Python 3.9 or later is required. The core library depends only on NumPy and
-does not import Tk, Matplotlib, FastAPI, or SciPy at startup.
+Python 3.12 or later is required (tested on 3.12, 3.14 and 3.15). The core
+library depends only on NumPy and does not import Tk, Matplotlib, FastAPI, or
+SciPy at startup. On Python 3.15 the solid-union backend (`manifold3d`) has no
+binary wheel yet, so multi-component particles need Python 3.12 to 3.14 for now.
 
 From a local checkout:
 
