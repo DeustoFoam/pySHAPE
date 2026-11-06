@@ -2,7 +2,7 @@
 
 # pySHAPE
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24004679.svg)](https://doi.org/10.5281/zenodo.24004679)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24005718.svg)](https://doi.org/10.5281/zenodo.24005718)
 
 [Features](#features) · [Project layout](#project-layout) · [Installation](#requirements-and-installation) · [Quick start](#quick-start) · [Input and results](#input-and-result-contract) · [HTTP API & Web GUI](#optional-http-api-and-html-gui) · [Examples](#examples) · [Desktop GUI](#desktop-gui) · [Tests](#tests) · [Publishing](#building-and-publishing) · [Citation](#citation-and-acknowledgement) · [License](#license) · [Branding](#logo-and-branding)
 

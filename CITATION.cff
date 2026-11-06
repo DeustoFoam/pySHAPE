@@ -5,7 +5,7 @@ message: >-
 title: "pySHAPE: a Python library and graphical interfaces for three-dimensional particle shape characterisation"
 type: software
 version: 0.1.1
-doi: 10.5281/zenodo.24004679
+doi: 10.5281/zenodo.24005718
 date-released: 2026-11-06
 license: GPL-3.0-only
 repository-code: "https://github.com/DeustoFoam/pySHAPE"
