@@ -4,19 +4,27 @@ on: [push, pull_request]
 
 jobs:
   test:
-    # Pinned: ubuntu-latest (Ubuntu 26.04 since 2026-10-19) has no Python 3.9
-    # build in actions/setup-python, and 3.9 is the declared minimum.
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        python: ["3.9", "3.13"]
+        include:
+          # Oldest supported version (current NumPy and SciPy require >= 3.12).
+          - python: "3.12"
+            install: ".[mesh,analysis,web,dev]"
+          # Newest version with wheels for every optional dependency.
+          - python: "3.14"
+            install: ".[mesh,analysis,web,dev]"
+          # Latest release. manifold3d has no 3.15 wheel yet, so the solid-union
+          # backend is left out and its tests skip; everything else is tested.
+          - python: "3.15"
+            install: ".[analysis,dev] trimesh fastapi uvicorn python-multipart"
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python }}
-      - run: python -m pip install ".[mesh,analysis,web,dev]"
+      - run: python -m pip install ${{ matrix.install }}
       - run: python -m pytest -q tests
       - run: python -m build
       - name: Check installed wheel without optional dependencies
