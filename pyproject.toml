@@ -12,6 +12,10 @@ license = {text = "GPL-3.0-only"}
 dependencies = ["numpy>=1.20"]
 authors = [
     {name = "Lorenzo Pedrolli", email = "l.pedrolli@deusto.es"},
+    {name = "Alejandro Lopez"},
+    {name = "Beatriz Achiaga"},
+    {name = "Sadegh Nadimi"},
+    {name = "Vasileios Angelidakis"},
 ]
 keywords = ["particle shape", "morphology", "sphericity", "form indices", "SHAPE", "DEM", "STL"]
 classifiers = [

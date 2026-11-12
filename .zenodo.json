@@ -7,10 +7,10 @@
     {"name": "Pedrolli, Lorenzo", "affiliation": "University of Deusto", "orcid": "0000-0001-7120-3401"},
     {"name": "Lopez, Alejandro", "affiliation": "University of Deusto", "orcid": "0000-0001-5498-1746"},
     {"name": "Achiaga, Beatriz", "affiliation": "University of Deusto", "orcid": "0000-0002-5184-7944"},
-    {"name": "Angelidakis, Vasileios", "affiliation": "Queen's University Belfast", "orcid": "0000-0002-0788-115X"}
+    {"name": "Nadimi, Sadegh", "affiliation": "School of Engineering, Newcastle University", "orcid": "0000-0002-0971-7089"},
+    {"name": "Angelidakis, Vasileios", "affiliation": "School of Natural and Built Environment, Queen's University Belfast", "orcid": "0000-0002-0788-115X"}
   ],
   "contributors": [
-    {"name": "Nadimi, Sadegh", "affiliation": "Newcastle University", "type": "Other"},
     {"name": "Utili, Stefano", "affiliation": "Newcastle University", "type": "Other"}
   ],
   "license": "GPL-3.0-only",

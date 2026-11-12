@@ -37,9 +37,13 @@ authors:
     given-names: Beatriz
     affiliation: University of Deusto
     orcid: "https://orcid.org/0000-0002-5184-7944"
+  - family-names: Nadimi
+    given-names: Sadegh
+    affiliation: "School of Engineering, Newcastle University"
+    orcid: "https://orcid.org/0000-0002-0971-7089"
   - family-names: Angelidakis
     given-names: Vasileios
-    affiliation: "Queen's University Belfast"
+    affiliation: "School of Natural and Built Environment, Queen's University Belfast"
     orcid: "https://orcid.org/0000-0002-0788-115X"
 references:
   - type: article
