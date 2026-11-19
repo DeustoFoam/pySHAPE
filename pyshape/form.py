@@ -26,7 +26,8 @@ def sphericity_krumbein(S: float, I: float, L: float) -> float:
 
 def surface_orientation_tensor(nodes: np.ndarray, faces: np.ndarray) -> Tuple[float, float, float, np.ndarray, np.ndarray]:
     """
-    Surface orientation tensor (Bagi & Orosz, 2020) and shape indices.
+    Surface orientation tensor and shape indices (Bagi & Orosz, 2020;
+    Orosz, Angelidakis & Bagi, 2021, Powder Technol. 394, 312-325).
 
     Parameters
     ----------
