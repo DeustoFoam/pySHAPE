@@ -52,7 +52,7 @@ for k = 1:numel(files)
     r.sphericity_wadell = form.Sphericity_Wadell;
     r.orientation_C = form.Form_indices_sot.Compactness;
     r.orientation_F = form.Form_indices_sot.Flatness;
-    r.orientation_R = form.Form_indices_sot.Elongation;
+    r.orientation_E = form.Form_indices_sot.Elongation;
     r.pca = axis_indices(g.S_obb, g.I_obb, g.L_obb);
 
     % SHAPE's minVolume OBB (Auxiliary_geometries, minboundbox level 3)

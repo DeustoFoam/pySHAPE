@@ -8,7 +8,7 @@ surface,inertia_I2,33,1.0257231895493737e-12,relative,satellites_6,3.32567848447
 surface,inertia_I3,33,6.554114410555118e-13,relative,satellites_6,2.98306111162014e-15
 surface,orientation_C,33,1.8678920683732127e-15,relative,random_11,3.6730613488979273e-16
 surface,orientation_F,33,1.4605210123699983e-14,relative,satellites_6,3.794637093892072e-16
-surface,orientation_R,33,7.22367505702744e-14,relative,satellites_6,6.555302044655552e-16
+surface,orientation_E,33,7.22367505702744e-14,relative,satellites_6,6.555302044655552e-16
 pca_box,axis_S,24,4.034309821834357e-14,relative,dodecahedron,1.6953479281388281e-16
 pca_box,axis_I,24,2.5320156233800127e-15,relative,random_13,3.3700386711254066e-16
 pca_box,axis_L,24,6.860605133093867e-14,relative,dodecahedron,1.8822417349319665e-16

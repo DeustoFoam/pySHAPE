@@ -444,12 +444,12 @@ def compute_metrics(nodes: ArrayLike, faces: ArrayLike, *, axes: str = "pca") ->
         sphericity_wadell(volume, area) if volume is not None else None,
         "Sphericity", error=volume_error)
 
-    compactness, flakiness, rodness, eigenvalues, _ = surface_orientation_tensor(nodes, faces)
+    compactness, flakiness, elongation, eigenvalues, _ = surface_orientation_tensor(nodes, faces)
     for key, label, value in (
-        ("C", "compactness", compactness), ("F", "flakiness", flakiness),
-        ("R", "rodness", rodness),
+        ("C", "Compactness", compactness), ("F", "Flakiness", flakiness),
+        ("E", "Elongation", elongation),
     ):
-        add(f"orientation_{key}", f"Orientation {label} ({key})", value, "Orientation")
+        add(f"orientation_{key}", f"{label} {key} (surface orientation tensor)", value, "Orientation")
     for i, value in enumerate(eigenvalues, 1):
         add(f"orientation_eig{i}", f"Orientation eigenvalue {i}", value, "Orientation", False)
 

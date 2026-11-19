@@ -25,7 +25,7 @@ RESULTS = HERE / "results"
 WORK = HERE / "_work"
 
 SURFACE = ["volume", "surface_area", "convexity", "sphericity_wadell", "inertia_I1",
-           "inertia_I2", "inertia_I3", "orientation_C", "orientation_F", "orientation_R"]
+           "inertia_I2", "inertia_I3", "orientation_C", "orientation_F", "orientation_E"]
 AXIS = ["axis_S", "axis_I", "axis_L", "sphericity_krumbein", "potticary_flatness",
         "potticary_elongation", "kongfonseca_flatness", "kongfonseca_elongation",
         "angelidakis_flatness", "angelidakis_elongation", "zingg_SI", "zingg_IL"]

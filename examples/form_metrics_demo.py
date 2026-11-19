@@ -26,8 +26,8 @@ print("convexity:", convexity(2.0, 2.5))
 # Orientation tensor for a square in XY plane
 nodes = np.array([[0,0,0],[1,0,0],[1,1,0],[0,1,0]], float)
 faces = np.array([[0,1,2],[0,2,3]], int)
-C, F, R, vals, vecs = surface_orientation_tensor(nodes, faces)
-print("C,F,R:", C, F, R)
+C, F, E, vals, vecs = surface_orientation_tensor(nodes, faces)
+print("C,F,E:", C, F, E)
 
 # High-level wrappers
 print("Form_functions_1:", form_functions_1(surface_area=1.0, volume=0.5, volume_convex_hull=0.6))

@@ -84,7 +84,7 @@ def test_form_metrics_and_orientation_tensor():
     # Orientation tensor on a simple square (two triangles) on XY plane
     nodes = np.array([[0,0,0],[1,0,0],[1,1,0],[0,1,0]], dtype=float)
     faces = np.array([[0,1,2],[0,2,3]], dtype=int)
-    C, F, R, eigvals, eigvecs = surface_orientation_tensor(nodes, faces)
+    C, F, E, eigvals, eigvecs = surface_orientation_tensor(nodes, faces)
     # For a flat square in XY, normals point along +Z, tensor should reflect planarity
     assert eigvals.shape == (3,)
     assert eigvecs.shape == (3,3)
