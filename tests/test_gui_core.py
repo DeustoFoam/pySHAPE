@@ -78,10 +78,37 @@ def test_write_csv(tmp_path):
     write_csv(out, [("surface_area", 1.5), ("volume", 2.5)], source_name="sample.stl")
     text = out.read_text()
     lines = text.strip().splitlines()
-    assert lines[0] == "parameter,value"
-    assert lines[1] == "source_file,sample.stl"
-    assert lines[2] == "surface_area,1.5"
-    assert lines[3] == "volume,2.5"
+    assert lines[0] == "parameter,value,unit"
+    assert lines[1] == "source_file,sample.stl,"
+    assert lines[2] == "surface_area,1.5,"
+    assert lines[3] == "volume,2.5,"
+
+
+def test_write_csv_with_units(tmp_path):
+    out = tmp_path / "out.csv"
+    write_csv(out, [("surface_area", 1.5, "m^2"), ("sphericity_wadell", 0.9, "")])
+    lines = out.read_text().strip().splitlines()
+    assert lines == ["parameter,value,unit", "surface_area,1.5,m^2", "sphericity_wadell,0.9,"]
+
+
+def test_units_summary():
+    from pyshape.gui_core import units_summary
+    assert units_summary("mm", 1e-3) == "Input: mm → results in m"
+    assert units_summary("um", 1e-6) == "Input: µm → results in m"
+    assert units_summary("as-is", 1.0) == "Input: as-is → results in input units"
+    assert units_summary("mm", 1e-3, "mm") == "Input: mm → results in mm"
+    assert units_summary("inch", 0.0254, "um") == "Input: inch → results in µm"
+    assert units_summary("as-is", 1.0, "as-is") == "Input: as-is → results in input units"
+
+
+def test_gui_does_not_offer_auto_units():
+    from pathlib import Path
+
+    import pyshape
+    html = (Path(pyshape.__file__).parent / "static" / "index.html").read_text(encoding="utf-8")
+    assert 'value="auto"' not in html
+    gui_source = (Path(pyshape.__file__).parent / "gui.py").read_text(encoding="utf-8")
+    assert '"auto"' not in gui_source
 
 
 def test_axis_triad_scales_with_bbox():

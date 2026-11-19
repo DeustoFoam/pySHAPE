@@ -26,21 +26,27 @@ def make_export_path(input_path: str | Path, suffix: str, avoid_overwrite: bool)
 
 
 def csv_text(
-    rows: Iterable[Tuple[str, object]], source_name: Optional[str] = None
+    rows: Iterable[Tuple[object, ...]], source_name: Optional[str] = None
 ) -> str:
-    """Serialize parameter/value pairs with an optional source-file row."""
+    """Serialize parameter/value/unit rows with an optional source-file row.
+
+    Rows are ``(parameter, value)`` or ``(parameter, value, unit)``; the unit
+    column is left empty for dimensionless values and two-element rows.
+    """
     stream = StringIO(newline="")
     writer = csv.writer(stream)
-    writer.writerow(["parameter", "value"])
+    writer.writerow(["parameter", "value", "unit"])
     if source_name is not None:
-        writer.writerow(["source_file", source_name])
-    writer.writerows(rows)
+        writer.writerow(["source_file", source_name, ""])
+    for row in rows:
+        row = tuple(row)
+        writer.writerow(row if len(row) == 3 else (*row, ""))
     return stream.getvalue()
 
 
 def write_csv(
     path: str | Path,
-    rows: Iterable[Tuple[str, object]],
+    rows: Iterable[Tuple[object, ...]],
     source_name: Optional[str] = None,
 ) -> None:
     """Write UTF-8 CSV; an existing destination is overwritten."""

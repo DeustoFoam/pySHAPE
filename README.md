@@ -4,7 +4,7 @@
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24004678.svg)](https://doi.org/10.5281/zenodo.24004678)
 
-[Features](#features) · [Project layout](#project-layout) · [Installation](#requirements-and-installation) · [Quick start](#quick-start) · [Input and results](#input-and-result-contract) · [HTTP API & Web GUI](#optional-http-api-and-html-gui) · [Examples](#examples) · [Desktop GUI](#desktop-gui) · [Tests](#tests) · [Publishing](#building-and-publishing) · [Citation](#citation-and-acknowledgement) · [License](#license) · [Branding](#logo-and-branding)
+[Features](#features) · [Project layout](#project-layout) · [Installation](#requirements-and-installation) · [Run the GUIs](#run-the-graphical-interfaces) · [Quick start](#quick-start) · [Input and results](#input-and-result-contract) · [HTTP API & Web GUI](#optional-http-api-and-html-gui) · [Examples](#examples) · [Desktop GUI](#desktop-gui) · [Tests](#tests) · [Publishing](#building-and-publishing) · [Citation](#citation-and-acknowledgement) · [License](#license) · [Branding](#logo-and-branding)
 
 This repository contains a lightweight Python port of selected functionality from SHAPE, the SHape Analyser for Particle Engineering. It is derivative work based on the original project by Vasileios Angelidakis, Sadegh Nadimi, and Stefano Utili. Visit the [original SHAPE GitHub repository](https://github.com/vsangelidakis/SHAPE) for the full MATLAB toolbox and project history.
 
@@ -75,6 +75,25 @@ To install all development and viewer dependencies:
 python -m pip install -r requirements.txt
 ```
 
+### Run the graphical interfaces
+
+Install once (from the repository folder), then start either interface:
+
+```bash
+python -m pip install ".[gui,web,mesh,analysis]"
+
+python -m pyshape.gui    # desktop interface
+python -m pyshape.web    # browser interface: open http://127.0.0.1:8000
+```
+
+These commands work from any folder. Do not run the file directly
+(`python pyshape/gui.py`): it is part of the package and fails with
+`attempted relative import with no known parent package`.
+
+The install also creates the shortcuts `pyshape-gui` and `pyshape-web`. If pip
+warns that its `Scripts` folder "is not on PATH", either add that folder to
+PATH or keep using the `python -m` commands above.
+
 ## Quick start
 
 ### Analyze a file
@@ -128,12 +147,14 @@ does not derive surface roughness or tetrahedral inertia automatically.
 - Indices should be zero-based. One-based MATLAB-style indices are converted
   only when the minimum is 1 and the maximum equals the vertex count.
   Ambiguous arrays must be converted explicitly by the caller.
-- Units default to `"as-is"`: coordinates are unchanged. `"um"`, `"mm"`, `"cm"`,
-  `"m"`, and `"inch"` convert lengths to metres; area and volume then use
-  m² and m³. `"auto"` explicitly opts into the old desktop heuristic:
-  maximum span > 10000 scales by 1e-6, > 10 by 1e-3, otherwise by 1.
-  This guesses a scale; it does not detect units. The desktop retains its
-  existing `"auto"` default.
+- Units default to `"as-is"`: coordinates are unchanged and results are in
+  the file's own units. `"um"`, `"mm"`, `"cm"`, `"m"`, and `"inch"` declare
+  the units of the file; any other value raises `ValueError` (HTTP 422).
+- `output_units` (default `"m"`; also `"mm"`, `"um"`, `"cm"`, `"inch"`, or
+  `"same"` for the input units) sets the length unit of the results: areas,
+  volumes and inertia per unit density follow as its square, cube and fifth
+  power. It is ignored for `"as-is"` input. Each metric record carries its
+  `unit`, and the CSV export has a `unit` column.
 - Results contain mesh counts, surface area, volume, centroid, principal moments
   of inertia (unit density), Wadell and Krumbein sphericity, orientation
   indices/eigenvalues, the principal dimensions S, I, L,

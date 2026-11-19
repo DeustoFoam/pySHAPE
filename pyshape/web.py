@@ -20,7 +20,7 @@ MAX_PREVIEW_FACES = 5000
 
 
 def _analyze_upload(
-    file: UploadFile, units: str, axes: str = "pca",
+    file: UploadFile, units: str, axes: str = "pca", output_units: str = "m",
 ) -> tuple[AnalysisResult, np.ndarray, np.ndarray]:
     name = (file.filename or "").replace("\\", "/").rsplit("/", 1)[-1]
     # Only self-contained STL uploads are accepted; other loaders may resolve
@@ -40,7 +40,9 @@ def _analyze_upload(
             raise HTTPException(422, "The uploaded STL file is empty.")
         try:
             geometry = load_geometry(path)
-            result = analyze_mesh(geometry.nodes, geometry.faces, units=units, axes=axes)
+            result = analyze_mesh(
+                geometry.nodes, geometry.faces, units=units, axes=axes, output_units=output_units,
+            )
         except ValueError as exc:
             raise HTTPException(422, str(exc)) from exc
         except ImportError as exc:
@@ -122,12 +124,15 @@ def create_app() -> FastAPI:
         units: str = Form("as-is"),
         include_preview: bool = Form(False),
         axes: str = Form("pca"),
+        output_units: str = Form("m"),
     ) -> dict[str, object]:
         """Upload STL and receive metadata and metric records, with optional preview.
 
         ``axes`` is ``pca`` (default) or ``min_volume`` for the S, I, L dimensions.
+        ``output_units`` (``m`` by default, or ``mm``, ``um``, ``cm``, ``inch``,
+        ``same``) is the length unit of the results; ignored for ``as-is`` input.
         """
-        result, nodes, faces = _analyze_upload(file, units, axes)
+        result, nodes, faces = _analyze_upload(file, units, axes, output_units)
         payload = result.to_dict()
         if include_preview:
             payload["preview"] = _preview(nodes, faces)
@@ -139,9 +144,10 @@ def create_app() -> FastAPI:
         units: str = Form("as-is"),
         keys: Optional[str] = Form(None),
         axes: str = Form("pca"),
+        output_units: str = Form("m"),
     ) -> Response:
         """Analyze STL and download CSV; keys is a comma-separated metric selection."""
-        result, _, _ = _analyze_upload(file, units, axes)
+        result, _, _ = _analyze_upload(file, units, axes, output_units)
         try:
             text = result.to_csv(None if keys is None else keys.split(","))
         except ValueError as exc:

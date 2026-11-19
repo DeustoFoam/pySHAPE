@@ -128,7 +128,7 @@ def test_multisolid_api_and_preview_use_union(client, cube_mesh, monkeypatch):
     assert payload["preview"]["total_faces"] == values["n_faces"]
     exported = client.post("/api/export", files=files, data={"keys": "volume,surface_area"})
     assert exported.status_code == 200
-    rows = dict(csv.reader(io.StringIO(exported.text)))
+    rows = {row[0]: row[1] for row in csv.reader(io.StringIO(exported.text))}
     assert float(rows["volume"]) == pytest.approx(1.5, rel=1e-6)
     assert float(rows["surface_area"]) == pytest.approx(8, rel=1e-6)
     monkeypatch.setitem(sys.modules, "manifold3d", None)
@@ -174,3 +174,26 @@ def test_large_preview_is_simplified_not_sampled(client, tmp_path, monkeypatch):
     assert preview["shown_faces"] > 500
     corners = np.asarray(preview["triangles"]).reshape(-1, 3)
     assert np.abs(np.linalg.norm(corners, axis=1)).max() <= 0.51
+
+
+def test_output_units_form_field(client, stl_path):
+    files = lambda: {"file": (stl_path.name, stl_path.read_bytes())}
+    default = client.post("/api/analyze", files=files(), data={"units": "mm"}).json()
+    assert default["output_units"] == "m"
+    assert default == analyze_file(stl_path, units="mm").to_dict()
+    in_mm = client.post("/api/analyze", files=files(), data={"units": "mm", "output_units": "mm"}).json()
+    assert in_mm == analyze_file(stl_path, units="mm", output_units="mm").to_dict()
+    exported = client.post(
+        "/api/export", files=files(),
+        data={"units": "mm", "output_units": "mm", "keys": "surface_area"},
+    )
+    assert exported.text.splitlines()[-1].endswith(",mm^2")
+    bad = client.post("/api/analyze", files=files(), data={"units": "mm", "output_units": "km"})
+    assert bad.status_code == 422
+
+
+def test_auto_units_rejected_by_api(client, stl_path):
+    files = {"file": (stl_path.name, stl_path.read_bytes())}
+    response = client.post("/api/analyze", files=files, data={"units": "auto"})
+    assert response.status_code == 422
+    assert "Unknown units 'auto'" in response.json()["detail"]
