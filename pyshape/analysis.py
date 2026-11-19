@@ -64,14 +64,15 @@ def unit_label(key: str, units: str, *, ascii: bool = False, output_units: str =
 
     Explicit input units give results in ``output_units`` (default m:
     m, m², m³, m⁵); ``as-is`` keeps the coordinates of the input file, so
-    results are in "input units" whatever ``output_units`` is.
+    results are in ``input_units`` (no space, safe in CSV files) whatever
+    ``output_units`` is.
     ``ascii=True`` writes powers as ``^2`` and µm as ``um`` (used for CSV files).
     """
     power = LENGTH_POWERS.get(key, 0)
     if power == 0:
         return ""
     if units == "as-is" or output_units == "as-is":
-        base = "input units"
+        base = "input_units"
     else:
         base = (_ASCII_SYMBOLS if ascii else _UNIT_SYMBOLS)[output_units]
     if power == 1:

@@ -184,7 +184,7 @@ def test_csv_selection_and_default_export(tetra_mesh, tmp_path):
     assert "n_vertices" not in result.to_csv()
     path = tmp_path / "results.csv"
     result.write_csv(path, ["volume"])
-    assert path.read_text().splitlines()[-1] == "volume,0.16666666666666666,input units^3"
+    assert path.read_text().splitlines()[-1] == "volume,0.16666666666666666,input_units^3"
     with pytest.raises(ValueError, match="Unknown metric"):
         result.to_csv(["typo"])
     with pytest.raises(ValueError, match="at least one"):
@@ -252,7 +252,7 @@ def test_units_of_dimensional_metrics(tetra_mesh):
     assert units["inertia_I1"] == "m⁵"
     assert units["sphericity_wadell"] == units["n_faces"] == units["zingg_SI"] == ""
     raw = analyze_mesh(*tetra_mesh)
-    assert {m.key: m.unit for m in raw.metrics}["volume"] == "input units³"
+    assert {m.key: m.unit for m in raw.metrics}["volume"] == "input_units³"
     rows = list(csv.reader(io.StringIO(si.to_csv(["surface_area", "inertia_I1", "convexity"]))))
     assert rows[1:] == [
         ["surface_area", rows[1][1], "m^2"], ["inertia_I1", rows[2][1], "m^5"], ["convexity", rows[3][1], ""],
@@ -260,7 +260,7 @@ def test_units_of_dimensional_metrics(tetra_mesh):
 
 
 @pytest.mark.parametrize("units, expected", [
-    ("as-is", "input units^2"), ("um", "m^2"), ("inch", "m^2"),
+    ("as-is", "input_units^2"), ("um", "m^2"), ("inch", "m^2"),
 ])
 def test_unit_label(units, expected):
     assert analysis.unit_label("surface_area", units, ascii=True) == expected
@@ -319,7 +319,7 @@ def test_output_units_ignored_for_as_is(cube_mesh):
         result = analyze_mesh(*cube_mesh, output_units=choice)
         assert result.output_units == "as-is" and result.output_scale == 1.0
         assert result.values == plain.values
-        assert {m.key: m.unit for m in result.metrics}["volume"] == "input units³"
+        assert {m.key: m.unit for m in result.metrics}["volume"] == "input_units³"
 
 
 def test_invalid_output_units(cube_mesh):
