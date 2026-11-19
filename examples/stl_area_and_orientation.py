@@ -24,6 +24,6 @@ print("STL:", stl_path)
 print("nodes:", nodes.shape, "faces:", faces.shape)
 
 A = surface_area(nodes, faces)
-C, F, R, vals, vecs = surface_orientation_tensor(nodes, faces)
+C, F, E, vals, vecs = surface_orientation_tensor(nodes, faces)
 print("area:", A)
-print("C,F,R:", C, F, R)
+print("C,F,E:", C, F, E)

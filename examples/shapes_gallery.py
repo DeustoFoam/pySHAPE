@@ -13,5 +13,5 @@ for name, (nodes, faces) in {
     "ellipsoid": make_ellipsoid(1, 2, 3, stacks=12, slices=24),
 }.items():
     A = surface_area(nodes, faces)
-    C, F, R, vals, vecs = surface_orientation_tensor(nodes, faces)
-    print(f"{name}: area={A:.6f} C={C:.6f} F={F:.6f} R={R:.6f}")
+    C, F, E, vals, vecs = surface_orientation_tensor(nodes, faces)
+    print(f"{name}: area={A:.6f} C={C:.6f} F={F:.6f} E={E:.6f}")

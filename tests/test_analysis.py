@@ -33,7 +33,7 @@ def test_public_api_and_result_shape(tetra_mesh):
         "n_vertices", "n_faces", "surface_area", "volume",
         "centroid_x", "centroid_y", "centroid_z",
         "inertia_I1", "inertia_I2", "inertia_I3", "sphericity_wadell",
-        "orientation_C", "orientation_F", "orientation_R",
+        "orientation_C", "orientation_F", "orientation_E",
         "orientation_eig1", "orientation_eig2", "orientation_eig3",
         "axis_S", "axis_I", "axis_L", "sphericity_krumbein",
         "potticary_flatness", "potticary_elongation",
@@ -334,3 +334,24 @@ def test_auto_units_are_rejected(tetra_mesh):
         analyze_mesh(*tetra_mesh, units="auto")
     for unit in ("as-is", "um", "mm", "cm", "m", "inch"):
         assert unit in str(error.value)
+
+
+def test_orientation_indices_cuboid_exact():
+    # Cuboid 4 x 2 x 1: f = (8, 4, 2) / 14, so C = 1/4, F = 1/2, E = 1/4
+    # (Orosz et al., 2021, Eqs. 3-5); the key of elongation is orientation_E.
+    unit = np.array([
+        [0, 0, 0], [1, 0, 0], [1, 1, 0], [0, 1, 0],
+        [0, 0, 1], [1, 0, 1], [1, 1, 1], [0, 1, 1],
+    ], dtype=float)
+    faces = np.array([
+        [0, 2, 1], [0, 3, 2], [4, 5, 6], [4, 6, 7], [0, 1, 5], [0, 5, 4],
+        [1, 2, 6], [1, 6, 5], [2, 3, 7], [2, 7, 6], [3, 0, 4], [3, 4, 7],
+    ], dtype=int)
+    result = analyze_mesh(unit * [4.0, 2.0, 1.0], faces)
+    values = result.values
+    assert "orientation_R" not in values
+    assert np.isclose(values["orientation_C"], 0.25)
+    assert np.isclose(values["orientation_F"], 0.5)
+    assert np.isclose(values["orientation_E"], 0.25)
+    labels = {m.key: m.label for m in result.metrics}
+    assert labels["orientation_E"] == "Elongation E (surface orientation tensor)"

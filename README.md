@@ -129,7 +129,7 @@ nodes = np.array([[0, 0, 0], [1, 0, 0], [1, 1, 0], [0, 1, 0]], dtype=float)
 faces = np.array([[0, 1, 2], [0, 2, 3]], dtype=int)
 
 print(surface_area(nodes, faces))
-C, F, R, eigenvalues, eigenvectors = surface_orientation_tensor(nodes, faces)
+C, F, E, eigenvalues, eigenvectors = surface_orientation_tensor(nodes, faces)
 result = analyze_mesh(nodes, faces)
 # This is an open surface: area is available; volume-dependent results are not.
 print(result.values["surface_area"])
@@ -287,7 +287,7 @@ It lets you:
   triangle-mesh representation used for STL.
 - **Review result parameters and tick which to export** — clicking
   "Calculate results" computes surface area, volume, centroid, Wadell and
-  Krumbein sphericity, the surface orientation tensor (C, F, R), Potticary,
+  Krumbein sphericity, the surface orientation tensor (compactness C, flakiness F, elongation E), Potticary,
   Kong & Fonseca and Zingg form parameters, convexity, and PCA-estimated
   axes, each shown with a checkbox.
 - **Export to CSV** — by default the file is written next to the input as

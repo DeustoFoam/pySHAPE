@@ -188,7 +188,7 @@ def platonic_exact(name: str, edge: float) -> dict[str, float]:
         "icosahedron": (5 * sqrt(3) * a ** 2, 5 * (3 + sqrt(5)) / 12 * a ** 3),
     }[name]
     return {"surface_area": area, "volume": volume, "sphericity_wadell": wadell(volume, area),
-            "convexity": 1.0, "orientation_C": 1.0, "orientation_F": 0.0, "orientation_R": 0.0}
+            "convexity": 1.0, "orientation_C": 1.0, "orientation_F": 0.0, "orientation_E": 0.0}
 
 
 def ellipsoid_area(a: float, b: float, c: float) -> float:
@@ -229,7 +229,7 @@ def ellipsoid_exact(a: float, b: float, c: float) -> dict[str, float]:
     moments = sorted(volume / 5 * np.array([b * b + c * c, a * a + c * c, a * a + b * b]))
     return {"surface_area": area, "volume": volume, "sphericity_wadell": wadell(volume, area),
             "convexity": 1.0, "orientation_C": f3 / f1, "orientation_F": (f1 - f2) / f1,
-            "orientation_R": (f2 - f3) / f1, "axis_S": S, "axis_I": I, "axis_L": L,
+            "orientation_E": (f2 - f3) / f1, "axis_S": S, "axis_I": I, "axis_L": L,
             "inertia_I1": moments[0], "inertia_I2": moments[1], "inertia_I3": moments[2]}
 
 

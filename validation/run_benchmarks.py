@@ -34,7 +34,7 @@ from pyshape import analyze_mesh, min_volume_box  # noqa: E402
 RESULTS = HERE / "results"
 DIMENSIONLESS = [
     "sphericity_wadell", "sphericity_krumbein", "convexity",
-    "orientation_C", "orientation_F", "orientation_R",
+    "orientation_C", "orientation_F", "orientation_E",
     "potticary_flatness", "potticary_elongation", "kongfonseca_flatness",
     "kongfonseca_elongation", "angelidakis_flatness", "angelidakis_elongation",
     "zingg_SI", "zingg_IL",

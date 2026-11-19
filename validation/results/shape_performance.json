@@ -18,7 +18,7 @@
     "sphericity_wadell": 0.99605896081056111,
     "orientation_C": 0.99999999999999922,
     "orientation_F": 3.3306690738754662E-16,
-    "orientation_R": 4.9960036108131985E-16,
+    "orientation_E": 4.9960036108131985E-16,
     "pca": {
       "sphericity_krumbein": 0.99357216578354535,
       "potticary_flatness": 0.00852096634164304,
@@ -70,7 +70,7 @@
     "sphericity_wadell": 0.99901453521903116,
     "orientation_C": 0.99999999999999756,
     "orientation_F": 1.3322676295501867E-15,
-    "orientation_R": 1.1657341758564132E-15,
+    "orientation_E": 1.1657341758564132E-15,
     "pca": {
       "sphericity_krumbein": 0.99758750663964613,
       "potticary_flatness": 0.00010184576980793505,
@@ -122,7 +122,7 @@
     "sphericity_wadell": 0.99975362777408894,
     "orientation_C": 0.99999999999999456,
     "orientation_F": 1.9984014443252751E-15,
-    "orientation_R": 3.4972025275692317E-15,
+    "orientation_E": 3.4972025275692317E-15,
     "pca": {
       "sphericity_krumbein": 1,
       "potticary_flatness": 0,
@@ -174,7 +174,7 @@
     "sphericity_wadell": 0.99993840667334488,
     "orientation_C": 0.99999999999999734,
     "orientation_F": 1.1657341758564213E-15,
-    "orientation_R": 1.4988010832439702E-15,
+    "orientation_E": 1.4988010832439702E-15,
     "pca": {
       "sphericity_krumbein": 0.99999820145065232,
       "potticary_flatness": 1.7724831284201416E-6,

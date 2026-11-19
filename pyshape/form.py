@@ -35,8 +35,9 @@ def surface_orientation_tensor(nodes: np.ndarray, faces: np.ndarray) -> Tuple[fl
 
     Returns
     -------
-    C, F, R : floats
-        Compactness (equancy), Flakiness (platyness), Rodness (elongation)
+    C, F, E : floats
+        Compactness C = f3/f1, flakiness F = (f1 - f2)/f1 and elongation
+        E = (f2 - f3)/f1 (Orosz et al., 2021, Eqs. 3-5); C + F + E = 1.
     eigen_values : (3,) array, descending
     eigen_vectors : (3,3) array, columns correspond to eigen_values order
     """
@@ -88,8 +89,8 @@ def surface_orientation_tensor(nodes: np.ndarray, faces: np.ndarray) -> Tuple[fl
 
     C = float(f3 / f1)
     F = float((f1 - f2) / f1)
-    R = float((f2 - f3) / f1)
-    return C, F, R, eigen_values, eigen_vectors
+    E = float((f2 - f3) / f1)
+    return C, F, E, eigen_values, eigen_vectors
 
 
 def form_functions_1(surface_area: float, volume: float, volume_convex_hull: float) -> Tuple[float, float]:
