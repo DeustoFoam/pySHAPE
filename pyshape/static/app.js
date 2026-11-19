@@ -4,6 +4,7 @@ const $ = (id) => document.getElementById(id);
 let analysisFile = null;
 let analysisUnits = "as-is";
 let analysisAxes = "pca";
+let analysisOutput = "same";
 let busy = false;
 let triangles = [];
 let yaw = -0.6, pitch = 0.4, zoom = 1;
@@ -37,7 +38,7 @@ function renderResults(metrics) {
     const heading = document.createElement("tr");
     heading.className = "group";
     const cell = document.createElement("th");
-    cell.colSpan = 3;
+    cell.colSpan = 4;
     cell.textContent = group;
     heading.append(cell);
     $("results").append(heading);
@@ -57,8 +58,11 @@ function renderResults(metrics) {
       value.textContent = metric.value === null
         ? `n/a (${metric.error || "unavailable"})`
         : Number.isInteger(metric.value) ? String(metric.value) : Number(metric.value).toPrecision(6);
-      if (metric.value === null) value.className = "unavailable";
-      row.append(selection, label, value);
+      value.className = metric.value === null ? "value unavailable" : "value";
+      const unit = document.createElement("td");
+      unit.className = "unit";
+      unit.textContent = metric.value === null ? "" : (metric.unit || "");
+      row.append(selection, label, value, unit);
       $("results").append(row);
     }
   }
@@ -85,8 +89,10 @@ $("analyze-form").addEventListener("submit", async (event) => {
   const axes = $("axes").value;
   const data = new FormData();
   data.append("file", file);
+  const outputUnits = $("output-units").value;
   data.append("units", units);
   data.append("axes", axes);
+  data.append("output_units", outputUnits);
   data.append("include_preview", "true");
   try {
     const result = await (await post("/api/analyze", data)).json();
@@ -94,12 +100,16 @@ $("analyze-form").addEventListener("submit", async (event) => {
     analysisFile = file;
     analysisUnits = units;
     analysisAxes = axes;
+    analysisOutput = outputUnits;
     triangles = result.preview.triangles;
     zoom = 1;
-    $("metadata").textContent = `${result.source_name} | Input: ${result.input_units} | Scale: ${result.scale_factor}`
+    const unitNames = { m: "m", mm: "mm", um: "µm", cm: "cm", inch: "in" };
+    const out = unitNames[result.output_units];
+    $("metadata").textContent = `${result.source_name} | Input: ${result.input_units}`
+      + (out ? ` | Output: ${result.output_units}` : "")
       + ` | Axes: ${result.axes_method === "min_volume" ? "minimum-volume box" : "PCA"}. `
-      + (units === "as-is" ? "Results use input length units." : "Results use metres (area: m², volume: m³).")
-      + (units === "auto" ? " Units were guessed using the legacy size heuristic." : "");
+      + (out ? `Results in ${out} (area: ${out}², volume: ${out}³, inertia: ${out}⁵).`
+             : "Results use the input units of the file.");
     $("preview-info").textContent = `Showing ${result.preview.shown_faces} of ${result.preview.total_faces} faces. `
       + "Large meshes are simplified for display only; calculations always use the full mesh. "
       + "Drag to rotate, scroll to zoom.";
@@ -132,6 +142,7 @@ $("export").addEventListener("click", async () => {
   data.append("file", analysisFile);
   data.append("units", analysisUnits);
   data.append("axes", analysisAxes);
+  data.append("output_units", analysisOutput);
   data.append("keys", keys.join(","));
   setBusy(true);
   status("Preparing CSV...");
@@ -212,8 +223,8 @@ canvas.addEventListener("pointerdown", (event) => {
 });
 canvas.addEventListener("pointermove", (event) => {
   if (!pointer) return;
-  yaw += (event.clientX - pointer.x) * 0.01;
-  pitch = Math.max(-1.5, Math.min(1.5, pitch + (event.clientY - pointer.y) * 0.01));
+  yaw -= (event.clientX - pointer.x) * 0.01;
+  pitch = Math.max(-1.5, Math.min(1.5, pitch - (event.clientY - pointer.y) * 0.01));
   pointer = { x: event.clientX, y: event.clientY };
   draw();
 });
@@ -238,3 +249,9 @@ function animate(time) {
 }
 draw();
 requestAnimationFrame(animate);
+
+function syncOutputUnits() {
+  $("output-units").disabled = $("units").value === "as-is";
+}
+$("units").addEventListener("change", syncOutputUnits);
+syncOutputUnits();

@@ -19,18 +19,26 @@
         <h2>Load geometry</h2>
         <label for="file">STL file (up to 32 MiB)</label>
         <input id="file" name="file" type="file" accept=".stl" required>
-        <label for="units">Input units</label>
+        <label for="units">Input units (file)</label>
         <select id="units" name="units">
           <option value="as-is">As-is (no conversion)</option>
           <option value="um">Micrometres</option>
           <option value="mm">Millimetres</option>
           <option value="cm">Centimetres</option>
           <option value="m">Metres</option>
+          <option value="inch">Inches</option>        </select>
+        <label for="output-units">Output units</label>
+        <select id="output-units" name="output_units">
+          <option value="same">Same as input</option>
+          <option value="m">Metres</option>
+          <option value="mm">Millimetres</option>
+          <option value="um">Micrometres</option>
+          <option value="cm">Centimetres</option>
           <option value="inch">Inches</option>
-          <option value="auto">Auto (legacy size heuristic)</option>
         </select>
-        <p class="hint">Explicit units convert lengths to metres, areas to m², and volumes to m³.
-          Auto is a guess, not unit detection.</p>
+        <p class="hint">Input: units of the coordinates in the file. Output: unit of lengths in the
+          results (areas in its square, volumes in its cube, inertia per unit density in its fifth
+          power). As-is keeps the file's units and disables the output choice.</p>
         <label for="axes">Principal dimensions (S, I, L)</label>
         <select id="axes" name="axes">
           <option value="pca">PCA-aligned box (fast)</option>
@@ -70,7 +78,7 @@
         <p id="metadata" class="hint"></p>
         <div class="table-scroll">
           <table>
-            <thead><tr><th>Export</th><th>Parameter</th><th>Value</th></tr></thead>
+            <thead><tr><th>Export</th><th>Parameter</th><th>Value</th><th>Unit</th></tr></thead>
             <tbody id="results"></tbody>
           </table>
         </div>

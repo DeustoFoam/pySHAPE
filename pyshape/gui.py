@@ -27,7 +27,15 @@ from matplotlib.colors import to_rgb
 from matplotlib.figure import Figure
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 
-from .analysis import UNIT_SCALES, prepare_mesh, scale_nodes
+from .analysis import (
+    OUTPUT_UNITS,
+    UNIT_SCALES,
+    apply_output_units,
+    prepare_mesh,
+    resolve_output_units,
+    scale_nodes,
+    unit_label,
+)
 from .bounding import AXES_METHODS
 from .gui_core import (
     LoadedGeometry,
@@ -43,6 +51,27 @@ from .gui_core import (
 ROTATION_DEG_PER_TICK = 0.6
 EDGE_FACE_LIMIT = 4000
 ROTATION_INTERVAL_MS = 40
+
+UNITS_HINT = (
+    "Input: units of the coordinates in the file. Output: unit of lengths in the "
+    "results; areas, volumes and inertia follow (e.g. mm², mm³, mm⁵). As-is keeps "
+    "the file's units and disables the output choice."
+)
+_UNIT_NAMES = {"um": "µm", "mm": "mm", "cm": "cm", "m": "m", "inch": "inch"}
+
+
+SAME_AS_INPUT = "same as input"
+
+
+def units_summary(units: str, scale: float, output_units: str = "m") -> str:
+    """One-line description of how input coordinates map to result units.
+
+    ``output_units`` is the effective output unit (see ``resolve_output_units``).
+    """
+    if units == "as-is":
+        return "Input: as-is → results in input units"
+    result = _UNIT_NAMES.get(output_units, output_units)
+    return f"Input: {_UNIT_NAMES.get(units, units)} → results in {result}"
 
 
 def _shaded_colors(nodes: np.ndarray, faces: np.ndarray, base: str = "lightsteelblue") -> np.ndarray:
@@ -64,6 +93,9 @@ class ShapeGUI(tk.Tk):
         self.geo: Optional[LoadedGeometry] = None
         self.nodes: Optional[np.ndarray] = None
         self.faces: Optional[np.ndarray] = None
+        self.loaded_units = "as-is"
+        self.loaded_scale = 1.0
+        self.output_effective = "m"
         self.metrics: list[Metric] = []
         self.metric_vars: Dict[str, tk.BooleanVar] = {}
 
@@ -105,12 +137,27 @@ class ShapeGUI(tk.Tk):
         ttk.Button(parent, text="Browse…", command=self.browse_file).grid(row=row, column=2, padx=(6, 0))
         row += 1
 
-        ttk.Label(parent, text="Units").grid(row=row, column=0, sticky="w", pady=(6, 0))
-        self.units_var = tk.StringVar(value="auto")
+        ttk.Label(parent, text="Input units (file)").grid(row=row, column=0, sticky="w", pady=(6, 0))
+        self.units_var = tk.StringVar(value="as-is")
         ttk.Combobox(
             parent, textvariable=self.units_var, state="readonly", width=12,
-            values=["auto", *UNIT_SCALES.keys()],
+            values=list(UNIT_SCALES.keys()),
         ).grid(row=row, column=1, sticky="w", pady=(6, 0))
+        row += 1
+        ttk.Label(parent, text="Output units").grid(row=row, column=0, sticky="w", pady=(4, 0))
+        self.output_units_var = tk.StringVar(value=SAME_AS_INPUT)
+        self.output_units_combo = ttk.Combobox(
+            parent, textvariable=self.output_units_var, state="readonly", width=12,
+            values=[SAME_AS_INPUT, *OUTPUT_UNITS.keys()],
+        )
+        self.output_units_combo.grid(row=row, column=1, sticky="w", pady=(4, 0))
+        self.units_var.trace_add("write", lambda *a: self._sync_output_state())
+        self.output_units_var.trace_add("write", lambda *a: self._refresh_units_summary())
+        self._sync_output_state()
+        row += 1
+        ttk.Label(parent, text=UNITS_HINT, foreground="#555", wraplength=320, justify="left").grid(
+            row=row, column=0, columnspan=3, sticky="w", pady=(2, 0)
+        )
         row += 1
 
         ttk.Label(parent, text="Principal axes").grid(row=row, column=0, sticky="w", pady=(6, 0))
@@ -142,6 +189,11 @@ class ShapeGUI(tk.Tk):
         )
         row += 1
         ttk.Label(parent, text="Results (tick to export)").grid(row=row, column=0, sticky="w", pady=(8, 0))
+        row += 1
+        self.units_summary_var = tk.StringVar(value="")
+        ttk.Label(parent, textvariable=self.units_summary_var, foreground="#555").grid(
+            row=row, column=0, columnspan=3, sticky="w"
+        )
         row += 1
         btns = ttk.Frame(parent)
         btns.grid(row=row, column=0, columnspan=3, sticky="w")
@@ -244,9 +296,10 @@ class ShapeGUI(tk.Tk):
         if not path:
             messagebox.showwarning("No file", "Please specify a geometry file.")
             return
+        units = self.units_var.get()
         try:
             geo = load_geometry(path)
-            nodes, _ = scale_nodes(geo.nodes, self.units_var.get())
+            nodes, scale = scale_nodes(geo.nodes, units)
             nodes, faces = prepare_mesh(nodes, geo.faces)
         except Exception as exc:
             messagebox.showerror("Load error", str(exc))
@@ -254,8 +307,10 @@ class ShapeGUI(tk.Tk):
 
         self.geo = geo
         self.nodes, self.faces = nodes, faces
+        self.loaded_units, self.loaded_scale = units, scale
         self.metrics = []
         self._clear_results()
+        self._refresh_units_summary()
 
         info = (
             f"{geo.source_path.name}\n"
@@ -267,6 +322,30 @@ class ShapeGUI(tk.Tk):
         self._update_export_preview()
         self._render_mesh()
         self._start_rotation()
+
+    def _output_choice(self) -> str:
+        choice = self.output_units_var.get()
+        return "same" if choice == SAME_AS_INPUT else choice
+
+    def _sync_output_state(self):
+        """Output units are meaningless for as-is input: disable the selector."""
+        state = "disabled" if self.units_var.get() == "as-is" else "readonly"
+        self.output_units_combo.configure(state=state)
+
+    def _refresh_units_summary(self):
+        if self.nodes is None:
+            self.units_summary_var.set("")
+            return
+        if self.metrics:
+            effective = self.output_effective  # units of the results on screen
+        else:
+            effective = resolve_output_units(self.loaded_units, self._output_choice())
+        text = units_summary(self.loaded_units, self.loaded_scale, effective)
+        if self.metrics and effective != resolve_output_units(
+            self.loaded_units, self._output_choice()
+        ):
+            text += "  (recalculate to apply new output units)"
+        self.units_summary_var.set(text)
 
     # ------------------------------------------------------------------
     # Results / metrics
@@ -285,6 +364,10 @@ class ShapeGUI(tk.Tk):
         except Exception as exc:
             messagebox.showerror("Compute error", str(exc))
             return
+        self.output_effective, _ = apply_output_units(
+            self.metrics, self.loaded_units, self._output_choice(),
+        )
+        self._refresh_units_summary()
         self._populate_results()
 
     def _populate_results(self):
@@ -302,7 +385,8 @@ class ShapeGUI(tk.Tk):
             self.metric_vars[metric.key] = var
             cb = ttk.Checkbutton(
                 self.results_frame,
-                text=f"{metric.label} = {metric.text}",
+                text=f"{metric.label} = {metric.text}"
+                + (f" {metric.unit}" if metric.unit and metric.value is not None else ""),
                 variable=var,
                 state=("normal" if metric.value is not None else "disabled"),
             )
@@ -338,7 +422,8 @@ class ShapeGUI(tk.Tk):
             messagebox.showwarning("No results", "Click 'Calculate results' first.")
             return
         selected = [
-            (m.label, m.value)
+            (m.label, m.value,
+             unit_label(m.key, self.loaded_units, ascii=True, output_units=self.output_effective))
             for m in self.metrics
             if m.value is not None and self.metric_vars.get(m.key, tk.BooleanVar(value=False)).get()
         ]

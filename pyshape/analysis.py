@@ -27,6 +27,77 @@ UNIT_SCALES = {"as-is": 1.0, "um": 1e-6, "mm": 1e-3, "cm": 1e-2, "m": 1.0, "inch
 AXES_LABELS = {"pca": ("PCA", "Axes (PCA estimate)"),
                "min_volume": ("min. volume box", "Axes (minimum-volume box)")}
 
+# Power of length of each dimensional metric; all other metrics are dimensionless
+# (counts, ratios, indices). Inertia is per unit density, hence length^5.
+LENGTH_POWERS = {
+    "surface_area": 2, "volume": 3,
+    "centroid_x": 1, "centroid_y": 1, "centroid_z": 1,
+    "inertia_I1": 5, "inertia_I2": 5, "inertia_I3": 5,
+    "axis_S": 1, "axis_I": 1, "axis_L": 1,
+}
+_SUPERSCRIPTS = {1: "", 2: "²", 3: "³", 5: "⁵"}
+
+# Length units for results: metres per unit. "same" means "same as the input units".
+OUTPUT_UNITS = {"m": 1.0, "mm": 1e-3, "um": 1e-6, "cm": 1e-2, "inch": 0.0254}
+_UNIT_SYMBOLS = {"m": "m", "mm": "mm", "um": "µm", "cm": "cm", "inch": "in"}
+_ASCII_SYMBOLS = {"m": "m", "mm": "mm", "um": "um", "cm": "cm", "inch": "in"}
+
+
+def resolve_output_units(input_units: str, output_units: str) -> str:
+    """Effective output unit: ``"as-is"`` for as-is input, else a key of OUTPUT_UNITS.
+
+    ``output_units="same"`` follows the input units.
+    """
+    if output_units != "same" and output_units not in OUTPUT_UNITS:
+        raise ValueError(
+            f"Unknown output units '{output_units}'. Choose same or {', '.join(OUTPUT_UNITS)}"
+        )
+    if input_units == "as-is":
+        return "as-is"
+    if output_units != "same":
+        return output_units
+    return input_units
+
+
+def unit_label(key: str, units: str, *, ascii: bool = False, output_units: str = "m") -> str:
+    """Unit of a metric for the given input and output units ("" if dimensionless).
+
+    Explicit input units give results in ``output_units`` (default m:
+    m, m², m³, m⁵); ``as-is`` keeps the coordinates of the input file, so
+    results are in "input units" whatever ``output_units`` is.
+    ``ascii=True`` writes powers as ``^2`` and µm as ``um`` (used for CSV files).
+    """
+    power = LENGTH_POWERS.get(key, 0)
+    if power == 0:
+        return ""
+    if units == "as-is" or output_units == "as-is":
+        base = "input units"
+    else:
+        base = (_ASCII_SYMBOLS if ascii else _UNIT_SYMBOLS)[output_units]
+    if power == 1:
+        return base
+    return f"{base}^{power}" if ascii else f"{base}{_SUPERSCRIPTS[power]}"
+
+
+def apply_output_units(
+    metrics: list["Metric"], input_units: str, output_units: str = "m",
+) -> tuple[str, float]:
+    """Rescale dimensional metrics (computed in metres) and set their units, in place.
+
+    Returns the effective output unit and the length multiplier applied
+    (1 for metres and for as-is input). A length scales with k, an area
+    with k², a volume with k³ and an inertia per unit density with k⁵;
+    dimensionless metrics are untouched.
+    """
+    effective = resolve_output_units(input_units, output_units)
+    factor = 1.0 if effective == "as-is" else 1.0 / OUTPUT_UNITS[effective]
+    for metric in metrics:
+        power = LENGTH_POWERS.get(metric.key, 0)
+        if power and metric.value is not None and factor != 1.0:
+            metric.value = metric.value * factor ** power
+        metric.unit = unit_label(metric.key, input_units, output_units=effective)
+    return effective, factor
+
 
 @dataclass
 class Metric:
@@ -38,6 +109,7 @@ class Metric:
     group: str = "General"
     default_selected: bool = True
     error: Optional[str] = None
+    unit: str = ""
 
     @property
     def text(self) -> str:
@@ -55,6 +127,8 @@ class AnalysisResult:
     input_units: str = "as-is"
     scale_factor: float = 1.0
     axes_method: str = "pca"
+    output_units: str = "m"
+    output_scale: float = 1.0
 
     @property
     def values(self) -> dict[str, Optional[float]]:
@@ -88,7 +162,12 @@ class AnalysisResult:
                 selected.append(metric)
         if not selected:
             raise ValueError("Select at least one available metric")
-        return csv_text(((m.key, m.value) for m in selected), self.source_name)
+        return csv_text(
+            ((m.key, m.value,
+              unit_label(m.key, self.input_units, ascii=True, output_units=self.output_units))
+             for m in selected),
+            self.source_name,
+        )
 
     def write_csv(self, path: str | Path, keys: Optional[Iterable[str]] = None) -> None:
         """Write selected results as UTF-8 CSV, overwriting the destination."""
@@ -125,17 +204,10 @@ def validate_mesh(nodes: ArrayLike, faces: ArrayLike) -> tuple[np.ndarray, np.nd
 
 
 def scale_nodes(nodes: np.ndarray, units: str) -> tuple[np.ndarray, float]:
-    """Convert explicit input units to metres, or preserve coordinates as-is.
-
-    ``auto`` retains the desktop viewer's legacy size heuristic; it is opt-in.
-    """
-    if units == "auto":
-        span = float(np.ptp(nodes, axis=0).max())
-        scale = 1e-6 if span > 10000 else 1e-3 if span > 10 else 1.0
-    elif units in UNIT_SCALES:
-        scale = UNIT_SCALES[units]
-    else:
-        raise ValueError(f"Unknown units '{units}'. Choose auto or {', '.join(UNIT_SCALES)}")
+    """Convert explicit input units to metres, or preserve coordinates as-is."""
+    if units not in UNIT_SCALES:
+        raise ValueError(f"Unknown units '{units}'. Choose one of: {', '.join(UNIT_SCALES)}")
+    scale = UNIT_SCALES[units]
     return nodes * scale, scale
 
 
@@ -429,22 +501,33 @@ def compute_metrics(nodes: ArrayLike, faces: ArrayLike, *, axes: str = "pca") ->
 
 def analyze_mesh(
     nodes: ArrayLike, faces: ArrayLike, *, units: str = "as-is", axes: str = "pca",
+    output_units: str = "m",
 ) -> AnalysisResult:
     """Analyze arrays; explicit physical units convert lengths to metres.
 
     ``axes`` is ``"pca"`` (default) or ``"min_volume"``; see :func:`compute_metrics`.
+    ``output_units`` (``"m"`` by default, or ``"mm"``, ``"um"``, ``"cm"``,
+    ``"inch"``, ``"same"``) sets the length unit of the dimensional results;
+    it is ignored for ``units="as-is"``, whose results stay in input units.
     """
+    resolve_output_units(units if units == "as-is" else "m", output_units)  # validate early
     vertices, indices = validate_mesh(nodes, faces)
     vertices, scale = scale_nodes(vertices, units)
+    metrics = compute_metrics(vertices, indices, axes=axes)
+    effective, factor = apply_output_units(metrics, units, output_units)
     return AnalysisResult(
-        compute_metrics(vertices, indices, axes=axes),
-        input_units=units, scale_factor=scale, axes_method=axes,
+        metrics, input_units=units, scale_factor=scale, axes_method=axes,
+        output_units=effective, output_scale=factor,
     )
 
 
-def analyze_file(path: str | Path, *, units: str = "as-is", axes: str = "pca") -> AnalysisResult:
+def analyze_file(
+    path: str | Path, *, units: str = "as-is", axes: str = "pca", output_units: str = "m",
+) -> AnalysisResult:
     """Load and analyze a supported mesh file; no GUI or server is needed."""
     geometry = load_geometry(path)
-    result = analyze_mesh(geometry.nodes, geometry.faces, units=units, axes=axes)
+    result = analyze_mesh(
+        geometry.nodes, geometry.faces, units=units, axes=axes, output_units=output_units,
+    )
     result.source_name = geometry.source_path.name
     return result
