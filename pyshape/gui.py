@@ -45,6 +45,7 @@ from .gui_core import (
     compute_metrics,
     load_geometry,
     make_export_path,
+    units_summary,
     write_csv,
 )
 
@@ -57,21 +58,7 @@ UNITS_HINT = (
     "results; areas, volumes and inertia follow (e.g. mm², mm³, mm⁵). As-is keeps "
     "the file's units and disables the output choice."
 )
-_UNIT_NAMES = {"um": "µm", "mm": "mm", "cm": "cm", "m": "m", "inch": "inch"}
-
-
 SAME_AS_INPUT = "same as input"
-
-
-def units_summary(units: str, scale: float, output_units: str = "m") -> str:
-    """One-line description of how input coordinates map to result units.
-
-    ``output_units`` is the effective output unit (see ``resolve_output_units``).
-    """
-    if units == "as-is":
-        return "Input: as-is → results in input units"
-    result = _UNIT_NAMES.get(output_units, output_units)
-    return f"Input: {_UNIT_NAMES.get(units, units)} → results in {result}"
 
 
 def _shaded_colors(nodes: np.ndarray, faces: np.ndarray, base: str = "lightsteelblue") -> np.ndarray:

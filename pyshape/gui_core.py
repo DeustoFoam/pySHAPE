@@ -20,6 +20,21 @@ from .io import (
 )
 
 
+_UNIT_NAMES = {"um": "µm", "mm": "mm", "cm": "cm", "m": "m", "inch": "inch"}
+
+
+def units_summary(units: str, scale: float, output_units: str = "m") -> str:
+    """One-line description of how input coordinates map to result units.
+
+    ``output_units`` is the effective output unit (see ``resolve_output_units``).
+    Kept here, free of Tk/Matplotlib, so that it can be tested without the GUI extra.
+    """
+    if units == "as-is":
+        return "Input: as-is → results in input units"
+    result = _UNIT_NAMES.get(output_units, output_units)
+    return f"Input: {_UNIT_NAMES.get(units, units)} → results in {result}"
+
+
 def axis_triad(nodes: np.ndarray) -> tuple[np.ndarray, float]:
     """Return the center and arm length of a bounding-box-scaled XYZ triad."""
     mins = nodes.min(axis=0)

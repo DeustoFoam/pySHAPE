@@ -92,7 +92,7 @@ def test_write_csv_with_units(tmp_path):
 
 
 def test_units_summary():
-    from pyshape.gui import units_summary
+    from pyshape.gui_core import units_summary
     assert units_summary("mm", 1e-3) == "Input: mm → results in m"
     assert units_summary("um", 1e-6) == "Input: µm → results in m"
     assert units_summary("as-is", 1.0) == "Input: as-is → results in input units"
