@@ -345,7 +345,7 @@ Angelidakis, V., Nadimi, S. and Utili, S., 2021. [SHape Analyser for Particle En
 
 The BibTeX citation is available in [CITATION.bib](CITATION.bib). The original MATLAB project and its development are credited to Vasileios Angelidakis, Sadegh Nadimi, and Stefano Utili at [vsangelidakis/SHAPE](https://github.com/vsangelidakis/SHAPE).
 
-The package also implements descriptors and methods reported by Wadell (1932), Krumbein (1941), Zingg (1935), Potticary et al. (2015), Kong and Fonseca (2018), Angelidakis et al. (2022, *Powder Technology* 396, 689–695), and Bagi and Orosz (2020), as applicable.
+The package also implements descriptors and methods reported by Wadell (1932), Krumbein (1941), Zingg (1935), Potticary et al. (2015), Kong and Fonseca (2018), Angelidakis et al. (2022, *Powder Technology* 396, 689–695), and the surface orientation tensor of Bagi and Orosz (2020) and Orosz et al. (2021, *Powder Technology* 394, 312–325), as applicable.
 
 ## Validation
 
