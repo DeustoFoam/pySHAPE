@@ -43,6 +43,7 @@ Repository = "https://github.com/DeustoFoam/pySHAPE"
 [project.scripts]
 pyshape-gui = "pyshape.gui:main"
 pyshape-web = "pyshape.web:main"
+pyshape-batch = "pyshape.batch:main"
 
 [tool.setuptools.dynamic]
 version = {attr = "pyshape.__version__"}

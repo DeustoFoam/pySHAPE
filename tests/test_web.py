@@ -197,3 +197,25 @@ def test_auto_units_rejected_by_api(client, stl_path):
     response = client.post("/api/analyze", files=files, data={"units": "auto"})
     assert response.status_code == 422
     assert "Unknown units 'auto'" in response.json()["detail"]
+
+
+def test_batch_page_and_navigation(client):
+    page = client.get("/batch")
+    assert page.status_code == 200
+    assert "Analyse all" in page.text and "webkitdirectory" in page.text
+    assert client.get("/static/batch.js").status_code == 200
+    for path in ("/", "/batch"):
+        html = client.get(path).text
+        assert 'href="/batch"' in html and 'href="/"' in html
+
+
+def test_analyze_can_include_csv(client, stl_path):
+    files = lambda: {"file": (stl_path.name, stl_path.read_bytes())}
+    payload = client.post("/api/analyze", files=files(), data={"units": "mm", "include_csv": "true"}).json()
+    expected = analyze_file(stl_path, units="mm")
+    assert payload["csv"] == expected.to_csv()
+    assert "csv" not in client.post("/api/analyze", files=files()).json()
+    picked = client.post("/api/analyze", files=files(), data={"include_csv": "true", "keys": "volume"}).json()
+    assert picked["csv"] == analyze_file(stl_path).to_csv(["volume"])
+    bad = client.post("/api/analyze", files=files(), data={"include_csv": "true", "keys": "invalid"})
+    assert bad.status_code == 422
