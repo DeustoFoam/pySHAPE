@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>pySHAPE | Batch analysis</title>
+  <link rel="icon" href="/static/pyshape-icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/static/style.css">
+  <script src="/static/batch.js" defer></script>
+</head>
+<body>
+  <header>
+    <h1><img class="brand-icon" src="/static/pyshape-icon.svg" width="44" height="44" alt="">pySHAPE <span>Batch analysis</span></h1>
+    <nav aria-label="Pages">
+      <a href="/">Single particle</a>
+      <a href="/batch" aria-current="page">Batch</a>
+      <a href="/docs">API documentation</a>
+    </nav>
+  </header>
+  <main>
+    <section class="controls" aria-label="Batch controls">
+      <form id="batch-form">
+        <h2>Choose particles</h2>
+        <label for="folder">Folder of STL files</label>
+        <input id="folder" type="file" webkitdirectory multiple>
+        <label for="files">…or individual STL files</label>
+        <input id="files" type="file" accept=".stl" multiple>
+        <label class="check"><input id="recursive" type="checkbox"> Include subfolders</label>
+        <p id="selection" class="hint">No files chosen. Each file may be up to 32 MiB.</p>
+        <label for="units">Input units (files)</label>
+        <select id="units" name="units">
+          <option value="as-is">As-is (no conversion)</option>
+          <option value="um">Micrometres</option>
+          <option value="mm">Millimetres</option>
+          <option value="cm">Centimetres</option>
+          <option value="m">Metres</option>
+          <option value="inch">Inches</option>
+        </select>
+        <label for="output-units">Output units</label>
+        <select id="output-units" name="output_units">
+          <option value="same">Same as input</option>
+          <option value="m">Metres</option>
+          <option value="mm">Millimetres</option>
+          <option value="um">Micrometres</option>
+          <option value="cm">Centimetres</option>
+          <option value="inch">Inches</option>
+        </select>
+        <label for="axes">Principal dimensions (S, I, L)</label>
+        <select id="axes" name="axes">
+          <option value="pca">PCA-aligned box (fast)</option>
+          <option value="min_volume">Minimum-volume box</option>
+        </select>
+        <p class="hint">The same settings apply to every file. They work as on the
+          single-particle page.</p>
+        <label for="suffix">CSV filename suffix</label>
+        <input id="suffix" value="" placeholder="none: particle.stl → particle.csv">
+        <label class="check"><input id="summary" type="checkbox"> Also make a summary CSV (one row per particle)</label>
+        <button id="run" type="submit" disabled>Analyse all</button>
+        <button id="stop" type="button" class="secondary" hidden>Stop after current file</button>
+      </form>
+      <p id="status" role="status" aria-live="polite">Choose a folder or files to begin.</p>
+      <progress id="progress" max="1" value="0" hidden></progress>
+      <section aria-labelledby="download-heading">
+        <h2 id="download-heading">Download results</h2>
+        <button id="download-all" type="button" disabled>Download all CSVs (.zip)</button>
+        <p class="hint">The zip holds one CSV per particle, with the same name as its STL file
+          and in the same subfolder. Single CSVs can be downloaded from the table.
+          Each CSV has the standard selection of results. With the Python package,
+          <code>pyshape-batch FOLDER</code> writes the CSVs straight next to the files.</p>
+      </section>
+    </section>
+    <section class="workspace" aria-label="Batch results">
+      <section aria-labelledby="results-heading">
+        <h2 id="results-heading">Files</h2>
+        <p id="metadata" class="hint"></p>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>#</th><th>File</th><th>Status</th><th>CSV</th></tr></thead>
+            <tbody id="files-table"></tbody>
+          </table>
+        </div>
+      </section>
+    </section>
+  </main>
+</body>
+</html>

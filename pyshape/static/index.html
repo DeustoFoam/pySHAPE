@@ -11,7 +11,11 @@
 <body>
   <header>
     <h1><img class="brand-icon" src="/static/pyshape-icon.svg" width="44" height="44" alt="">pySHAPE <span>Particle analysis</span></h1>
-    <a href="/docs">API documentation</a>
+    <nav aria-label="Pages">
+      <a href="/" aria-current="page">Single particle</a>
+      <a href="/batch">Batch</a>
+      <a href="/docs">API documentation</a>
+    </nav>
   </header>
   <main>
     <section class="controls" aria-label="Analysis controls">
@@ -26,7 +30,8 @@
           <option value="mm">Millimetres</option>
           <option value="cm">Centimetres</option>
           <option value="m">Metres</option>
-          <option value="inch">Inches</option>        </select>
+          <option value="inch">Inches</option>
+        </select>
         <label for="output-units">Output units</label>
         <select id="output-units" name="output_units">
           <option value="same">Same as input</option>

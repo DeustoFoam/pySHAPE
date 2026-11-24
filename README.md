@@ -90,7 +90,8 @@ These commands work from any folder. Do not run the file directly
 (`python pyshape/gui.py`): it is part of the package and fails with
 `attempted relative import with no known parent package`.
 
-The install also creates the shortcuts `pyshape-gui` and `pyshape-web`. If pip
+The install also creates the shortcuts `pyshape-gui`, `pyshape-web` and
+`pyshape-batch` (see [Batch analysis](#batch-analysis-of-a-folder)). If pip
 warns that its `Scripts` folder "is not on PATH", either add that folder to
 PATH or keep using the `python -m` commands above.
 
@@ -118,6 +119,34 @@ json_text = json.dumps(result.to_dict(), allow_nan=False)
 Both return an `AnalysisResult` containing 30 metric records. No window or
 server is started. `load_geometry(path)` is also public when you need the
 mesh arrays and source metadata.
+
+### Batch analysis of a folder
+
+Analyse every particle file in a folder with the same settings. By default each
+particle gets its own CSV next to it, with the same name
+(`particle_01.stl` → `particle_01.csv`):
+
+```python
+from pyshape import analyze_folder
+
+batch = analyze_folder("particles/", units="mm", output_units="mm")
+for item in batch.failed:
+    print(item.path.name, item.error)  # bad files are reported and skipped
+```
+
+The same from the command line (exit code 1 if any file failed):
+
+```bash
+pyshape-batch particles/ --units mm --output-units mm
+pyshape-batch particles/ --recursive --summary --suffix _SHAPE --no-overwrite
+```
+
+Options: `suffix` (added to each CSV name), `avoid_overwrite` (number new
+CSVs instead of overwriting, `--no-overwrite`), `recursive` (include
+subfolders), `summary` (also write `pyshape_summary.csv` with one row per
+particle), `keys` (choose the metrics) and `write_csv=False` (results only).
+Every format `analyze_file` reads is included. Inputs with the same name
+(`a.stl` and `a.obj`) never overwrite each other's CSV.
 
 ### Analyze arrays or call individual functions
 
@@ -208,11 +237,19 @@ pyshape-web
 python -m pyshape.web --host 127.0.0.1 --port 8000
 ```
 
-Open <http://127.0.0.1:8000> to upload an STL, choose input units,
-view grouped results, select descriptors, and download CSV. The interactive
-mesh preview supports drag rotation, zoom, an XYZ triad, and auto-rotation.
-For large meshes only the preview is sampled (at most 5000 triangles);
-analysis always uses the full mesh.
+Open <http://127.0.0.1:8000>. The interface has two pages:
+
+- **Single particle** (`/`): upload an STL, choose input units,
+  view grouped results, select descriptors, and download CSV. The interactive
+  mesh preview supports drag rotation, zoom, an XYZ triad, and auto-rotation.
+  For large meshes only the preview is sampled (at most 5000 triangles);
+  analysis always uses the full mesh.
+- **Batch** (`/batch`): choose a folder (optionally with subfolders) or several
+  STL files and analyse them all with the same settings. A table shows the
+  status of each file. Failed files are reported and skipped. Download each
+  CSV, or a zip with one CSV per particle named after its STL file, plus an
+  optional summary CSV. To write the CSVs straight next to the files, use
+  `pyshape-batch` instead.
 
 ![pySHAPE browser interface showing a generated multi-sphere particle, its solid-union preview, and grouped analysis results](docs/images/web-viewer.png)
 
@@ -238,8 +275,10 @@ curl -F "file=@particle.stl" -F "units=mm" \
 ```
 
 - `POST /api/analyze`: multipart `file`, optional `units` (default `as-is`),
-  optional `include_preview` (default `false`). Returns the same JSON data
-  as the Python result, plus `preview` when requested.
+  optional `include_preview` (default `false`), optional `include_csv`
+  (default `false`) with optional `keys`. Returns the same JSON data
+  as the Python result, plus `preview` and `csv` (the text `/api/export`
+  returns) when requested.
 - `POST /api/export`: multipart `file`, optional `units`, optional
   comma-separated `keys`. Returns CSV.
 - `GET /api/health`: readiness response.
