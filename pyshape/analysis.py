@@ -260,11 +260,72 @@ def _volume_error(faces: np.ndarray) -> Optional[str]:
 
 
 def prepare_mesh(nodes: ArrayLike, faces: ArrayLike) -> tuple[np.ndarray, np.ndarray]:
-    """Orient closed shells outward and combine them as a solid union.
+    """Validate a triangle mesh, orient its closed shells outwards and merge them.
 
-    Open/non-manifold meshes are not filled or repaired. Multiple closed shells
-    represent solid components, not cavities, and need the ``mesh`` extra.
-    Input arrays are never modified.
+    This is the first step of :func:`compute_metrics`, and therefore of
+    :func:`analyze_mesh` and :func:`analyze_file`; call it directly to obtain
+    the surface that is actually analysed (e.g. to save or inspect it).
+
+    Steps:
+
+    1. The arrays are validated (see :func:`validate_mesh`); one-based faces
+       are recognised when unambiguous.
+    2. Edges are compared as unordered vertex pairs. If any edge belongs to one
+       triangle (a boundary) or to more than two (a non-manifold edge), the mesh
+       is treated as open and returned unchanged; volume-based descriptors are
+       then reported as unavailable by :func:`compute_metrics`.
+    3. Shells are the sets of triangles connected through shared edges. In each
+       shell, the winding of the first triangle (in input order) is kept and
+       propagated across shared edges: a neighbour that traverses a shared edge
+       in the same direction as the triangle it is reached from is reversed.
+    4. Each shell is reversed as a whole if its signed volume is negative, so
+       that its normals point outwards.
+    5. Two or more closed shells are treated as solid components (not cavities)
+       and merged by a Boolean union with Manifold, so that overlapping material
+       is counted once and internal surfaces are removed.
+
+    Parameters
+    ----------
+    nodes : (N, 3) array_like of float
+        Vertex coordinates.
+    faces : (M, 3) array_like of int
+        Triangle vertex indices, zero- or one-based.
+
+    Returns
+    -------
+    nodes : (N', 3) ndarray of float
+        Vertex coordinates; new arrays when several shells are merged.
+    faces : (M', 3) ndarray of int
+        Zero-based triangles, oriented outwards for closed meshes.
+
+    Raises
+    ------
+    ValueError
+        If the arrays are invalid, a closed surface is not orientable (a
+        triangle would have to be both kept and reversed), or the union fails.
+    ImportError
+        If several closed shells are present and the ``mesh`` extra
+        (trimesh and manifold3d) is not installed.
+
+    Notes
+    -----
+    Input arrays are never modified. Meshes are not repaired or filled. Two
+    cases are accepted without a warning: closed shells that touch at a single
+    vertex (only edges are checked) are oriented separately and merged, and the
+    outward direction is taken from the sign of the signed volume without a
+    tolerance, so very thin shells lose accuracy as their volume approaches
+    round-off; :func:`compute_metrics` reports the volume as unavailable only
+    when it is exactly zero.
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from pyshape import prepare_mesh
+    >>> nodes = np.array([[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]], float)
+    >>> inward = np.array([[0, 1, 2], [0, 3, 1], [1, 3, 2], [2, 3, 0]])
+    >>> oriented_nodes, oriented_faces = prepare_mesh(nodes, inward)
+    >>> oriented_faces.tolist()
+    [[2, 1, 0], [1, 3, 0], [2, 3, 1], [0, 3, 2]]
     """
     nodes, faces = validate_mesh(nodes, faces)
     edges = np.concatenate((faces[:, [0, 1]], faces[:, [1, 2]], faces[:, [2, 0]]))

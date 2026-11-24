@@ -168,6 +168,26 @@ All existing low-level public imports remain available, including tetrahedral
 volume/inertia and roughness functions. The high-level triangle-mesh analysis
 does not derive surface roughness or tetrahedral inertia automatically.
 
+### Get the surface that is analysed
+
+Before computing any descriptor, `analyze_file` and `analyze_mesh` call
+`prepare_mesh`, which orients every closed shell consistently and outwards and
+merges several shells into one solid (see the contract below). Call it directly
+to inspect or save the corrected surface:
+
+```python
+import numpy as np
+from pyshape import load_geometry, prepare_mesh
+
+geometry = load_geometry("particle.stl")
+nodes, faces = prepare_mesh(geometry.nodes, geometry.faces)  # inputs are not modified
+np.savez("particle_prepared.npz", nodes=nodes, faces=faces)
+```
+
+An open mesh is returned unchanged; a closed surface that cannot be oriented
+(e.g. a Klein bottle) raises `ValueError`. Its docstring (`help(prepare_mesh)`)
+lists the steps and the cases accepted without a warning.
+
 ### Input and result contract
 
 - `analyze_mesh` accepts nonempty `(N, 3)` vertex coordinates and `(M, 3)`
@@ -200,7 +220,7 @@ does not derive surface roughness or tetrahedral inertia automatically.
   and 12 s for 10,000 hull vertices on a laptop); for very dense meshes use
   a decimated copy or the PCA box.
 - Closed, orientable mesh shells have their triangle winding corrected
-  automatically, including wholly reversed shells; the original arrays/files
+  automatically by `prepare_mesh`, including wholly reversed shells; the original arrays/files
   are not changed. Volume requires nonzero enclosed volume. Open/non-manifold
   meshes are not filled and still report unavailable volume-dependent metrics.
 - Multi-sphere/multi-component particles are interpreted as a **solid union**:
