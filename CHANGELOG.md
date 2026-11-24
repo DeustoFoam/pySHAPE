@@ -4,6 +4,20 @@ All notable changes to pySHAPE. Versions follow the tags of the GitHub
 repository; each release is archived on Zenodo (all versions:
 https://doi.org/10.5281/zenodo.24004678).
 
+## Unreleased
+
+### New
+- The browser interface (single-particle and batch pages) and the HTTP API
+  accept the formats of the library except the text glTF (`.gltf`): STL
+  (native, no extra package) and OBJ, PLY, OFF, GLB, 3MF and DAE (read by
+  trimesh), with any case of the extension. A `.glb` must embed its buffers
+  and images; DAE also needs `pycollada`. Results for STL files are
+  unchanged.
+
+### Changed
+- trimesh 5.0 or later is required (extras `mesh`, `gui`, `web`): it refuses
+  references of uploaded files to files outside their folder.
+
 ## 0.1.3 (2026-11-24)
 
 ### Changed

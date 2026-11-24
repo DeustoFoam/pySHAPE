@@ -21,12 +21,13 @@
     <section class="controls" aria-label="Batch controls">
       <form id="batch-form">
         <h2>Choose particles</h2>
-        <label for="folder">Folder of STL files</label>
+        <label for="folder">Folder of mesh files</label>
         <input id="folder" type="file" webkitdirectory multiple>
-        <label for="files">…or individual STL files</label>
-        <input id="files" type="file" accept=".stl" multiple>
+        <label for="files">…or individual mesh files</label>
+        <input id="files" type="file" accept=".stl,.obj,.ply,.off,.glb,.3mf,.dae" multiple>
         <label class="check"><input id="recursive" type="checkbox"> Include subfolders</label>
-        <p id="selection" class="hint">No files chosen. Each file may be up to 32 MiB.</p>
+        <p id="selection" class="hint">No files chosen. Formats: STL (native), or OBJ, PLY,
+          OFF, GLB, 3MF, DAE (read by trimesh); each file up to 32 MiB.</p>
         <label for="units">Input units (files)</label>
         <select id="units" name="units">
           <option value="as-is">As-is (no conversion)</option>
@@ -63,7 +64,7 @@
       <section aria-labelledby="download-heading">
         <h2 id="download-heading">Download results</h2>
         <button id="download-all" type="button" disabled>Download all CSVs (.zip)</button>
-        <p class="hint">The zip holds one CSV per particle, with the same name as its STL file
+        <p class="hint">The zip holds one CSV per particle, with the same name as its mesh file
           and in the same subfolder. Single CSVs can be downloaded from the table.
           Each CSV has the standard selection of results. With the Python package,
           <code>pyshape-batch FOLDER</code> writes the CSVs straight next to the files.</p>

@@ -73,8 +73,10 @@ def test_csv_matches_library(client, stl_path):
 
 @pytest.mark.parametrize("path", ["/api/analyze", "/api/export"])
 @pytest.mark.parametrize("filename,data,code", [
-    ("bad.obj", b"not STL", 415),
+    ("bad.xyz", b"not a mesh", 415),
+    ("noextension", b"not a mesh", 415),
     ("empty.stl", b"", 422),
+    ("empty.obj", b"", 422),
     ("bad.stl", b"not STL", 422),
 ])
 def test_invalid_uploads(client, path, filename, data, code):
