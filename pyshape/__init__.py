@@ -2,7 +2,7 @@
 
 __version__ = "0.1.1"
 
-from .analysis import AnalysisResult, Metric, analyze_file, analyze_mesh, compute_metrics
+from .analysis import AnalysisResult, Metric, analyze_file, analyze_mesh, compute_metrics, prepare_mesh
 from .batch import BatchItem, BatchResult, analyze_folder, find_particle_files
 from .bounding import AXES_METHODS, OrientedBox, min_volume_box, oriented_box, pca_box
 from .geometry import closed_surface_inertia_tensor, surface_area, volume_centroid_inertia_tensor
@@ -32,6 +32,7 @@ __all__ = [
 	"BatchResult",
 	"analyze_mesh",
 	"compute_metrics",
+	"prepare_mesh",
 	"load_geometry",
 	"AXES_METHODS",
 	"OrientedBox",

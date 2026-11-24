@@ -355,3 +355,39 @@ def test_orientation_indices_cuboid_exact():
     assert np.isclose(values["orientation_E"], 0.25)
     labels = {m.key: m.label for m in result.metrics}
     assert labels["orientation_E"] == "Elongation E (surface orientation tensor)"
+
+
+def test_prepare_mesh_is_public_and_orients_outwards(tetra_mesh):
+    from pyshape import prepare_mesh
+
+    nodes, faces = tetra_mesh
+    inward = faces[:, ::-1].copy()
+    before = inward.copy()
+    out_nodes, out_faces = prepare_mesh(nodes, inward)
+    assert np.array_equal(inward, before)
+    volume, _ = analysis.mesh_volume_centroid(out_nodes, out_faces)
+    assert volume == pytest.approx(1 / 6)
+
+
+def test_prepare_mesh_returns_open_mesh_unchanged(tetra_mesh):
+    from pyshape import prepare_mesh
+
+    nodes, faces = tetra_mesh
+    _, out_faces = prepare_mesh(nodes, faces[:3])
+    assert np.array_equal(out_faces, faces[:3])
+
+
+def test_non_orientable_surface_is_rejected():
+    from pyshape import prepare_mesh
+
+    # Six-vertex triangulation of the real projective plane: every edge is
+    # shared by exactly two triangles, but no consistent winding exists.
+    faces = np.array([
+        [0, 1, 2], [0, 2, 3], [0, 3, 4], [0, 4, 5], [0, 5, 1],
+        [1, 2, 4], [2, 3, 5], [3, 4, 1], [4, 5, 2], [5, 1, 3],
+    ])
+    nodes = np.random.default_rng(0).normal(size=(6, 3))
+    edges = np.sort(np.concatenate((faces[:, [0, 1]], faces[:, [1, 2]], faces[:, [2, 0]])), axis=1)
+    assert set(np.unique(edges, axis=0, return_counts=True)[1]) == {2}
+    with pytest.raises(ValueError, match="not orientable"):
+        prepare_mesh(nodes, faces)
