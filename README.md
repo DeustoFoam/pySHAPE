@@ -263,15 +263,16 @@ python -m pyshape.web --host 127.0.0.1 --port 8000
 
 Open <http://127.0.0.1:8000>. The interface has two pages:
 
-- **Single particle** (`/`): upload an STL, choose input units,
+- **Single particle** (`/`): upload a mesh file, choose input units,
   view grouped results, select descriptors, and download CSV. The interactive
   mesh preview supports drag rotation, zoom, an XYZ triad, and auto-rotation.
   For large meshes only the preview is sampled (at most 5000 triangles);
   analysis always uses the full mesh.
 - **Batch** (`/batch`): choose a folder (optionally with subfolders) or several
-  STL files and analyse them all with the same settings. A table shows the
+  mesh files and analyse them all with the same settings. A table shows the
   status of each file. Failed files are reported and skipped. Download each
-  CSV, or a zip with one CSV per particle named after its STL file, plus an
+  CSV, or a zip with one CSV per particle named after its mesh file (files
+  with the same name in different formats get `_1`, `_2`, ...), plus an
   optional summary CSV. To write the CSVs straight next to the files, use
   `pyshape-batch` instead.
 
@@ -280,9 +281,16 @@ Open <http://127.0.0.1:8000>. The interface has two pages:
 *Browser viewer analyzing a generated three-sphere demonstration mesh as one
 solid particle. The logo, mesh, and screenshot shown here were created for pySHAPE.*
 
-The optional HTTP adapter accepts **self-contained STL files only**, up to
-32 MiB. Other formats remain available through Python and the desktop viewer.
-Uploads use temporary files that are removed after each request; no server-side
+Both pages and the HTTP API accept every format of the library, up to 32 MiB
+per file: STL, OBJ, PLY, OFF, GLB, glTF, 3MF and DAE (any case of the
+extension). The reader is chosen by the extension, and every mesh is then
+prepared in the same way (orientation of closed shells, solid union). Each
+upload must be one **self-contained file**: a `.gltf` whose buffers or images
+are separate files is rejected (embed them, or export `.glb`), and OBJ or DAE
+references to materials and textures are not available. Formats other than STL
+need trimesh (`pyshape[mesh]`, included in `pyshape[web]`); without it the
+server answers 503. DAE files also need `pycollada` (`pip install pycollada`),
+which no pySHAPE extra installs. Uploads use temporary files that are removed after each request; no server-side
 analysis sessions are retained. CSV export resubmits and analyzes the file.
 Browser downloads follow the browser's save/duplicate-filename behavior rather
 than writing alongside a file on the server.
@@ -307,14 +315,23 @@ curl -F "file=@particle.stl" -F "units=mm" \
   comma-separated `keys`. Returns CSV.
 - `GET /api/health`: readiness response.
 - `/docs`: generated interactive API documentation.
-- Invalid data/selection returns 422, unsupported formats 415, and uploads
-  exceeding the file-size limit 413. A missing union dependency returns 503.
+- Invalid data/selection returns 422, unsupported extensions (and `.gltf`
+  files with external buffers or images) 415, and uploads exceeding the
+  file-size limit 413. A missing dependency (trimesh for non-STL formats, or
+  the union backend) returns 503.
 
 For ASGI integration use `from pyshape.web import create_app`. The server
 binds to loopback by default and is intended for local use. It has no
 authentication, deployment-level request-body limits, or resource isolation.
 Do not expose it directly to untrusted users; remote deployment needs
 appropriate authentication, proxy limits, and workload isolation.
+STL uploads are read by pySHAPE's own parser or trimesh; uploads in the other
+formats are parsed by trimesh. Some of these formats can refer to other files,
+so pySHAPE requires trimesh 5.0 or later, which refuses references outside the
+upload's temporary folder (that folder holds only the uploaded file), and
+rejects `.gltf`/`.glb` files that refer to external buffers or images before
+trimesh reads them. The server still binds to the local host by default, and
+the 32 MiB limit is unchanged.
 
 ## Examples
 

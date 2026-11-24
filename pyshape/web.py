@@ -2,6 +2,8 @@
 from __future__ import annotations
 
 import argparse
+import json
+import struct
 from pathlib import Path
 from tempfile import TemporaryDirectory
 from typing import Optional
@@ -17,11 +19,13 @@ from .analysis import (
     AXES_LABELS, LENGTH_POWERS, OUTPUT_UNITS, UNIT_SCALES,
     AnalysisResult, analyze_mesh, compute_metrics, scale_nodes,
 )
-from .io import load_geometry
+from . import io as io_module
+from .io import NATIVE_EXTENSIONS, SUPPORTED_EXTENSIONS, load_geometry
 from .preprocess import prepare_mesh
 
 MAX_UPLOAD_BYTES = 32 * 1024 * 1024
 MAX_PREVIEW_FACES = 5000
+ACCEPTED = ", ".join(SUPPORTED_EXTENSIONS)  # for messages and /docs
 
 
 # --- Documentation-only models: they describe the responses in /docs and
@@ -72,12 +76,14 @@ def _error(description: str) -> dict[str, object]:
 
 UPLOAD_ERRORS = {
     413: _error(f"The file is larger than {MAX_UPLOAD_BYTES // 2**20} MiB."),
-    415: _error("The file is not an STL file."),
+    415: _error(f"The file extension is not one of {ACCEPTED}, or a `.gltf`/`.glb` file "
+                "refers to external files (buffers or images must be embedded)."),
     422: _error("Invalid mesh, or unknown `units`, `axes`, `output_units` or metric key. "
                 "For a missing `file` or a malformed field, `detail` is instead a list of "
                 "validation errors."),
-    503: _error("The mesh has several closed shells and the solid-union packages "
-                "(`pyshape[mesh]`) are not installed."),
+    503: _error("A package is missing: trimesh, to read formats other than STL, or the "
+                "solid-union packages, for a mesh with several closed shells. Both come "
+                "with `pyshape[mesh]`."),
 }
 
 _POWER_TEXT = {1: "length", 2: "length²", 3: "length³", 5: "length⁵"}
@@ -111,13 +117,15 @@ OUTPUT_DOC = ("Length unit of the results: areas in its square, volumes in its c
 KEYS_DOC = ("Comma-separated metric keys to export, e.g. `volume,convexity` (see the table "
             "of metric keys above). Default: the keys exported by default. An unknown or "
             "unavailable key gives 422.")
-FILE_DOC = f"STL file (ASCII or binary), up to {MAX_UPLOAD_BYTES // 2**20} MiB."
+FILE_DOC = (f"Mesh file, up to {MAX_UPLOAD_BYTES // 2**20} MiB: STL (ASCII or binary), or "
+            f"OBJ, PLY, OFF, GLB, glTF (with embedded buffers), 3MF or DAE. The reader is "
+            f"chosen by the extension ({ACCEPTED}, any case).")
 
 API_DESCRIPTION = f"""
 Three-dimensional particle shape analysis: the same results as the pySHAPE Python
 library (`pyshape.analyze_file`), for programs written in any language.
 
-**How to use it.** Send an STL file as `multipart/form-data` to `/api/analyze` (JSON
+**How to use it.** Send a mesh file as `multipart/form-data` to `/api/analyze` (JSON
 records) or `/api/export` (CSV). Every request is independent; uploads are processed
 in temporary files that are deleted afterwards, and nothing is stored on the server.
 
@@ -127,12 +135,17 @@ curl -F "file=@particle.stl" -F "units=mm" -F "keys=volume,convexity" \\
      http://127.0.0.1:8000/api/export -o particle.csv
 ```
 
-**Limits.** STL files only (other formats: use the Python library), up to
-{MAX_UPLOAD_BYTES // 2**20} MiB. Volume-based results need a closed mesh; for open
-meshes they are returned with `value: null` and an `error` instead of failing the request.
+**Formats and limits.** {ACCEPTED} (any case), up to {MAX_UPLOAD_BYTES // 2**20} MiB.
+Formats other than STL are read by trimesh. Each upload must be a
+single self-contained file: a `.gltf` must embed its buffers and images (or use
+`.glb`), and references of OBJ or DAE files to other files (materials, textures) are
+not available. Every mesh is then prepared in the same way (orientation of closed
+shells, solid union). Volume-based results need a closed mesh; for open meshes they
+are returned with `value: null` and an `error` instead of failing the request.
 
 **Security.** The server is meant for local use. It has no authentication; do not expose
-it to untrusted networks.
+it to untrusted networks. Uploads other than STL are parsed by trimesh (version 5 or
+later, which refuses references outside the upload's temporary folder).
 
 The browser interface is at [/](/) (single particle) and [/batch](/batch) (a folder of
 particles).
@@ -146,27 +159,91 @@ The labels and group of `axis_S`, `axis_I` and `axis_L` name the method chosen w
 """
 
 
+def _gltf_external_references(path: Path) -> list[str]:
+    """URIs of buffers and images that a glTF/GLB file loads from other files.
+
+    Embedded data (``data:`` URIs, or the binary chunk of a GLB) is allowed;
+    anything else would need files that are not part of the upload.
+    """
+    data = path.read_bytes()
+    if data[:4] == b"glTF":  # GLB: 12-byte header, then the JSON chunk
+        if len(data) < 20:
+            raise ValueError("The GLB file is truncated.")
+        length, kind = struct.unpack_from("<II", data, 12)
+        if kind != 0x4E4F534A:  # "JSON"
+            raise ValueError("The GLB file has no JSON chunk.")
+        text = data[20:20 + length]
+    else:
+        text = data
+    try:
+        document = json.loads(text)
+    except (UnicodeDecodeError, ValueError) as exc:
+        raise ValueError(f"The glTF file is not valid JSON: {exc}") from exc
+    if not isinstance(document, dict):
+        raise ValueError("The glTF file is not a JSON object.")
+    uris = []
+    for group in ("buffers", "images"):
+        for item in document.get(group) or []:
+            uri = item.get("uri") if isinstance(item, dict) else None
+            if isinstance(uri, str) and not uri.startswith("data:"):
+                uris.append(uri)
+    return uris
+
+
 def _analyze_upload(
     file: UploadFile, units: str, axes: str = "pca", output_units: str = "m",
 ) -> tuple[AnalysisResult, np.ndarray, np.ndarray]:
     name = (file.filename or "").replace("\\", "/").rsplit("/", 1)[-1]
-    # Only self-contained STL uploads are accepted; other loaders may resolve
-    # companion files. The Python API still supports every existing format.
-    if Path(name).suffix.lower() != ".stl":
-        raise HTTPException(415, "The web interface accepts STL files only.")
+    # The reader is chosen by the extension (io.load_geometry); every mesh is
+    # then prepared in the same way by analyze_mesh (prepare_mesh).
+    extension = Path(name).suffix.lower()
+    if extension not in SUPPORTED_EXTENSIONS:
+        raise HTTPException(
+            415, f"Unsupported file type '{extension or name}'. Accepted: {ACCEPTED}.")
     with TemporaryDirectory(prefix="pyshape-") as directory:
-        path = Path(directory) / "mesh.stl"
+        # Keep the extension so that load_geometry picks the right reader. The
+        # folder holds only this file, so references to other files cannot resolve.
+        path = Path(directory) / f"mesh{extension}"
         size = 0
         with path.open("wb") as stream:
             while chunk := file.file.read(1024 * 1024):
                 size += len(chunk)
                 if size > MAX_UPLOAD_BYTES:
-                    raise HTTPException(413, "STL upload exceeds the 32 MiB limit.")
+                    raise HTTPException(
+                        413, f"Upload exceeds the {MAX_UPLOAD_BYTES // 2**20} MiB limit.")
                 stream.write(chunk)
         if size == 0:
-            raise HTTPException(422, "The uploaded STL file is empty.")
+            raise HTTPException(422, "The uploaded file is empty.")
+        if extension in (".gltf", ".glb"):
+            try:
+                external = _gltf_external_references(path)
+            except ValueError as exc:
+                raise HTTPException(422, str(exc)) from exc
+            if external:
+                raise HTTPException(
+                    415, f"The {extension} file refers to external files ({', '.join(external)}), "
+                    "which cannot be uploaded with it. Embed the buffers and images "
+                    "(data: URIs) or export a .glb file.")
         try:
             geometry = load_geometry(path)
+        except ImportError as exc:
+            if not io_module.HAS_TRIMESH:
+                raise HTTPException(
+                    503, f"Reading {extension} files needs trimesh, which is not installed on "
+                    "the server. Install it with: pip install \"pyshape[mesh]\"") from exc
+            # trimesh is there, but its reader for this format needs another package
+            # (e.g. pycollada for .dae).
+            raise HTTPException(
+                503, f"Reading {extension} files needs a package that is not installed on "
+                f"the server: {exc}") from exc
+        except ValueError as exc:
+            raise HTTPException(422, str(exc)) from exc
+        except Exception as exc:  # third-party readers raise many exception types
+            if extension in NATIVE_EXTENSIONS:
+                raise
+            raise HTTPException(
+                422, f"Could not read the {extension} file: {type(exc).__name__}: {exc}") from exc
+        try:
             result = analyze_mesh(
                 geometry.nodes, geometry.faces, units=units, axes=axes, output_units=output_units,
             )
@@ -239,7 +316,7 @@ def create_app() -> FastAPI:
         description=API_DESCRIPTION.replace("{table}", _metric_table()),
         license_info={"name": "GPL-3.0", "url": "https://www.gnu.org/licenses/gpl-3.0.html"},
         openapi_tags=[
-            {"name": "analysis", "description": "Analyse an uploaded STL file."},
+            {"name": "analysis", "description": "Analyse an uploaded mesh file."},
             {"name": "service", "description": "Server status."},
         ],
     )
@@ -263,7 +340,7 @@ def create_app() -> FastAPI:
         return {"status": "ok"}
 
     @application.post(
-        "/api/analyze", tags=["analysis"], summary="Analyse an STL file (JSON results)",
+        "/api/analyze", tags=["analysis"], summary="Analyse a mesh file (JSON results)",
         responses={200: {"model": AnalysisResponse, "description": "All results of the particle."},
                    **UPLOAD_ERRORS},
     )
@@ -294,7 +371,7 @@ def create_app() -> FastAPI:
         return payload
 
     @application.post(
-        "/api/export", tags=["analysis"], summary="Analyse an STL file (CSV download)",
+        "/api/export", tags=["analysis"], summary="Analyse a mesh file (CSV download)",
         response_class=Response,
         responses={
             200: {"description": "CSV with columns parameter, value, unit; the second row "

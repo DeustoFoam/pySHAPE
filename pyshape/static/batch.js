@@ -2,6 +2,9 @@
 
 const $ = (id) => document.getElementById(id);
 const MAX_BYTES = 32 * 1024 * 1024;
+// Same list as pyshape.io.SUPPORTED_EXTENSIONS (checked by the tests).
+const EXTENSIONS = [".stl", ".obj", ".ply", ".off", ".glb", ".gltf", ".3mf", ".dae"];
+const MESH_FILE = new RegExp(`(${EXTENSIONS.map((e) => e.replace(".", "\\.")).join("|")})$`, "i");
 let chosen = [];      // { file, path } with path relative to the chosen folder
 let outputs = [];     // { path, text } CSVs ready to download
 let summaryRows = []; // analysis results, in table order, for the summary CSV
@@ -24,7 +27,7 @@ function setBusy(value) {
   }
   if (!value) {
     syncOutputUnits();
-    $("run").disabled = !stlFiles().length;
+    $("run").disabled = !meshFiles().length;
   }
   $("stop").hidden = !value;
   $("download-all").disabled = value || !outputs.length;
@@ -35,17 +38,17 @@ function fromFolder(file) {
   return { file, path: file.webkitRelativePath.split("/").slice(1).join("/") || file.name };
 }
 
-function stlFiles() {
+function meshFiles() {
   const recursive = $("recursive").checked;
   return chosen
-    .filter(({ path }) => /\.stl$/i.test(path))
+    .filter(({ path }) => MESH_FILE.test(path))
     .filter(({ path }) => recursive || !path.includes("/"))
     .sort((a, b) => a.path.localeCompare(b.path, undefined, { numeric: true }));
 }
 
 function csvPath(path, taken) {
   const suffix = $("suffix").value.replace(/[<>:"/\\|?*\x00-\x1f]/g, "_");
-  const stem = path.replace(/\.stl$/i, "") + suffix;
+  const stem = path.replace(MESH_FILE, "") + suffix;
   let candidate = `${stem}.csv`;
   for (let n = 1; taken.has(candidate.toLowerCase()); n++) candidate = `${stem}_${n}.csv`;
   taken.add(candidate.toLowerCase());
@@ -60,7 +63,7 @@ function cell(text, className) {
 }
 
 function showSelection() {
-  const files = stlFiles();
+  const files = meshFiles();
   const skipped = chosen.length - files.length;
   $("files-table").replaceChildren(...files.map(({ path }, i) => {
     const row = document.createElement("tr");
@@ -68,7 +71,7 @@ function showSelection() {
     return row;
   }));
   $("selection").textContent = chosen.length
-    ? `${files.length} STL file${files.length === 1 ? "" : "s"} to analyse`
+    ? `${files.length} mesh file${files.length === 1 ? "" : "s"} to analyse`
       + (skipped ? `; ${skipped} other file${skipped === 1 ? "" : "s"} ignored`
         + ($("recursive").checked ? "" : " (subfolders are off)") : "") + "."
     : "No files chosen. Each file may be up to 32 MiB.";
@@ -119,7 +122,7 @@ function downloadLink(text, name) {
 $("batch-form").addEventListener("submit", async (event) => {
   event.preventDefault();
   if (busy) return;
-  const files = stlFiles();
+  const files = meshFiles();
   if (!files.length) return;
   showSelection();
   for (const link of document.querySelectorAll("#files-table a")) URL.revokeObjectURL(link.href);
@@ -141,7 +144,7 @@ $("batch-form").addEventListener("submit", async (event) => {
     rows[i].scrollIntoView({ block: "nearest" });
     status(`Analysing ${i + 1} of ${files.length}: ${path}`);
     try {
-      if (file.size > MAX_BYTES) throw new Error("STL upload exceeds the 32 MiB limit.");
+      if (file.size > MAX_BYTES) throw new Error("The file exceeds the 32 MiB limit.");
       const result = await analyse(file);
       const name = csvPath(path, taken);
       outputs.push({ path: name, text: result.csv });

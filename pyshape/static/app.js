@@ -74,7 +74,7 @@ $("analyze-form").addEventListener("submit", async (event) => {
   const file = $("file").files[0];
   if (!file) return;
   if (file.size > 32 * 1024 * 1024) {
-    status("STL upload exceeds the 32 MiB limit.", true);
+    status("The file exceeds the 32 MiB limit.", true);
     return;
   }
   analysisFile = null;
@@ -152,7 +152,7 @@ $("export").addEventListener("click", async () => {
     const link = document.createElement("a");
     link.href = url;
     const suffix = $("suffix").value.replace(/[<>:"/\\|?*\x00-\x1f]/g, "_");
-    link.download = analysisFile.name.replace(/\.stl$/i, "") + suffix + ".csv";
+    link.download = analysisFile.name.replace(/\.[^./\\]+$/, "") + suffix + ".csv";
     document.body.append(link);
     link.click();
     link.remove();
