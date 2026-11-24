@@ -219,3 +219,29 @@ def test_analyze_can_include_csv(client, stl_path):
     assert picked["csv"] == analyze_file(stl_path).to_csv(["volume"])
     bad = client.post("/api/analyze", files=files(), data={"include_csv": "true", "keys": "invalid"})
     assert bad.status_code == 422
+
+
+def test_api_documentation_is_complete(client, stl_path):
+    schema = client.get("/openapi.json").json()
+    assert schema["info"]["description"]
+    result = analyze_file(stl_path)
+    for metric in result.metrics:  # every metric key is documented
+        assert f"`{metric.key}`" in schema["info"]["description"]
+    bodies = schema["components"]["schemas"]
+    for name in ("Body_analyze_api_analyze_post", "Body_export_api_export_post"):
+        fields = bodies[name]["properties"]
+        assert all(field.get("description") for field in fields.values())
+        assert fields["units"]["enum"] == ["as-is", "um", "mm", "cm", "m", "inch"]
+        assert fields["axes"]["enum"] == ["pca", "min_volume"]
+        assert fields["output_units"]["enum"][0] == "same"
+    analyze = schema["paths"]["/api/analyze"]["post"]
+    export = schema["paths"]["/api/export"]["post"]
+    for operation in (analyze, export):
+        assert operation["summary"] and operation["description"]
+        assert {"200", "413", "415", "422", "503"} <= set(operation["responses"])
+    assert list(export["responses"]["200"]["content"]) == ["text/csv"]
+    response_schema = analyze["responses"]["200"]["content"]["application/json"]["schema"]
+    assert response_schema["$ref"].endswith("/AnalysisResponse")
+    documented = set(bodies["AnalysisResponse"]["properties"])
+    assert set(result.to_dict()) | {"preview", "csv"} == documented
+    assert set(bodies["MetricRecord"]["properties"]) == set(result.to_dict()["metrics"][0])
