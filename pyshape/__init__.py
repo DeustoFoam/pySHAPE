@@ -1,6 +1,6 @@
 """Particle analysis as a Python library; UI dependencies are optional."""
 
-__version__ = "0.1.1"
+__version__ = "0.1.2"
 
 from .analysis import AnalysisResult, Metric, analyze_file, analyze_mesh, compute_metrics, prepare_mesh
 from .batch import BatchItem, BatchResult, analyze_folder, find_particle_files
