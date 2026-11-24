@@ -4,16 +4,13 @@ message: >-
   (Angelidakis, Nadimi and Utili, 2021), from which pySHAPE is derived.
 title: "pySHAPE: a Python library and graphical interfaces for three-dimensional particle shape characterisation"
 type: software
-version: 0.1.1
-doi: 10.5281/zenodo.24005718
+version: 0.1.2
+doi: 10.5281/zenodo.24004678
 identifiers:
   - type: doi
     value: 10.5281/zenodo.24004678
     description: Concept DOI (all versions, resolves to the latest)
-  - type: doi
-    value: 10.5281/zenodo.24005718
-    description: Version 0.1.1
-date-released: 2026-11-06
+date-released: 2026-11-24
 license: GPL-3.0-only
 repository-code: "https://github.com/DeustoFoam/pySHAPE"
 keywords:
@@ -43,7 +40,7 @@ authors:
     orcid: "https://orcid.org/0000-0002-0971-7089"
   - family-names: Angelidakis
     given-names: Vasileios
-    affiliation: "School of Natural and Built Environment, Queen's University Belfast"
+    affiliation: "Department of Civil and Environmental Engineering, Imperial College London"
     orcid: "https://orcid.org/0000-0002-0788-115X"
 references:
   - type: article
