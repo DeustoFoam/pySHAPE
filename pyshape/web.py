@@ -15,9 +15,10 @@ from pydantic import BaseModel, Field
 from . import __version__
 from .analysis import (
     AXES_LABELS, LENGTH_POWERS, OUTPUT_UNITS, UNIT_SCALES,
-    AnalysisResult, analyze_mesh, compute_metrics, prepare_mesh, scale_nodes,
+    AnalysisResult, analyze_mesh, compute_metrics, scale_nodes,
 )
 from .io import load_geometry
+from .preprocess import prepare_mesh
 
 MAX_UPLOAD_BYTES = 32 * 1024 * 1024
 MAX_PREVIEW_FACES = 5000

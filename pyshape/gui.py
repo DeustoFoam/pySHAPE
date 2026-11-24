@@ -31,12 +31,12 @@ from .analysis import (
     OUTPUT_UNITS,
     UNIT_SCALES,
     apply_output_units,
-    prepare_mesh,
     resolve_output_units,
     scale_nodes,
     unit_label,
 )
 from .bounding import AXES_METHODS
+from .preprocess import prepare_mesh
 from .gui_core import (
     LoadedGeometry,
     Metric,
