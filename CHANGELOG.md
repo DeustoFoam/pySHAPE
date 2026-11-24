@@ -4,6 +4,15 @@ All notable changes to pySHAPE. Versions follow the tags of the GitHub
 repository; each release is archived on Zenodo (all versions:
 https://doi.org/10.5281/zenodo.24004678).
 
+## 0.1.3 (2026-11-24)
+
+### Changed
+- Mesh preparation (`validate_mesh`, `prepare_mesh`: validation, orientation of
+  closed shells, solid union) moved from `pyshape.analysis` to the new module
+  `pyshape.preprocess`. The old imports still work (`from pyshape import
+  prepare_mesh`, `pyshape.analysis.prepare_mesh`,
+  `pyshape.analysis.validate_mesh`). No change in results.
+
 ## 0.1.2 (2026-11-24)
 
 ### New
