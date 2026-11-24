@@ -25,7 +25,10 @@ from .preprocess import prepare_mesh
 
 MAX_UPLOAD_BYTES = 32 * 1024 * 1024
 MAX_PREVIEW_FACES = 5000
-ACCEPTED = ", ".join(SUPPORTED_EXTENSIONS)  # for messages and /docs
+# The web accepts the library formats except the text .gltf, which usually
+# keeps its buffers in separate files (the self-contained .glb is accepted).
+WEB_EXTENSIONS = tuple(e for e in SUPPORTED_EXTENSIONS if e != ".gltf")
+ACCEPTED = ", ".join(WEB_EXTENSIONS)  # for messages and /docs
 
 
 # --- Documentation-only models: they describe the responses in /docs and
@@ -76,8 +79,8 @@ def _error(description: str) -> dict[str, object]:
 
 UPLOAD_ERRORS = {
     413: _error(f"The file is larger than {MAX_UPLOAD_BYTES // 2**20} MiB."),
-    415: _error(f"The file extension is not one of {ACCEPTED}, or a `.gltf`/`.glb` file "
-                "refers to external files (buffers or images must be embedded)."),
+    415: _error(f"The file extension is not one of {ACCEPTED}, or a `.glb` file refers "
+                "to external files (its buffers and images must be embedded)."),
     422: _error("Invalid mesh, or unknown `units`, `axes`, `output_units` or metric key. "
                 "For a missing `file` or a malformed field, `detail` is instead a list of "
                 "validation errors."),
@@ -118,8 +121,7 @@ KEYS_DOC = ("Comma-separated metric keys to export, e.g. `volume,convexity` (see
             "of metric keys above). Default: the keys exported by default. An unknown or "
             "unavailable key gives 422.")
 FILE_DOC = (f"Mesh file, up to {MAX_UPLOAD_BYTES // 2**20} MiB: STL (ASCII or binary; native, "
-            f"no extra package needed), or OBJ, PLY, OFF, GLB, glTF (with embedded buffers), "
-            f"3MF or DAE (read by trimesh). The reader is chosen by the extension "
+            f"no extra package needed), or OBJ, PLY, OFF, GLB, 3MF or DAE (read by trimesh). The reader is chosen by the extension "
             f"({ACCEPTED}, any case).")
 
 API_DESCRIPTION = f"""
@@ -139,9 +141,9 @@ curl -F "file=@particle.stl" -F "units=mm" -F "keys=volume,convexity" \\
 **Formats and limits.** {ACCEPTED} (any case), up to {MAX_UPLOAD_BYTES // 2**20} MiB.
 STL is the native format and needs no extra package; the other formats are read by
 trimesh. Each upload must be a
-single self-contained file: a `.gltf` must embed its buffers and images (or use
-`.glb`), and references of OBJ or DAE files to other files (materials, textures) are
-not available. Every mesh is then prepared in the same way (orientation of closed
+single self-contained file: the text glTF format (`.gltf`), whose buffers are usually
+separate files, is not accepted (export `.glb`), and references of OBJ or DAE files
+to other files (materials, textures) are not available. Every mesh is then prepared in the same way (orientation of closed
 shells, solid union). Volume-based results need a closed mesh; for open meshes they
 are returned with `value: null` and an `error` instead of failing the request.
 
@@ -161,28 +163,24 @@ The labels and group of `axis_S`, `axis_I` and `axis_L` name the method chosen w
 """
 
 
-def _gltf_external_references(path: Path) -> list[str]:
-    """URIs of buffers and images that a glTF/GLB file loads from other files.
+def _glb_external_references(path: Path) -> list[str]:
+    """URIs of buffers and images that a GLB file loads from other files.
 
-    Embedded data (``data:`` URIs, or the binary chunk of a GLB) is allowed;
-    anything else would need files that are not part of the upload.
+    Embedded data (the binary chunk, or ``data:`` URIs) is allowed; anything
+    else would need files that are not part of the upload.
     """
     data = path.read_bytes()
-    if data[:4] == b"glTF":  # GLB: 12-byte header, then the JSON chunk
-        if len(data) < 20:
-            raise ValueError("The GLB file is truncated.")
-        length, kind = struct.unpack_from("<II", data, 12)
-        if kind != 0x4E4F534A:  # "JSON"
-            raise ValueError("The GLB file has no JSON chunk.")
-        text = data[20:20 + length]
-    else:
-        text = data
+    if data[:4] != b"glTF" or len(data) < 20:  # 12-byte header, then the JSON chunk
+        raise ValueError("The file is not a binary glTF (.glb) file.")
+    length, kind = struct.unpack_from("<II", data, 12)
+    if kind != 0x4E4F534A:  # "JSON"
+        raise ValueError("The GLB file has no JSON chunk.")
     try:
-        document = json.loads(text)
+        document = json.loads(data[20:20 + length])
     except (UnicodeDecodeError, ValueError) as exc:
-        raise ValueError(f"The glTF file is not valid JSON: {exc}") from exc
+        raise ValueError(f"The JSON chunk of the GLB file is not valid: {exc}") from exc
     if not isinstance(document, dict):
-        raise ValueError("The glTF file is not a JSON object.")
+        raise ValueError("The JSON chunk of the GLB file is not an object.")
     uris = []
     for group in ("buffers", "images"):
         for item in document.get(group) or []:
@@ -199,7 +197,7 @@ def _analyze_upload(
     # The reader is chosen by the extension (io.load_geometry); every mesh is
     # then prepared in the same way by analyze_mesh (prepare_mesh).
     extension = Path(name).suffix.lower()
-    if extension not in SUPPORTED_EXTENSIONS:
+    if extension not in WEB_EXTENSIONS:
         raise HTTPException(
             415, f"Unsupported file type '{extension or name}'. Accepted: {ACCEPTED}.")
     with TemporaryDirectory(prefix="pyshape-") as directory:
@@ -216,16 +214,16 @@ def _analyze_upload(
                 stream.write(chunk)
         if size == 0:
             raise HTTPException(422, "The uploaded file is empty.")
-        if extension in (".gltf", ".glb"):
+        if extension == ".glb":
             try:
-                external = _gltf_external_references(path)
+                external = _glb_external_references(path)
             except ValueError as exc:
                 raise HTTPException(422, str(exc)) from exc
             if external:
                 raise HTTPException(
                     415, f"The {extension} file refers to external files ({', '.join(external)}), "
-                    "which cannot be uploaded with it. Embed the buffers and images "
-                    "(data: URIs) or export a .glb file.")
+                    "which cannot be uploaded with it. Export the .glb with embedded buffers "
+                    "and images.")
         try:
             geometry = load_geometry(path)
         except ImportError as exc:

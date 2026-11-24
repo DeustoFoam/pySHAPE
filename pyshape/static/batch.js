@@ -2,8 +2,8 @@
 
 const $ = (id) => document.getElementById(id);
 const MAX_BYTES = 32 * 1024 * 1024;
-// Same list as pyshape.io.SUPPORTED_EXTENSIONS (checked by the tests).
-const EXTENSIONS = [".stl", ".obj", ".ply", ".off", ".glb", ".gltf", ".3mf", ".dae"];
+// Same list as pyshape.web.WEB_EXTENSIONS (checked by the tests).
+const EXTENSIONS = [".stl", ".obj", ".ply", ".off", ".glb", ".3mf", ".dae"];
 const MESH_FILE = new RegExp(`(${EXTENSIONS.map((e) => e.replace(".", "\\.")).join("|")})$`, "i");
 let chosen = [];      // { file, path } with path relative to the chosen folder
 let outputs = [];     // { path, text } CSVs ready to download

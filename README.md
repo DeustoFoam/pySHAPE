@@ -281,13 +281,15 @@ Open <http://127.0.0.1:8000>. The interface has two pages:
 *Browser viewer analyzing a generated three-sphere demonstration mesh as one
 solid particle. The logo, mesh, and screenshot shown here were created for pySHAPE.*
 
-Both pages and the HTTP API accept every format of the library, up to 32 MiB
-per file: STL, the native format, which needs no extra package, and OBJ, PLY,
-OFF, GLB, glTF, 3MF and DAE, read by trimesh (any case of the extension). The
+Both pages and the HTTP API accept the formats of the library except the text
+glTF (`.gltf`), up to 32 MiB per file: STL, the native format, which needs no
+extra package, and OBJ, PLY, OFF, GLB, 3MF and DAE, read by trimesh (any case
+of the extension). The
 reader is chosen by the extension, and every mesh is then
 prepared in the same way (orientation of closed shells, solid union). Each
-upload must be one **self-contained file**: a `.gltf` whose buffers or images
-are separate files is rejected (embed them, or export `.glb`), and OBJ or DAE
+upload must be one **self-contained file**: `.gltf` is not accepted because it
+usually keeps its buffers in separate files (export `.glb`), a `.glb` that
+refers to external buffers or images is rejected, and OBJ or DAE
 references to materials and textures are not available. Formats other than STL
 need trimesh (`pyshape[mesh]`, included in `pyshape[web]`); without it the
 server answers 503. DAE files also need `pycollada` (`pip install pycollada`),
@@ -316,8 +318,8 @@ curl -F "file=@particle.stl" -F "units=mm" \
   comma-separated `keys`. Returns CSV.
 - `GET /api/health`: readiness response.
 - `/docs`: generated interactive API documentation.
-- Invalid data/selection returns 422, unsupported extensions (and `.gltf`
-  files with external buffers or images) 415, and uploads exceeding the
+- Invalid data/selection returns 422, unsupported extensions (including
+  `.gltf`, and `.glb` files with external buffers or images) 415, and uploads exceeding the
   file-size limit 413. A missing dependency (trimesh for non-STL formats, or
   the union backend) returns 503.
 
@@ -330,7 +332,7 @@ STL uploads are read by pySHAPE's own parser or trimesh; uploads in the other
 formats are parsed by trimesh. Some of these formats can refer to other files,
 so pySHAPE requires trimesh 5.0 or later, which refuses references outside the
 upload's temporary folder (that folder holds only the uploaded file), and
-rejects `.gltf`/`.glb` files that refer to external buffers or images before
+rejects `.gltf` uploads and `.glb` files that refer to external buffers or images before
 trimesh reads them. The server still binds to the local host by default, and
 the 32 MiB limit is unchanged.
 

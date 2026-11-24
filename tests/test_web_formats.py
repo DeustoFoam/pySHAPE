@@ -74,7 +74,7 @@ def test_uppercase_extension_is_accepted(client, cube_mesh):
 def test_unsupported_extension_lists_the_accepted_ones(client):
     response = _upload(client, "/api/analyze", "particle.xyz", b"1 2 3")
     assert response.status_code == 415
-    for extension in pyshape_io.SUPPORTED_EXTENSIONS:
+    for extension in web.WEB_EXTENSIONS:
         assert extension in response.json()["detail"]
 
 
@@ -129,19 +129,19 @@ def _gltf(cube_mesh, uri):
     return json.dumps(document).encode()
 
 
-def test_gltf_with_embedded_buffers_is_accepted(client, cube_mesh):
-    pytest.importorskip("trimesh")
-    response = _upload(client, "/api/analyze", "cube.gltf", _gltf(cube_mesh, None))
-    assert response.status_code == 200, response.text
-    assert _values(response.json())["volume"] == pytest.approx(1.0)
+def test_web_accepts_library_formats_except_text_gltf():
+    assert ".gltf" in pyshape_io.SUPPORTED_EXTENSIONS  # the library still reads it
+    assert web.WEB_EXTENSIONS == tuple(
+        e for e in pyshape_io.SUPPORTED_EXTENSIONS if e != ".gltf")
 
 
-@pytest.mark.parametrize("uri", ["cube.bin", "../secret.bin", "file:///etc/passwd",
+@pytest.mark.parametrize("uri", [None, "cube.bin", "../secret.bin", "file:///etc/passwd",
                                  "http://127.0.0.1:9/x.bin"])
-def test_gltf_with_external_buffers_is_rejected(client, cube_mesh, uri):
-    response = _upload(client, "/api/analyze", "cube.gltf", _gltf(cube_mesh, uri))
-    assert response.status_code == 415
-    assert "external files" in response.json()["detail"]
+def test_gltf_is_not_accepted(client, cube_mesh, uri):
+    for name in ("cube.gltf", "CUBE.GLTF"):
+        response = _upload(client, "/api/analyze", name, _gltf(cube_mesh, uri))
+        assert response.status_code == 415
+        assert "Unsupported file type '.gltf'" in response.json()["detail"]
 
 
 def test_glb_with_external_buffer_is_rejected(client):
@@ -154,13 +154,15 @@ def test_glb_with_external_buffer_is_rejected(client):
     assert response.status_code == 415
 
 
-def test_invalid_gltf_json_is_a_client_error(client):
-    response = _upload(client, "/api/analyze", "broken.gltf", b"{not json")
+@pytest.mark.parametrize("data", [b"{not a glb}", b"glTF" + b"\x00" * 4])
+def test_invalid_glb_is_a_client_error(client, data):
+    response = _upload(client, "/api/analyze", "broken.glb", data)
     assert response.status_code == 422
 
 
 def test_pages_accept_every_supported_extension():
-    expected = list(pyshape_io.SUPPORTED_EXTENSIONS)
+    expected = list(web.WEB_EXTENSIONS)
+    assert ".gltf" not in expected
     for page in ("index.html", "batch.html"):
         accepts = re.findall(r'accept="([^"]+)"', (STATIC / page).read_text(encoding="utf-8"))
         assert accepts and all(a.split(",") == expected for a in accepts), page
