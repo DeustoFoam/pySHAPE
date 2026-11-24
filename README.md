@@ -282,8 +282,9 @@ Open <http://127.0.0.1:8000>. The interface has two pages:
 solid particle. The logo, mesh, and screenshot shown here were created for pySHAPE.*
 
 Both pages and the HTTP API accept every format of the library, up to 32 MiB
-per file: STL, OBJ, PLY, OFF, GLB, glTF, 3MF and DAE (any case of the
-extension). The reader is chosen by the extension, and every mesh is then
+per file: STL, the native format, which needs no extra package, and OBJ, PLY,
+OFF, GLB, glTF, 3MF and DAE, read by trimesh (any case of the extension). The
+reader is chosen by the extension, and every mesh is then
 prepared in the same way (orientation of closed shells, solid union). Each
 upload must be one **self-contained file**: a `.gltf` whose buffers or images
 are separate files is rejected (embed them, or export `.glb`), and OBJ or DAE

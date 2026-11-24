@@ -8,8 +8,9 @@ https://doi.org/10.5281/zenodo.24004678).
 
 ### New
 - The browser interface (single-particle and batch pages) and the HTTP API
-  accept every format of the library: STL, OBJ, PLY, OFF, GLB, glTF, 3MF and
-  DAE (any case of the extension). A `.gltf` must embed its buffers and images;
+  accept every format of the library: STL (native, no extra package) and OBJ,
+  PLY, OFF, GLB, glTF, 3MF and DAE (read by trimesh), with any case of the
+  extension. A `.gltf` must embed its buffers and images;
   DAE also needs `pycollada`. Results for STL files are unchanged.
 
 ### Changed

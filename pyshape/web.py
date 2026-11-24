@@ -117,9 +117,10 @@ OUTPUT_DOC = ("Length unit of the results: areas in its square, volumes in its c
 KEYS_DOC = ("Comma-separated metric keys to export, e.g. `volume,convexity` (see the table "
             "of metric keys above). Default: the keys exported by default. An unknown or "
             "unavailable key gives 422.")
-FILE_DOC = (f"Mesh file, up to {MAX_UPLOAD_BYTES // 2**20} MiB: STL (ASCII or binary), or "
-            f"OBJ, PLY, OFF, GLB, glTF (with embedded buffers), 3MF or DAE. The reader is "
-            f"chosen by the extension ({ACCEPTED}, any case).")
+FILE_DOC = (f"Mesh file, up to {MAX_UPLOAD_BYTES // 2**20} MiB: STL (ASCII or binary; native, "
+            f"no extra package needed), or OBJ, PLY, OFF, GLB, glTF (with embedded buffers), "
+            f"3MF or DAE (read by trimesh). The reader is chosen by the extension "
+            f"({ACCEPTED}, any case).")
 
 API_DESCRIPTION = f"""
 Three-dimensional particle shape analysis: the same results as the pySHAPE Python
@@ -136,7 +137,8 @@ curl -F "file=@particle.stl" -F "units=mm" -F "keys=volume,convexity" \\
 ```
 
 **Formats and limits.** {ACCEPTED} (any case), up to {MAX_UPLOAD_BYTES // 2**20} MiB.
-Formats other than STL are read by trimesh. Each upload must be a
+STL is the native format and needs no extra package; the other formats are read by
+trimesh. Each upload must be a
 single self-contained file: a `.gltf` must embed its buffers and images (or use
 `.glb`), and references of OBJ or DAE files to other files (materials, textures) are
 not available. Every mesh is then prepared in the same way (orientation of closed
