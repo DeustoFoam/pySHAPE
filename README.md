@@ -26,7 +26,11 @@ The Python package provides tools for 3D particle geometry and form analysis. It
 ## Project layout
 
 - `pyshape/` — Python package
-- `pyshape/analysis.py` — shared analysis service, independent of the interfaces
+- `pyshape/io.py` — file loading (built-in STL parser; other formats through trimesh)
+- `pyshape/preprocess.py` — mesh preparation: validation, orientation of closed
+  shells and solid union (`prepare_mesh`)
+- `pyshape/analysis.py` — shared analysis service (descriptors and results),
+  independent of the interfaces
 - `pyshape/web.py` and `pyshape/static/` — optional API and browser viewer
 - `examples/` — runnable demos and a bundled ASCII STL asset
 - `tests/` — unit tests
@@ -171,7 +175,7 @@ does not derive surface roughness or tetrahedral inertia automatically.
 ### Get the surface that is analysed
 
 Before computing any descriptor, `analyze_file` and `analyze_mesh` call
-`prepare_mesh`, which orients every closed shell consistently and outwards and
+`prepare_mesh` (module `pyshape.preprocess`), which orients every closed shell consistently and outwards and
 merges several shells into one solid (see the contract below). Call it directly
 to inspect or save the corrected surface:
 

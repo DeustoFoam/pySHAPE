@@ -2,7 +2,7 @@
 
 __version__ = "0.1.1"
 
-from .analysis import AnalysisResult, Metric, analyze_file, analyze_mesh, compute_metrics, prepare_mesh
+from .analysis import AnalysisResult, Metric, analyze_file, analyze_mesh, compute_metrics
 from .batch import BatchItem, BatchResult, analyze_folder, find_particle_files
 from .bounding import AXES_METHODS, OrientedBox, min_volume_box, oriented_box, pca_box
 from .geometry import closed_surface_inertia_tensor, surface_area, volume_centroid_inertia_tensor
@@ -19,6 +19,7 @@ from .form import (
 	form_parameters_zingg,
 )
 from .io import LoadedGeometry, load_geometry, load_stl
+from .preprocess import prepare_mesh
 from .roughness import sa, sq, sdq, sku, ssk, roughness_functions
 
 __all__ = [

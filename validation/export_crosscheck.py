@@ -24,7 +24,7 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 import meshes as M  # noqa: E402
 from pyshape import analyze_mesh  # noqa: E402
-from pyshape.analysis import prepare_mesh  # noqa: E402
+from pyshape.preprocess import prepare_mesh  # noqa: E402
 
 WORK = HERE / "_work"
 RESULTS = HERE / "results"
