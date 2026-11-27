@@ -47,7 +47,8 @@ from .analysis import (
 )
 from . import descriptors
 from .bounding import AXES_METHODS
-from .preprocess import CAVITY_MODES, prepare_solid
+from .preprocess import CAVITY_MODES, _volume_error, prepare_solid
+from .repair import open_mesh_warning
 from .gui_core import (
     PREVIEW_OPACITY,
     face_normals,
@@ -131,6 +132,7 @@ class ShapeGUI(tk.Tk):
         self.geometry("1200x720")
 
         self.geo: Optional[LoadedGeometry] = None
+        self.mesh_notes: list[str] = []
         self.nodes: Optional[np.ndarray] = None
         self.faces: Optional[np.ndarray] = None
         # Scaled input mesh (before preparation) and the cavity-wall flags of the prepared one.
@@ -398,6 +400,9 @@ class ShapeGUI(tk.Tk):
             return
 
         self.geo = geo
+        # Diagnosis of an open mesh (in file units), as in AnalysisResult.warnings.
+        note = open_mesh_warning(geo.nodes, geo.faces) if _volume_error(geo.faces) else None
+        self.mesh_notes = [note] if note else []
         self.raw_nodes, self.raw_faces = nodes, geo.faces
         self.nodes, self.faces = solid.nodes, solid.faces
         self.cavity_mask = solid.cavity_faces
@@ -413,7 +418,7 @@ class ShapeGUI(tk.Tk):
             + (" (converted to a triangle mesh)" if geo.converted_from_native else "")
             + f"\nreader: {reader_text(geo.reader, geo.reader_version)}"
             + f"\nvertices: {nodes.shape[0]}  faces: {faces.shape[0]}"
-            + "".join(f"\nWarning: {text}" for text in geo.warnings)
+            + "".join(f"\nWarning: {text}" for text in geo.warnings + self.mesh_notes)
         )
         self.file_info_var.set(info)
         self._update_export_preview()
@@ -631,7 +636,8 @@ class ShapeGUI(tk.Tk):
             return
         try:
             write_csv(out_path, selected, source_name=self.geo.source_path.name,
-                      metadata=geo_metadata_rows(self.geo))
+                      metadata=geo_metadata_rows(self.geo)
+                      + [("warning", text, "") for text in self.mesh_notes])
         except Exception as exc:
             messagebox.showerror("Export error", str(exc))
             return

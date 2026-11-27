@@ -19,8 +19,9 @@ from .form import (
 	form_parameters_angelidakis_et_al,
 	form_parameters_zingg,
 )
-from .io import LoadedGeometry, load_geometry, load_stl
+from .io import LoadedGeometry, load_geometry, load_stl, write_stl
 from .preprocess import CAVITY_MODES, PreparedSolid, prepare_mesh, prepare_solid
+from .repair import MeshDiagnosis, RepairReport, diagnose_mesh, repair_mesh
 from .roughness import sa, sq, sdq, sku, ssk, roughness_functions
 
 __all__ = [
@@ -62,6 +63,11 @@ __all__ = [
 	"form_parameters_angelidakis_et_al",
 	"form_parameters_zingg",
 	"load_stl",
+	"write_stl",
+	"diagnose_mesh",
+	"repair_mesh",
+	"MeshDiagnosis",
+	"RepairReport",
 	"sa",
 	"sq",
 	"sdq",

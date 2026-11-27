@@ -54,13 +54,17 @@ def validate_mesh(nodes: ArrayLike, faces: ArrayLike) -> tuple[np.ndarray, np.nd
     return vertices, indices
 
 
+# Error of the volume-based results of an open or non-manifold mesh.
+_NOT_CLOSED = "volume requires a closed, manifold triangle mesh"
+
+
 def _volume_error(faces: np.ndarray) -> Optional[str]:
     edges = np.concatenate((faces[:, [0, 1]], faces[:, [1, 2]], faces[:, [2, 0]]))
     _, inverse, counts = np.unique(
         np.sort(edges, axis=1), axis=0, return_inverse=True, return_counts=True
     )
     if np.any(counts != 2):
-        return "volume requires a closed, manifold triangle mesh"
+        return _NOT_CLOSED
     orientation = np.where(edges[:, 0] < edges[:, 1], 1, -1)
     if np.any(np.bincount(inverse, weights=orientation) != 0):
         return "volume requires consistently wound faces"

@@ -23,8 +23,9 @@ from .form import (
 from .geometry import closed_surface_inertia_tensor, surface_area
 from .io import LoadedGeometry, load_geometry
 from .preprocess import (  # noqa: F401 (prepare_mesh, validate_mesh re-exported)
-    CAVITY_MODES, _volume_error, prepare_mesh, prepare_solid, validate_mesh,
+    _NOT_CLOSED, CAVITY_MODES, _volume_error, prepare_mesh, prepare_solid, validate_mesh,
 )
+from .repair import open_mesh_warning
 
 UNIT_SCALES = {"as-is": 1.0, "um": 1e-6, "mm": 1e-3, "cm": 1e-2, "m": 1.0, "inch": 0.0254}
 # Result groups, ordered by what each descriptor depends on (issue #7).
@@ -471,16 +472,26 @@ def analyze_mesh(
     ``output_units`` (``"m"`` by default, or ``"mm"``, ``"um"``, ``"cm"``,
     ``"inch"``, ``"same"``) sets the length unit of the dimensional results;
     it is ignored for ``units="as-is"``, whose results stay in input units.
+
+    For an open or non-manifold mesh, ``warnings`` gets the diagnosis of
+    :func:`pyshape.diagnose_mesh` (in the units of the input): whether the
+    openings look like small gaps, which ``pyshape-repair`` can close, or like
+    holes. The mesh itself is analysed as given.
     """
     resolve_output_units(units if units == "as-is" else "m", output_units)  # validate early
-    vertices, indices = validate_mesh(nodes, faces)
-    vertices, scale = scale_nodes(vertices, units)
+    raw_vertices, indices = validate_mesh(nodes, faces)
+    vertices, scale = scale_nodes(raw_vertices, units)
     metrics = compute_metrics(vertices, indices, axes=axes, cavities=cavities)
     effective, factor = apply_output_units(metrics, units, output_units)
-    return AnalysisResult(
+    result = AnalysisResult(
         metrics, input_units=units, scale_factor=scale, axes_method=axes,
         output_units=effective, output_scale=factor, cavities=cavities,
     )
+    if any(m.key == "volume" and m.error == _NOT_CLOSED for m in metrics):
+        note = open_mesh_warning(raw_vertices, indices)
+        if note:
+            result.warnings.append(note)
+    return result
 
 
 def analyze_file(

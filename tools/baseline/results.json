@@ -14901,6 +14901,2834 @@
     "manifold3d"
    ]
   },
+  "file:synthetic/open_ellipsoid.stl|axes=fitted_ellipsoid": {
+   "csv": [
+    [
+     "parameter",
+     "unit"
+    ],
+    [
+     "source_file",
+     ""
+    ],
+    [
+     "reader",
+     ""
+    ],
+    [
+     "warning",
+     ""
+    ],
+    [
+     "surface_area",
+     "input_units^2"
+    ],
+    [
+     "orientation_C",
+     ""
+    ],
+    [
+     "orientation_F",
+     ""
+    ],
+    [
+     "orientation_E",
+     ""
+    ],
+    [
+     "sphericity_krumbein",
+     ""
+    ],
+    [
+     "potticary_flatness",
+     ""
+    ],
+    [
+     "potticary_elongation",
+     ""
+    ],
+    [
+     "kongfonseca_flatness",
+     ""
+    ],
+    [
+     "kongfonseca_elongation",
+     ""
+    ],
+    [
+     "angelidakis_flatness",
+     ""
+    ],
+    [
+     "angelidakis_elongation",
+     ""
+    ],
+    [
+     "zingg_SI",
+     ""
+    ],
+    [
+     "zingg_IL",
+     ""
+    ]
+   ],
+   "excluded": [],
+   "meta": {
+    "axes_method": "fitted_ellipsoid",
+    "input_units": "as-is",
+    "output_scale": 1.0,
+    "output_units": "as-is",
+    "reader": "builtin-stl",
+    "scale_factor": 1.0,
+    "source_name": "open_ellipsoid.stl",
+    "warnings": [
+     "Open surface: 40 boundary edges. No boundary vertex lies within 0.00022 (0.001 x the median edge length) of another: the openings are holes rather than export gaps; pySHAPE does not fill holes (use e.g. MeshLab, PyMeshFix or Blender's 3D-Print toolbox)."
+    ]
+   },
+   "metrics": {
+    "angelidakis_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Elongation (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.17171717400359204
+    },
+    "angelidakis_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Flatness (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.16161616092261122
+    },
+    "axis_I": {
+     "default_selected": false,
+     "error": null,
+     "group": "Principal dimensions (fitted ellipsoid)",
+     "label": "Intermediate axis I (fitted ellipsoid)",
+     "unit": "input_units",
+     "value": 2.7999999824030377
+    },
+    "axis_L": {
+     "default_selected": false,
+     "error": null,
+     "group": "Principal dimensions (fitted ellipsoid)",
+     "label": "Long axis L (fitted ellipsoid)",
+     "unit": "input_units",
+     "value": 3.9999999939504955
+    },
+    "axis_S": {
+     "default_selected": false,
+     "error": null,
+     "group": "Principal dimensions (fitted ellipsoid)",
+     "label": "Short axis S (fitted ellipsoid)",
+     "unit": "input_units",
+     "value": 1.9999999898073337
+    },
+    "cavity_volume": {
+     "default_selected": false,
+     "error": "cavities are filled (cavities='fill')",
+     "group": "Size and mass properties",
+     "label": "Cavity volume",
+     "unit": "input_units³",
+     "value": null
+    },
+    "centroid_x": {
+     "default_selected": false,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Size and mass properties",
+     "label": "Centroid X",
+     "unit": "input_units",
+     "value": null
+    },
+    "centroid_y": {
+     "default_selected": false,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Size and mass properties",
+     "label": "Centroid Y",
+     "unit": "input_units",
+     "value": null
+    },
+    "centroid_z": {
+     "default_selected": false,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Size and mass properties",
+     "label": "Centroid Z",
+     "unit": "input_units",
+     "value": null
+    },
+    "convexity": {
+     "default_selected": true,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Convexity (V / V_convex_hull)",
+     "unit": "",
+     "value": null
+    },
+    "inertia_I1": {
+     "default_selected": false,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Size and mass properties",
+     "label": "Principal inertia I1 (unit density)",
+     "unit": "input_units⁵",
+     "value": null
+    },
+    "inertia_I2": {
+     "default_selected": false,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Size and mass properties",
+     "label": "Principal inertia I2 (unit density)",
+     "unit": "input_units⁵",
+     "value": null
+    },
+    "inertia_I3": {
+     "default_selected": false,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Size and mass properties",
+     "label": "Principal inertia I3 (unit density)",
+     "unit": "input_units⁵",
+     "value": null
+    },
+    "kongfonseca_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Elongation (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.3000000033405773
+    },
+    "kongfonseca_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Flatness (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.28571428486550265
+    },
+    "n_cavities": {
+     "default_selected": false,
+     "error": "cavities are filled (cavities='fill')",
+     "group": "Size and mass properties",
+     "label": "Number of cavities",
+     "unit": "",
+     "value": null
+    },
+    "n_faces": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Face count",
+     "unit": "",
+     "value": 1088.0
+    },
+    "n_vertices": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Vertex count",
+     "unit": "",
+     "value": 565.0
+    },
+    "orientation_C": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Compactness C (surface orientation tensor)",
+     "unit": "",
+     "value": 0.22932356815998012
+    },
+    "orientation_E": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Elongation E (surface orientation tensor)",
+     "unit": "",
+     "value": 0.36406498536244447
+    },
+    "orientation_F": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Flakiness F (surface orientation tensor)",
+     "unit": "",
+     "value": 0.4066114464775754
+    },
+    "orientation_eig1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f1 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.5486329893263546
+    },
+    "orientation_eig2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f2 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.3255525359510494
+    },
+    "orientation_eig3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f3 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.12581447472259594
+    },
+    "porosity": {
+     "default_selected": false,
+     "error": "cavities are filled (cavities='fill')",
+     "group": "Size and mass properties",
+     "label": "Porosity (cavity volume / envelope volume)",
+     "unit": "",
+     "value": null
+    },
+    "potticary_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Elongation (Potticary et al.)",
+     "unit": "",
+     "value": 0.13636363820021422
+    },
+    "potticary_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Flatness (Potticary et al.)",
+     "unit": "",
+     "value": 0.1818181808345429
+    },
+    "sphericity_krumbein": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Sphericity (Krumbein)",
+     "unit": "",
+     "value": 0.7047298712435323
+    },
+    "sphericity_wadell": {
+     "default_selected": true,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Sphericity (Wadell)",
+     "unit": "",
+     "value": null
+    },
+    "surface_area": {
+     "default_selected": true,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Surface area",
+     "unit": "input_units²",
+     "value": 23.228320896988773
+    },
+    "surface_area_outer": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Surface area of the envelope (outer surface)",
+     "unit": "input_units²",
+     "value": 23.228320896988773
+    },
+    "volume": {
+     "default_selected": true,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Size and mass properties",
+     "label": "Volume (mesh)",
+     "unit": "input_units³",
+     "value": null
+    },
+    "zingg_IL": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Zingg ratio I/L",
+     "unit": "",
+     "value": 0.6999999966594227
+    },
+    "zingg_SI": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Zingg ratio S/I",
+     "unit": "",
+     "value": 0.7142857151344973
+    }
+   },
+   "requires": [
+    "scipy"
+   ]
+  },
+  "file:synthetic/open_ellipsoid.stl|axes=inertia_ellipsoid": {
+   "csv": [
+    [
+     "parameter",
+     "unit"
+    ],
+    [
+     "source_file",
+     ""
+    ],
+    [
+     "reader",
+     ""
+    ],
+    [
+     "warning",
+     ""
+    ],
+    [
+     "surface_area",
+     "input_units^2"
+    ],
+    [
+     "orientation_C",
+     ""
+    ],
+    [
+     "orientation_F",
+     ""
+    ],
+    [
+     "orientation_E",
+     ""
+    ]
+   ],
+   "excluded": [],
+   "meta": {
+    "axes_method": "inertia_ellipsoid",
+    "input_units": "as-is",
+    "output_scale": 1.0,
+    "output_units": "as-is",
+    "reader": "builtin-stl",
+    "scale_factor": 1.0,
+    "source_name": "open_ellipsoid.stl",
+    "warnings": [
+     "Open surface: 40 boundary edges. No boundary vertex lies within 0.00022 (0.001 x the median edge length) of another: the openings are holes rather than export gaps; pySHAPE does not fill holes (use e.g. MeshLab, PyMeshFix or Blender's 3D-Print toolbox)."
+    ]
+   },
+   "metrics": {
+    "angelidakis_elongation": {
+     "default_selected": true,
+     "error": "inertia-equivalent ellipsoid unavailable: volume requires a closed, manifold triangle mesh",
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Elongation (Angelidakis et al.)",
+     "unit": "",
+     "value": null
+    },
+    "angelidakis_flatness": {
+     "default_selected": true,
+     "error": "inertia-equivalent ellipsoid unavailable: volume requires a closed, manifold triangle mesh",
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Flatness (Angelidakis et al.)",
+     "unit": "",
+     "value": null
+    },
+    "axis_I": {
+     "default_selected": false,
+     "error": "inertia-equivalent ellipsoid unavailable: volume requires a closed, manifold triangle mesh",
+     "group": "Principal dimensions (inertia-equivalent ellipsoid)",
+     "label": "Intermediate axis I (inertia ellipsoid)",
+     "unit": "input_units",
+     "value": null
+    },
+    "axis_L": {
+     "default_selected": false,
+     "error": "inertia-equivalent ellipsoid unavailable: volume requires a closed, manifold triangle mesh",
+     "group": "Principal dimensions (inertia-equivalent ellipsoid)",
+     "label": "Long axis L (inertia ellipsoid)",
+     "unit": "input_units",
+     "value": null
+    },
+    "axis_S": {
+     "default_selected": false,
+     "error": "inertia-equivalent ellipsoid unavailable: volume requires a closed, manifold triangle mesh",
+     "group": "Principal dimensions (inertia-equivalent ellipsoid)",
+     "label": "Short axis S (inertia ellipsoid)",
+     "unit": "input_units",
+     "value": null
+    },
+    "cavity_volume": {
+     "default_selected": false,
+     "error": "cavities are filled (cavities='fill')",
+     "group": "Size and mass properties",
+     "label": "Cavity volume",
+     "unit": "input_units³",
+     "value": null
+    },
+    "centroid_x": {
+     "default_selected": false,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Size and mass properties",
+     "label": "Centroid X",
+     "unit": "input_units",
+     "value": null
+    },
+    "centroid_y": {
+     "default_selected": false,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Size and mass properties",
+     "label": "Centroid Y",
+     "unit": "input_units",
+     "value": null
+    },
+    "centroid_z": {
+     "default_selected": false,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Size and mass properties",
+     "label": "Centroid Z",
+     "unit": "input_units",
+     "value": null
+    },
+    "convexity": {
+     "default_selected": true,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Convexity (V / V_convex_hull)",
+     "unit": "",
+     "value": null
+    },
+    "inertia_I1": {
+     "default_selected": false,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Size and mass properties",
+     "label": "Principal inertia I1 (unit density)",
+     "unit": "input_units⁵",
+     "value": null
+    },
+    "inertia_I2": {
+     "default_selected": false,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Size and mass properties",
+     "label": "Principal inertia I2 (unit density)",
+     "unit": "input_units⁵",
+     "value": null
+    },
+    "inertia_I3": {
+     "default_selected": false,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Size and mass properties",
+     "label": "Principal inertia I3 (unit density)",
+     "unit": "input_units⁵",
+     "value": null
+    },
+    "kongfonseca_elongation": {
+     "default_selected": true,
+     "error": "inertia-equivalent ellipsoid unavailable: volume requires a closed, manifold triangle mesh",
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Elongation (Kong & Fonseca)",
+     "unit": "",
+     "value": null
+    },
+    "kongfonseca_flatness": {
+     "default_selected": true,
+     "error": "inertia-equivalent ellipsoid unavailable: volume requires a closed, manifold triangle mesh",
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Flatness (Kong & Fonseca)",
+     "unit": "",
+     "value": null
+    },
+    "n_cavities": {
+     "default_selected": false,
+     "error": "cavities are filled (cavities='fill')",
+     "group": "Size and mass properties",
+     "label": "Number of cavities",
+     "unit": "",
+     "value": null
+    },
+    "n_faces": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Face count",
+     "unit": "",
+     "value": 1088.0
+    },
+    "n_vertices": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Vertex count",
+     "unit": "",
+     "value": 565.0
+    },
+    "orientation_C": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Compactness C (surface orientation tensor)",
+     "unit": "",
+     "value": 0.22932356815998012
+    },
+    "orientation_E": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Elongation E (surface orientation tensor)",
+     "unit": "",
+     "value": 0.36406498536244447
+    },
+    "orientation_F": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Flakiness F (surface orientation tensor)",
+     "unit": "",
+     "value": 0.4066114464775754
+    },
+    "orientation_eig1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f1 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.5486329893263546
+    },
+    "orientation_eig2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f2 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.3255525359510494
+    },
+    "orientation_eig3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f3 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.12581447472259594
+    },
+    "porosity": {
+     "default_selected": false,
+     "error": "cavities are filled (cavities='fill')",
+     "group": "Size and mass properties",
+     "label": "Porosity (cavity volume / envelope volume)",
+     "unit": "",
+     "value": null
+    },
+    "potticary_elongation": {
+     "default_selected": true,
+     "error": "inertia-equivalent ellipsoid unavailable: volume requires a closed, manifold triangle mesh",
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Elongation (Potticary et al.)",
+     "unit": "",
+     "value": null
+    },
+    "potticary_flatness": {
+     "default_selected": true,
+     "error": "inertia-equivalent ellipsoid unavailable: volume requires a closed, manifold triangle mesh",
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Flatness (Potticary et al.)",
+     "unit": "",
+     "value": null
+    },
+    "sphericity_krumbein": {
+     "default_selected": true,
+     "error": "inertia-equivalent ellipsoid unavailable: volume requires a closed, manifold triangle mesh",
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Sphericity (Krumbein)",
+     "unit": "",
+     "value": null
+    },
+    "sphericity_wadell": {
+     "default_selected": true,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Sphericity (Wadell)",
+     "unit": "",
+     "value": null
+    },
+    "surface_area": {
+     "default_selected": true,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Surface area",
+     "unit": "input_units²",
+     "value": 23.228320896988773
+    },
+    "surface_area_outer": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Surface area of the envelope (outer surface)",
+     "unit": "input_units²",
+     "value": 23.228320896988773
+    },
+    "volume": {
+     "default_selected": true,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Size and mass properties",
+     "label": "Volume (mesh)",
+     "unit": "input_units³",
+     "value": null
+    },
+    "zingg_IL": {
+     "default_selected": true,
+     "error": "inertia-equivalent ellipsoid unavailable: volume requires a closed, manifold triangle mesh",
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Zingg ratio I/L",
+     "unit": "",
+     "value": null
+    },
+    "zingg_SI": {
+     "default_selected": true,
+     "error": "inertia-equivalent ellipsoid unavailable: volume requires a closed, manifold triangle mesh",
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Zingg ratio S/I",
+     "unit": "",
+     "value": null
+    }
+   },
+   "requires": [
+    "scipy"
+   ]
+  },
+  "file:synthetic/open_ellipsoid.stl|axes=min_volume": {
+   "csv": [
+    [
+     "parameter",
+     "unit"
+    ],
+    [
+     "source_file",
+     ""
+    ],
+    [
+     "reader",
+     ""
+    ],
+    [
+     "warning",
+     ""
+    ],
+    [
+     "surface_area",
+     "input_units^2"
+    ],
+    [
+     "orientation_C",
+     ""
+    ],
+    [
+     "orientation_F",
+     ""
+    ],
+    [
+     "orientation_E",
+     ""
+    ],
+    [
+     "sphericity_krumbein",
+     ""
+    ],
+    [
+     "potticary_flatness",
+     ""
+    ],
+    [
+     "potticary_elongation",
+     ""
+    ],
+    [
+     "kongfonseca_flatness",
+     ""
+    ],
+    [
+     "kongfonseca_elongation",
+     ""
+    ],
+    [
+     "angelidakis_flatness",
+     ""
+    ],
+    [
+     "angelidakis_elongation",
+     ""
+    ],
+    [
+     "zingg_SI",
+     ""
+    ],
+    [
+     "zingg_IL",
+     ""
+    ]
+   ],
+   "excluded": [],
+   "meta": {
+    "axes_method": "min_volume",
+    "input_units": "as-is",
+    "output_scale": 1.0,
+    "output_units": "as-is",
+    "reader": "builtin-stl",
+    "scale_factor": 1.0,
+    "source_name": "open_ellipsoid.stl",
+    "warnings": [
+     "Open surface: 40 boundary edges. No boundary vertex lies within 0.00022 (0.001 x the median edge length) of another: the openings are holes rather than export gaps; pySHAPE does not fill holes (use e.g. MeshLab, PyMeshFix or Blender's 3D-Print toolbox)."
+    ]
+   },
+   "metrics": {
+    "angelidakis_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (minimum-volume box)",
+     "label": "Elongation (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.11101936924158368
+    },
+    "angelidakis_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (minimum-volume box)",
+     "label": "Flatness (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.16455451463705167
+    },
+    "axis_I": {
+     "default_selected": false,
+     "error": null,
+     "group": "Principal dimensions (minimum-volume box)",
+     "label": "Intermediate axis I (min. volume box)",
+     "unit": "input_units",
+     "value": 2.7965751563998285
+    },
+    "axis_L": {
+     "default_selected": false,
+     "error": null,
+     "group": "Principal dimensions (minimum-volume box)",
+     "label": "Long axis L (min. volume box)",
+     "unit": "input_units",
+     "value": 3.5173046588897705
+    },
+    "axis_S": {
+     "default_selected": false,
+     "error": null,
+     "group": "Principal dimensions (minimum-volume box)",
+     "label": "Short axis S (min. volume box)",
+     "unit": "input_units",
+     "value": 1.9975537171608717
+    },
+    "cavity_volume": {
+     "default_selected": false,
+     "error": "cavities are filled (cavities='fill')",
+     "group": "Size and mass properties",
+     "label": "Cavity volume",
+     "unit": "input_units³",
+     "value": null
+    },
+    "centroid_x": {
+     "default_selected": false,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Size and mass properties",
+     "label": "Centroid X",
+     "unit": "input_units",
+     "value": null
+    },
+    "centroid_y": {
+     "default_selected": false,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Size and mass properties",
+     "label": "Centroid Y",
+     "unit": "input_units",
+     "value": null
+    },
+    "centroid_z": {
+     "default_selected": false,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Size and mass properties",
+     "label": "Centroid Z",
+     "unit": "input_units",
+     "value": null
+    },
+    "convexity": {
+     "default_selected": true,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Convexity (V / V_convex_hull)",
+     "unit": "",
+     "value": null
+    },
+    "inertia_I1": {
+     "default_selected": false,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Size and mass properties",
+     "label": "Principal inertia I1 (unit density)",
+     "unit": "input_units⁵",
+     "value": null
+    },
+    "inertia_I2": {
+     "default_selected": false,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Size and mass properties",
+     "label": "Principal inertia I2 (unit density)",
+     "unit": "input_units⁵",
+     "value": null
+    },
+    "inertia_I3": {
+     "default_selected": false,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Size and mass properties",
+     "label": "Principal inertia I3 (unit density)",
+     "unit": "input_units⁵",
+     "value": null
+    },
+    "kongfonseca_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (minimum-volume box)",
+     "label": "Elongation (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.20490960334310043
+    },
+    "kongfonseca_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (minimum-volume box)",
+     "label": "Flatness (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.2857142735500723
+    },
+    "n_cavities": {
+     "default_selected": false,
+     "error": "cavities are filled (cavities='fill')",
+     "group": "Size and mass properties",
+     "label": "Number of cavities",
+     "unit": "",
+     "value": null
+    },
+    "n_faces": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Face count",
+     "unit": "",
+     "value": 1088.0
+    },
+    "n_vertices": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Vertex count",
+     "unit": "",
+     "value": 565.0
+    },
+    "orientation_C": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Compactness C (surface orientation tensor)",
+     "unit": "",
+     "value": 0.22932356815998012
+    },
+    "orientation_E": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Elongation E (surface orientation tensor)",
+     "unit": "",
+     "value": 0.36406498536244447
+    },
+    "orientation_F": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Flakiness F (surface orientation tensor)",
+     "unit": "",
+     "value": 0.4066114464775754
+    },
+    "orientation_eig1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f1 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.5486329893263546
+    },
+    "orientation_eig2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f2 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.3255525359510494
+    },
+    "orientation_eig3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f3 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.12581447472259594
+    },
+    "porosity": {
+     "default_selected": false,
+     "error": "cavities are filled (cavities='fill')",
+     "group": "Size and mass properties",
+     "label": "Porosity (cavity volume / envelope volume)",
+     "unit": "",
+     "value": null
+    },
+    "potticary_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (minimum-volume box)",
+     "label": "Elongation (Potticary et al.)",
+     "unit": "",
+     "value": 0.08671542636730302
+    },
+    "potticary_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (minimum-volume box)",
+     "label": "Flatness (Potticary et al.)",
+     "unit": "",
+     "value": 0.19227042750671683
+    },
+    "sphericity_krumbein": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (minimum-volume box)",
+     "label": "Sphericity (Krumbein)",
+     "unit": "",
+     "value": 0.767187755083701
+    },
+    "sphericity_wadell": {
+     "default_selected": true,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Sphericity (Wadell)",
+     "unit": "",
+     "value": null
+    },
+    "surface_area": {
+     "default_selected": true,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Surface area",
+     "unit": "input_units²",
+     "value": 23.228320896988773
+    },
+    "surface_area_outer": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Surface area of the envelope (outer surface)",
+     "unit": "input_units²",
+     "value": 23.228320896988773
+    },
+    "volume": {
+     "default_selected": true,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Size and mass properties",
+     "label": "Volume (mesh)",
+     "unit": "input_units³",
+     "value": null
+    },
+    "zingg_IL": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (minimum-volume box)",
+     "label": "Zingg ratio I/L",
+     "unit": "",
+     "value": 0.7950903966568995
+    },
+    "zingg_SI": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (minimum-volume box)",
+     "label": "Zingg ratio S/I",
+     "unit": "",
+     "value": 0.7142857264499277
+    }
+   },
+   "requires": [
+    "scipy"
+   ]
+  },
+  "file:synthetic/open_ellipsoid.stl|axes=pca": {
+   "csv": [
+    [
+     "parameter",
+     "unit"
+    ],
+    [
+     "source_file",
+     ""
+    ],
+    [
+     "reader",
+     ""
+    ],
+    [
+     "warning",
+     ""
+    ],
+    [
+     "surface_area",
+     "input_units^2"
+    ],
+    [
+     "orientation_C",
+     ""
+    ],
+    [
+     "orientation_F",
+     ""
+    ],
+    [
+     "orientation_E",
+     ""
+    ],
+    [
+     "sphericity_krumbein",
+     ""
+    ],
+    [
+     "potticary_flatness",
+     ""
+    ],
+    [
+     "potticary_elongation",
+     ""
+    ],
+    [
+     "kongfonseca_flatness",
+     ""
+    ],
+    [
+     "kongfonseca_elongation",
+     ""
+    ],
+    [
+     "angelidakis_flatness",
+     ""
+    ],
+    [
+     "angelidakis_elongation",
+     ""
+    ],
+    [
+     "zingg_SI",
+     ""
+    ],
+    [
+     "zingg_IL",
+     ""
+    ]
+   ],
+   "excluded": [],
+   "meta": {
+    "axes_method": "pca",
+    "input_units": "as-is",
+    "output_scale": 1.0,
+    "output_units": "as-is",
+    "reader": "builtin-stl",
+    "scale_factor": 1.0,
+    "source_name": "open_ellipsoid.stl",
+    "warnings": [
+     "Open surface: 40 boundary edges. No boundary vertex lies within 0.00022 (0.001 x the median edge length) of another: the openings are holes rather than export gaps; pySHAPE does not fill holes (use e.g. MeshLab, PyMeshFix or Blender's 3D-Print toolbox)."
+    ]
+   },
+   "metrics": {
+    "angelidakis_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (PCA box)",
+     "label": "Elongation (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.11043149935750723
+    },
+    "angelidakis_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (PCA box)",
+     "label": "Flatness (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.1645768158793557
+    },
+    "axis_I": {
+     "default_selected": false,
+     "error": null,
+     "group": "Principal dimensions (PCA box)",
+     "label": "Intermediate axis I (PCA)",
+     "unit": "input_units",
+     "value": 2.7999999523162837
+    },
+    "axis_L": {
+     "default_selected": false,
+     "error": null,
+     "group": "Principal dimensions (PCA box)",
+     "label": "Long axis L (PCA)",
+     "unit": "input_units",
+     "value": 3.5173046588897705
+    },
+    "axis_S": {
+     "default_selected": false,
+     "error": null,
+     "group": "Principal dimensions (PCA box)",
+     "label": "Short axis S (PCA)",
+     "unit": "input_units",
+     "value": 1.9999999999999998
+    },
+    "cavity_volume": {
+     "default_selected": false,
+     "error": "cavities are filled (cavities='fill')",
+     "group": "Size and mass properties",
+     "label": "Cavity volume",
+     "unit": "input_units³",
+     "value": null
+    },
+    "centroid_x": {
+     "default_selected": false,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Size and mass properties",
+     "label": "Centroid X",
+     "unit": "input_units",
+     "value": null
+    },
+    "centroid_y": {
+     "default_selected": false,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Size and mass properties",
+     "label": "Centroid Y",
+     "unit": "input_units",
+     "value": null
+    },
+    "centroid_z": {
+     "default_selected": false,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Size and mass properties",
+     "label": "Centroid Z",
+     "unit": "input_units",
+     "value": null
+    },
+    "convexity": {
+     "default_selected": true,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Convexity (V / V_convex_hull)",
+     "unit": "",
+     "value": null
+    },
+    "inertia_I1": {
+     "default_selected": false,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Size and mass properties",
+     "label": "Principal inertia I1 (unit density)",
+     "unit": "input_units⁵",
+     "value": null
+    },
+    "inertia_I2": {
+     "default_selected": false,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Size and mass properties",
+     "label": "Principal inertia I2 (unit density)",
+     "unit": "input_units⁵",
+     "value": null
+    },
+    "inertia_I3": {
+     "default_selected": false,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Size and mass properties",
+     "label": "Principal inertia I3 (unit density)",
+     "unit": "input_units⁵",
+     "value": null
+    },
+    "kongfonseca_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (PCA box)",
+     "label": "Elongation (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.20393590437511389
+    },
+    "kongfonseca_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (PCA box)",
+     "label": "Flatness (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.28571427355007223
+    },
+    "n_cavities": {
+     "default_selected": false,
+     "error": "cavities are filled (cavities='fill')",
+     "group": "Size and mass properties",
+     "label": "Number of cavities",
+     "unit": "",
+     "value": null
+    },
+    "n_faces": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Face count",
+     "unit": "",
+     "value": 1088.0
+    },
+    "n_vertices": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Vertex count",
+     "unit": "",
+     "value": 565.0
+    },
+    "orientation_C": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Compactness C (surface orientation tensor)",
+     "unit": "",
+     "value": 0.22932356815998012
+    },
+    "orientation_E": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Elongation E (surface orientation tensor)",
+     "unit": "",
+     "value": 0.36406498536244447
+    },
+    "orientation_F": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Flakiness F (surface orientation tensor)",
+     "unit": "",
+     "value": 0.4066114464775754
+    },
+    "orientation_eig1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f1 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.5486329893263546
+    },
+    "orientation_eig2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f2 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.3255525359510494
+    },
+    "orientation_eig3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f3 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.12581447472259594
+    },
+    "porosity": {
+     "default_selected": false,
+     "error": "cavities are filled (cavities='fill')",
+     "group": "Size and mass properties",
+     "label": "Porosity (cavity volume / envelope volume)",
+     "unit": "",
+     "value": null
+    },
+    "potticary_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (PCA box)",
+     "label": "Elongation (Potticary et al.)",
+     "unit": "",
+     "value": 0.08624244753607427
+    },
+    "potticary_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (PCA box)",
+     "label": "Flatness (Potticary et al.)",
+     "unit": "",
+     "value": 0.19237000199281618
+    },
+    "sphericity_krumbein": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (PCA box)",
+     "label": "Sphericity (Krumbein)",
+     "unit": "",
+     "value": 0.7678139795078442
+    },
+    "sphericity_wadell": {
+     "default_selected": true,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Sphericity (Wadell)",
+     "unit": "",
+     "value": null
+    },
+    "surface_area": {
+     "default_selected": true,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Surface area",
+     "unit": "input_units²",
+     "value": 23.228320896988773
+    },
+    "surface_area_outer": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Surface area of the envelope (outer surface)",
+     "unit": "input_units²",
+     "value": 23.228320896988773
+    },
+    "volume": {
+     "default_selected": true,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Size and mass properties",
+     "label": "Volume (mesh)",
+     "unit": "input_units³",
+     "value": null
+    },
+    "zingg_IL": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (PCA box)",
+     "label": "Zingg ratio I/L",
+     "unit": "",
+     "value": 0.7960640956248861
+    },
+    "zingg_SI": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (PCA box)",
+     "label": "Zingg ratio S/I",
+     "unit": "",
+     "value": 0.7142857264499277
+    }
+   },
+   "requires": [
+    "scipy"
+   ]
+  },
+  "file:synthetic/sphere_with_gaps.stl|axes=fitted_ellipsoid": {
+   "csv": [
+    [
+     "parameter",
+     "unit"
+    ],
+    [
+     "source_file",
+     ""
+    ],
+    [
+     "reader",
+     ""
+    ],
+    [
+     "warning",
+     ""
+    ],
+    [
+     "surface_area",
+     "input_units^2"
+    ],
+    [
+     "orientation_C",
+     ""
+    ],
+    [
+     "orientation_F",
+     ""
+    ],
+    [
+     "orientation_E",
+     ""
+    ],
+    [
+     "sphericity_krumbein",
+     ""
+    ],
+    [
+     "potticary_flatness",
+     ""
+    ],
+    [
+     "potticary_elongation",
+     ""
+    ],
+    [
+     "kongfonseca_flatness",
+     ""
+    ],
+    [
+     "kongfonseca_elongation",
+     ""
+    ],
+    [
+     "angelidakis_flatness",
+     ""
+    ],
+    [
+     "angelidakis_elongation",
+     ""
+    ],
+    [
+     "zingg_SI",
+     ""
+    ],
+    [
+     "zingg_IL",
+     ""
+    ]
+   ],
+   "excluded": [],
+   "meta": {
+    "axes_method": "fitted_ellipsoid",
+    "input_units": "as-is",
+    "output_scale": 1.0,
+    "output_units": "as-is",
+    "reader": "builtin-stl",
+    "scale_factor": 1.0,
+    "source_name": "sphere_with_gaps.stl",
+    "warnings": [
+     "Open surface: 96 boundary edges. All 96 boundary vertices lie within 0.000144 (0.001 x the median edge length) of another boundary vertex: the openings are probably gaps left by export or rounding, which pyshape-repair can close (it writes a repaired copy of the file)."
+    ]
+   },
+   "metrics": {
+    "angelidakis_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Elongation (Angelidakis et al.)",
+     "unit": "",
+     "value": 5.1639651998947045e-09
+    },
+    "angelidakis_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Flatness (Angelidakis et al.)",
+     "unit": "",
+     "value": 6.560118115395142e-08
+    },
+    "axis_I": {
+     "default_selected": false,
+     "error": null,
+     "group": "Principal dimensions (fitted ellipsoid)",
+     "label": "Intermediate axis I (fitted ellipsoid)",
+     "unit": "input_units",
+     "value": 2.000000143037276
+    },
+    "axis_L": {
+     "default_selected": false,
+     "error": null,
+     "group": "Principal dimensions (fitted ellipsoid)",
+     "label": "Long axis L (fitted ellipsoid)",
+     "unit": "input_units",
+     "value": 2.000000163693138
+    },
+    "axis_S": {
+     "default_selected": false,
+     "error": null,
+     "group": "Principal dimensions (fitted ellipsoid)",
+     "label": "Short axis S (fitted ellipsoid)",
+     "unit": "input_units",
+     "value": 1.9999998806325496
+    },
+    "cavity_volume": {
+     "default_selected": false,
+     "error": "cavities are filled (cavities='fill')",
+     "group": "Size and mass properties",
+     "label": "Cavity volume",
+     "unit": "input_units³",
+     "value": null
+    },
+    "centroid_x": {
+     "default_selected": false,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Size and mass properties",
+     "label": "Centroid X",
+     "unit": "input_units",
+     "value": null
+    },
+    "centroid_y": {
+     "default_selected": false,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Size and mass properties",
+     "label": "Centroid Y",
+     "unit": "input_units",
+     "value": null
+    },
+    "centroid_z": {
+     "default_selected": false,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Size and mass properties",
+     "label": "Centroid Z",
+     "unit": "input_units",
+     "value": null
+    },
+    "convexity": {
+     "default_selected": true,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Convexity (V / V_convex_hull)",
+     "unit": "",
+     "value": null
+    },
+    "inertia_I1": {
+     "default_selected": false,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Size and mass properties",
+     "label": "Principal inertia I1 (unit density)",
+     "unit": "input_units⁵",
+     "value": null
+    },
+    "inertia_I2": {
+     "default_selected": false,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Size and mass properties",
+     "label": "Principal inertia I2 (unit density)",
+     "unit": "input_units⁵",
+     "value": null
+    },
+    "inertia_I3": {
+     "default_selected": false,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Size and mass properties",
+     "label": "Principal inertia I3 (unit density)",
+     "unit": "input_units⁵",
+     "value": null
+    },
+    "kongfonseca_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Elongation (Kong & Fonseca)",
+     "unit": "",
+     "value": 1.0327930331639863e-08
+    },
+    "kongfonseca_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Flatness (Kong & Fonseca)",
+     "unit": "",
+     "value": 1.3120235370164532e-07
+    },
+    "n_cavities": {
+     "default_selected": false,
+     "error": "cavities are filled (cavities='fill')",
+     "group": "Size and mass properties",
+     "label": "Number of cavities",
+     "unit": "",
+     "value": null
+    },
+    "n_faces": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Face count",
+     "unit": "",
+     "value": 1280.0
+    },
+    "n_vertices": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Vertex count",
+     "unit": "",
+     "value": 690.0
+    },
+    "orientation_C": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Compactness C (surface orientation tensor)",
+     "unit": "",
+     "value": 0.9999996004484633
+    },
+    "orientation_E": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Elongation E (surface orientation tensor)",
+     "unit": "",
+     "value": 1.2424911535732287e-07
+    },
+    "orientation_F": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Flakiness F (surface orientation tensor)",
+     "unit": "",
+     "value": 2.753024213805466e-07
+    },
+    "orientation_eig1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f1 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.33333340831712216
+    },
+    "orientation_eig2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f2 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.3333333165496277
+    },
+    "orientation_eig3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f3 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.3333332751332466
+    },
+    "porosity": {
+     "default_selected": false,
+     "error": "cavities are filled (cavities='fill')",
+     "group": "Size and mass properties",
+     "label": "Porosity (cavity volume / envelope volume)",
+     "unit": "",
+     "value": null
+    },
+    "potticary_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Elongation (Potticary et al.)",
+     "unit": "",
+     "value": 3.442643618144524e-09
+    },
+    "potticary_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Flatness (Potticary et al.)",
+     "unit": "",
+     "value": 8.746823932532121e-08
+    },
+    "sphericity_krumbein": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Sphericity (Krumbein)",
+     "unit": "",
+     "value": 0.9999999493805936
+    },
+    "sphericity_wadell": {
+     "default_selected": true,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Sphericity (Wadell)",
+     "unit": "",
+     "value": null
+    },
+    "surface_area": {
+     "default_selected": true,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Surface area",
+     "unit": "input_units²",
+     "value": 12.506493517437056
+    },
+    "surface_area_outer": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Surface area of the envelope (outer surface)",
+     "unit": "input_units²",
+     "value": 12.506493517437056
+    },
+    "volume": {
+     "default_selected": true,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Size and mass properties",
+     "label": "Volume (mesh)",
+     "unit": "input_units³",
+     "value": null
+    },
+    "zingg_IL": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Zingg ratio I/L",
+     "unit": "",
+     "value": 0.9999999896720697
+    },
+    "zingg_SI": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Zingg ratio S/I",
+     "unit": "",
+     "value": 0.9999998687976464
+    }
+   },
+   "requires": [
+    "scipy",
+    "manifold3d"
+   ]
+  },
+  "file:synthetic/sphere_with_gaps.stl|axes=inertia_ellipsoid": {
+   "csv": [
+    [
+     "parameter",
+     "unit"
+    ],
+    [
+     "source_file",
+     ""
+    ],
+    [
+     "reader",
+     ""
+    ],
+    [
+     "warning",
+     ""
+    ],
+    [
+     "surface_area",
+     "input_units^2"
+    ],
+    [
+     "orientation_C",
+     ""
+    ],
+    [
+     "orientation_F",
+     ""
+    ],
+    [
+     "orientation_E",
+     ""
+    ]
+   ],
+   "excluded": [],
+   "meta": {
+    "axes_method": "inertia_ellipsoid",
+    "input_units": "as-is",
+    "output_scale": 1.0,
+    "output_units": "as-is",
+    "reader": "builtin-stl",
+    "scale_factor": 1.0,
+    "source_name": "sphere_with_gaps.stl",
+    "warnings": [
+     "Open surface: 96 boundary edges. All 96 boundary vertices lie within 0.000144 (0.001 x the median edge length) of another boundary vertex: the openings are probably gaps left by export or rounding, which pyshape-repair can close (it writes a repaired copy of the file)."
+    ]
+   },
+   "metrics": {
+    "angelidakis_elongation": {
+     "default_selected": true,
+     "error": "inertia-equivalent ellipsoid unavailable: volume requires a closed, manifold triangle mesh",
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Elongation (Angelidakis et al.)",
+     "unit": "",
+     "value": null
+    },
+    "angelidakis_flatness": {
+     "default_selected": true,
+     "error": "inertia-equivalent ellipsoid unavailable: volume requires a closed, manifold triangle mesh",
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Flatness (Angelidakis et al.)",
+     "unit": "",
+     "value": null
+    },
+    "axis_I": {
+     "default_selected": false,
+     "error": "inertia-equivalent ellipsoid unavailable: volume requires a closed, manifold triangle mesh",
+     "group": "Principal dimensions (inertia-equivalent ellipsoid)",
+     "label": "Intermediate axis I (inertia ellipsoid)",
+     "unit": "input_units",
+     "value": null
+    },
+    "axis_L": {
+     "default_selected": false,
+     "error": "inertia-equivalent ellipsoid unavailable: volume requires a closed, manifold triangle mesh",
+     "group": "Principal dimensions (inertia-equivalent ellipsoid)",
+     "label": "Long axis L (inertia ellipsoid)",
+     "unit": "input_units",
+     "value": null
+    },
+    "axis_S": {
+     "default_selected": false,
+     "error": "inertia-equivalent ellipsoid unavailable: volume requires a closed, manifold triangle mesh",
+     "group": "Principal dimensions (inertia-equivalent ellipsoid)",
+     "label": "Short axis S (inertia ellipsoid)",
+     "unit": "input_units",
+     "value": null
+    },
+    "cavity_volume": {
+     "default_selected": false,
+     "error": "cavities are filled (cavities='fill')",
+     "group": "Size and mass properties",
+     "label": "Cavity volume",
+     "unit": "input_units³",
+     "value": null
+    },
+    "centroid_x": {
+     "default_selected": false,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Size and mass properties",
+     "label": "Centroid X",
+     "unit": "input_units",
+     "value": null
+    },
+    "centroid_y": {
+     "default_selected": false,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Size and mass properties",
+     "label": "Centroid Y",
+     "unit": "input_units",
+     "value": null
+    },
+    "centroid_z": {
+     "default_selected": false,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Size and mass properties",
+     "label": "Centroid Z",
+     "unit": "input_units",
+     "value": null
+    },
+    "convexity": {
+     "default_selected": true,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Convexity (V / V_convex_hull)",
+     "unit": "",
+     "value": null
+    },
+    "inertia_I1": {
+     "default_selected": false,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Size and mass properties",
+     "label": "Principal inertia I1 (unit density)",
+     "unit": "input_units⁵",
+     "value": null
+    },
+    "inertia_I2": {
+     "default_selected": false,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Size and mass properties",
+     "label": "Principal inertia I2 (unit density)",
+     "unit": "input_units⁵",
+     "value": null
+    },
+    "inertia_I3": {
+     "default_selected": false,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Size and mass properties",
+     "label": "Principal inertia I3 (unit density)",
+     "unit": "input_units⁵",
+     "value": null
+    },
+    "kongfonseca_elongation": {
+     "default_selected": true,
+     "error": "inertia-equivalent ellipsoid unavailable: volume requires a closed, manifold triangle mesh",
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Elongation (Kong & Fonseca)",
+     "unit": "",
+     "value": null
+    },
+    "kongfonseca_flatness": {
+     "default_selected": true,
+     "error": "inertia-equivalent ellipsoid unavailable: volume requires a closed, manifold triangle mesh",
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Flatness (Kong & Fonseca)",
+     "unit": "",
+     "value": null
+    },
+    "n_cavities": {
+     "default_selected": false,
+     "error": "cavities are filled (cavities='fill')",
+     "group": "Size and mass properties",
+     "label": "Number of cavities",
+     "unit": "",
+     "value": null
+    },
+    "n_faces": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Face count",
+     "unit": "",
+     "value": 1280.0
+    },
+    "n_vertices": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Vertex count",
+     "unit": "",
+     "value": 690.0
+    },
+    "orientation_C": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Compactness C (surface orientation tensor)",
+     "unit": "",
+     "value": 0.9999996004484633
+    },
+    "orientation_E": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Elongation E (surface orientation tensor)",
+     "unit": "",
+     "value": 1.2424911535732287e-07
+    },
+    "orientation_F": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Flakiness F (surface orientation tensor)",
+     "unit": "",
+     "value": 2.753024213805466e-07
+    },
+    "orientation_eig1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f1 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.33333340831712216
+    },
+    "orientation_eig2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f2 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.3333333165496277
+    },
+    "orientation_eig3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f3 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.3333332751332466
+    },
+    "porosity": {
+     "default_selected": false,
+     "error": "cavities are filled (cavities='fill')",
+     "group": "Size and mass properties",
+     "label": "Porosity (cavity volume / envelope volume)",
+     "unit": "",
+     "value": null
+    },
+    "potticary_elongation": {
+     "default_selected": true,
+     "error": "inertia-equivalent ellipsoid unavailable: volume requires a closed, manifold triangle mesh",
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Elongation (Potticary et al.)",
+     "unit": "",
+     "value": null
+    },
+    "potticary_flatness": {
+     "default_selected": true,
+     "error": "inertia-equivalent ellipsoid unavailable: volume requires a closed, manifold triangle mesh",
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Flatness (Potticary et al.)",
+     "unit": "",
+     "value": null
+    },
+    "sphericity_krumbein": {
+     "default_selected": true,
+     "error": "inertia-equivalent ellipsoid unavailable: volume requires a closed, manifold triangle mesh",
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Sphericity (Krumbein)",
+     "unit": "",
+     "value": null
+    },
+    "sphericity_wadell": {
+     "default_selected": true,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Sphericity (Wadell)",
+     "unit": "",
+     "value": null
+    },
+    "surface_area": {
+     "default_selected": true,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Surface area",
+     "unit": "input_units²",
+     "value": 12.506493517437056
+    },
+    "surface_area_outer": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Surface area of the envelope (outer surface)",
+     "unit": "input_units²",
+     "value": 12.506493517437056
+    },
+    "volume": {
+     "default_selected": true,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Size and mass properties",
+     "label": "Volume (mesh)",
+     "unit": "input_units³",
+     "value": null
+    },
+    "zingg_IL": {
+     "default_selected": true,
+     "error": "inertia-equivalent ellipsoid unavailable: volume requires a closed, manifold triangle mesh",
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Zingg ratio I/L",
+     "unit": "",
+     "value": null
+    },
+    "zingg_SI": {
+     "default_selected": true,
+     "error": "inertia-equivalent ellipsoid unavailable: volume requires a closed, manifold triangle mesh",
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Zingg ratio S/I",
+     "unit": "",
+     "value": null
+    }
+   },
+   "requires": [
+    "scipy",
+    "manifold3d"
+   ]
+  },
+  "file:synthetic/sphere_with_gaps.stl|axes=min_volume": {
+   "csv": [
+    [
+     "parameter",
+     "unit"
+    ],
+    [
+     "source_file",
+     ""
+    ],
+    [
+     "reader",
+     ""
+    ],
+    [
+     "warning",
+     ""
+    ],
+    [
+     "surface_area",
+     "input_units^2"
+    ],
+    [
+     "orientation_C",
+     ""
+    ],
+    [
+     "orientation_F",
+     ""
+    ],
+    [
+     "orientation_E",
+     ""
+    ],
+    [
+     "sphericity_krumbein",
+     ""
+    ],
+    [
+     "potticary_flatness",
+     ""
+    ],
+    [
+     "potticary_elongation",
+     ""
+    ],
+    [
+     "kongfonseca_flatness",
+     ""
+    ],
+    [
+     "kongfonseca_elongation",
+     ""
+    ],
+    [
+     "angelidakis_flatness",
+     ""
+    ],
+    [
+     "angelidakis_elongation",
+     ""
+    ],
+    [
+     "zingg_SI",
+     ""
+    ],
+    [
+     "zingg_IL",
+     ""
+    ]
+   ],
+   "excluded": [],
+   "meta": {
+    "axes_method": "min_volume",
+    "input_units": "as-is",
+    "output_scale": 1.0,
+    "output_units": "as-is",
+    "reader": "builtin-stl",
+    "scale_factor": 1.0,
+    "source_name": "sphere_with_gaps.stl",
+    "warnings": [
+     "Open surface: 96 boundary edges. All 96 boundary vertices lie within 0.000144 (0.001 x the median edge length) of another boundary vertex: the openings are probably gaps left by export or rounding, which pyshape-repair can close (it writes a repaired copy of the file)."
+    ]
+   },
+   "metrics": {
+    "angelidakis_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (minimum-volume box)",
+     "label": "Elongation (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.000378535723782214
+    },
+    "angelidakis_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (minimum-volume box)",
+     "label": "Flatness (Angelidakis et al.)",
+     "unit": "",
+     "value": 5.383471446407384e-12
+    },
+    "axis_I": {
+     "default_selected": false,
+     "error": null,
+     "group": "Principal dimensions (minimum-volume box)",
+     "label": "Intermediate axis I (min. volume box)",
+     "unit": "input_units",
+     "value": 1.991600957625203
+    },
+    "axis_L": {
+     "default_selected": false,
+     "error": null,
+     "group": "Principal dimensions (minimum-volume box)",
+     "label": "Long axis L (min. volume box)",
+     "unit": "input_units",
+     "value": 1.993109312811485
+    },
+    "axis_S": {
+     "default_selected": false,
+     "error": null,
+     "group": "Principal dimensions (minimum-volume box)",
+     "label": "Short axis S (min. volume box)",
+     "unit": "input_units",
+     "value": 1.9916009576037594
+    },
+    "cavity_volume": {
+     "default_selected": false,
+     "error": "cavities are filled (cavities='fill')",
+     "group": "Size and mass properties",
+     "label": "Cavity volume",
+     "unit": "input_units³",
+     "value": null
+    },
+    "centroid_x": {
+     "default_selected": false,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Size and mass properties",
+     "label": "Centroid X",
+     "unit": "input_units",
+     "value": null
+    },
+    "centroid_y": {
+     "default_selected": false,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Size and mass properties",
+     "label": "Centroid Y",
+     "unit": "input_units",
+     "value": null
+    },
+    "centroid_z": {
+     "default_selected": false,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Size and mass properties",
+     "label": "Centroid Z",
+     "unit": "input_units",
+     "value": null
+    },
+    "convexity": {
+     "default_selected": true,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Convexity (V / V_convex_hull)",
+     "unit": "",
+     "value": null
+    },
+    "inertia_I1": {
+     "default_selected": false,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Size and mass properties",
+     "label": "Principal inertia I1 (unit density)",
+     "unit": "input_units⁵",
+     "value": null
+    },
+    "inertia_I2": {
+     "default_selected": false,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Size and mass properties",
+     "label": "Principal inertia I2 (unit density)",
+     "unit": "input_units⁵",
+     "value": null
+    },
+    "inertia_I3": {
+     "default_selected": false,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Size and mass properties",
+     "label": "Principal inertia I3 (unit density)",
+     "unit": "input_units⁵",
+     "value": null
+    },
+    "kongfonseca_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (minimum-volume box)",
+     "label": "Elongation (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.000756784977415171
+    },
+    "kongfonseca_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (minimum-volume box)",
+     "label": "Flatness (Kong & Fonseca)",
+     "unit": "",
+     "value": 1.0766972946726448e-11
+    },
+    "n_cavities": {
+     "default_selected": false,
+     "error": "cavities are filled (cavities='fill')",
+     "group": "Size and mass properties",
+     "label": "Number of cavities",
+     "unit": "",
+     "value": null
+    },
+    "n_faces": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Face count",
+     "unit": "",
+     "value": 1280.0
+    },
+    "n_vertices": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Vertex count",
+     "unit": "",
+     "value": 690.0
+    },
+    "orientation_C": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Compactness C (surface orientation tensor)",
+     "unit": "",
+     "value": 0.9999996004484633
+    },
+    "orientation_E": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Elongation E (surface orientation tensor)",
+     "unit": "",
+     "value": 1.2424911535732287e-07
+    },
+    "orientation_F": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Flakiness F (surface orientation tensor)",
+     "unit": "",
+     "value": 2.753024213805466e-07
+    },
+    "orientation_eig1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f1 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.33333340831712216
+    },
+    "orientation_eig2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f2 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.3333333165496277
+    },
+    "orientation_eig3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f3 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.3333332751332466
+    },
+    "porosity": {
+     "default_selected": false,
+     "error": "cavities are filled (cavities='fill')",
+     "group": "Size and mass properties",
+     "label": "Porosity (cavity volume / envelope volume)",
+     "unit": "",
+     "value": null
+    },
+    "potticary_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (minimum-volume box)",
+     "label": "Elongation (Potticary et al.)",
+     "unit": "",
+     "value": 0.00025238899527268695
+    },
+    "potticary_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (minimum-volume box)",
+     "label": "Flatness (Potticary et al.)",
+     "unit": "",
+     "value": 7.1761703208539526e-12
+    },
+    "sphericity_krumbein": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (minimum-volume box)",
+     "label": "Sphericity (Krumbein)",
+     "unit": "",
+     "value": 0.999495413020778
+    },
+    "sphericity_wadell": {
+     "default_selected": true,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Sphericity (Wadell)",
+     "unit": "",
+     "value": null
+    },
+    "surface_area": {
+     "default_selected": true,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Surface area",
+     "unit": "input_units²",
+     "value": 12.506493517437056
+    },
+    "surface_area_outer": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Surface area of the envelope (outer surface)",
+     "unit": "input_units²",
+     "value": 12.506493517437056
+    },
+    "volume": {
+     "default_selected": true,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Size and mass properties",
+     "label": "Volume (mesh)",
+     "unit": "input_units³",
+     "value": null
+    },
+    "zingg_IL": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (minimum-volume box)",
+     "label": "Zingg ratio I/L",
+     "unit": "",
+     "value": 0.9992432150225848
+    },
+    "zingg_SI": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (minimum-volume box)",
+     "label": "Zingg ratio S/I",
+     "unit": "",
+     "value": 0.9999999999892331
+    }
+   },
+   "requires": [
+    "scipy",
+    "manifold3d"
+   ]
+  },
+  "file:synthetic/sphere_with_gaps.stl|axes=pca": {
+   "csv": [
+    [
+     "parameter",
+     "unit"
+    ],
+    [
+     "source_file",
+     ""
+    ],
+    [
+     "reader",
+     ""
+    ],
+    [
+     "warning",
+     ""
+    ],
+    [
+     "surface_area",
+     "input_units^2"
+    ],
+    [
+     "orientation_C",
+     ""
+    ],
+    [
+     "orientation_F",
+     ""
+    ],
+    [
+     "orientation_E",
+     ""
+    ],
+    [
+     "sphericity_krumbein",
+     ""
+    ],
+    [
+     "potticary_flatness",
+     ""
+    ],
+    [
+     "potticary_elongation",
+     ""
+    ],
+    [
+     "kongfonseca_flatness",
+     ""
+    ],
+    [
+     "kongfonseca_elongation",
+     ""
+    ],
+    [
+     "angelidakis_flatness",
+     ""
+    ],
+    [
+     "angelidakis_elongation",
+     ""
+    ],
+    [
+     "zingg_SI",
+     ""
+    ],
+    [
+     "zingg_IL",
+     ""
+    ]
+   ],
+   "excluded": [],
+   "meta": {
+    "axes_method": "pca",
+    "input_units": "as-is",
+    "output_scale": 1.0,
+    "output_units": "as-is",
+    "reader": "builtin-stl",
+    "scale_factor": 1.0,
+    "source_name": "sphere_with_gaps.stl",
+    "warnings": [
+     "Open surface: 96 boundary edges. All 96 boundary vertices lie within 0.000144 (0.001 x the median edge length) of another boundary vertex: the openings are probably gaps left by export or rounding, which pyshape-repair can close (it writes a repaired copy of the file)."
+    ]
+   },
+   "metrics": {
+    "angelidakis_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (PCA box)",
+     "label": "Elongation (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.0
+    },
+    "angelidakis_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (PCA box)",
+     "label": "Flatness (Angelidakis et al.)",
+     "unit": "",
+     "value": 4.7683693082944956e-07
+    },
+    "axis_I": {
+     "default_selected": false,
+     "error": null,
+     "group": "Principal dimensions (PCA box)",
+     "label": "Intermediate axis I (PCA)",
+     "unit": "input_units",
+     "value": 2.000001907348633
+    },
+    "axis_L": {
+     "default_selected": false,
+     "error": null,
+     "group": "Principal dimensions (PCA box)",
+     "label": "Long axis L (PCA)",
+     "unit": "input_units",
+     "value": 2.000001907348633
+    },
+    "axis_S": {
+     "default_selected": false,
+     "error": null,
+     "group": "Principal dimensions (PCA box)",
+     "label": "Short axis S (PCA)",
+     "unit": "input_units",
+     "value": 2.0
+    },
+    "cavity_volume": {
+     "default_selected": false,
+     "error": "cavities are filled (cavities='fill')",
+     "group": "Size and mass properties",
+     "label": "Cavity volume",
+     "unit": "input_units³",
+     "value": null
+    },
+    "centroid_x": {
+     "default_selected": false,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Size and mass properties",
+     "label": "Centroid X",
+     "unit": "input_units",
+     "value": null
+    },
+    "centroid_y": {
+     "default_selected": false,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Size and mass properties",
+     "label": "Centroid Y",
+     "unit": "input_units",
+     "value": null
+    },
+    "centroid_z": {
+     "default_selected": false,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Size and mass properties",
+     "label": "Centroid Z",
+     "unit": "input_units",
+     "value": null
+    },
+    "convexity": {
+     "default_selected": true,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Convexity (V / V_convex_hull)",
+     "unit": "",
+     "value": null
+    },
+    "inertia_I1": {
+     "default_selected": false,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Size and mass properties",
+     "label": "Principal inertia I1 (unit density)",
+     "unit": "input_units⁵",
+     "value": null
+    },
+    "inertia_I2": {
+     "default_selected": false,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Size and mass properties",
+     "label": "Principal inertia I2 (unit density)",
+     "unit": "input_units⁵",
+     "value": null
+    },
+    "inertia_I3": {
+     "default_selected": false,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Size and mass properties",
+     "label": "Principal inertia I3 (unit density)",
+     "unit": "input_units⁵",
+     "value": null
+    },
+    "kongfonseca_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (PCA box)",
+     "label": "Elongation (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.0
+    },
+    "kongfonseca_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (PCA box)",
+     "label": "Flatness (Kong & Fonseca)",
+     "unit": "",
+     "value": 9.536734069124156e-07
+    },
+    "n_cavities": {
+     "default_selected": false,
+     "error": "cavities are filled (cavities='fill')",
+     "group": "Size and mass properties",
+     "label": "Number of cavities",
+     "unit": "",
+     "value": null
+    },
+    "n_faces": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Face count",
+     "unit": "",
+     "value": 1280.0
+    },
+    "n_vertices": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Vertex count",
+     "unit": "",
+     "value": 690.0
+    },
+    "orientation_C": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Compactness C (surface orientation tensor)",
+     "unit": "",
+     "value": 0.9999996004484633
+    },
+    "orientation_E": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Elongation E (surface orientation tensor)",
+     "unit": "",
+     "value": 1.2424911535732287e-07
+    },
+    "orientation_F": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Flakiness F (surface orientation tensor)",
+     "unit": "",
+     "value": 2.753024213805466e-07
+    },
+    "orientation_eig1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f1 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.33333340831712216
+    },
+    "orientation_eig2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f2 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.3333333165496277
+    },
+    "orientation_eig3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f3 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.3333332751332466
+    },
+    "porosity": {
+     "default_selected": false,
+     "error": "cavities are filled (cavities='fill')",
+     "group": "Size and mass properties",
+     "label": "Porosity (cavity volume / envelope volume)",
+     "unit": "",
+     "value": null
+    },
+    "potticary_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (PCA box)",
+     "label": "Elongation (Potticary et al.)",
+     "unit": "",
+     "value": 0.0
+    },
+    "potticary_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (PCA box)",
+     "label": "Flatness (Potticary et al.)",
+     "unit": "",
+     "value": 6.357824733845562e-07
+    },
+    "sphericity_krumbein": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (PCA box)",
+     "label": "Sphericity (Krumbein)",
+     "unit": "",
+     "value": 0.9999996821087633
+    },
+    "sphericity_wadell": {
+     "default_selected": true,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Sphericity (Wadell)",
+     "unit": "",
+     "value": null
+    },
+    "surface_area": {
+     "default_selected": true,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Surface area",
+     "unit": "input_units²",
+     "value": 12.506493517437056
+    },
+    "surface_area_outer": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Surface area of the envelope (outer surface)",
+     "unit": "input_units²",
+     "value": 12.506493517437056
+    },
+    "volume": {
+     "default_selected": true,
+     "error": "volume requires a closed, manifold triangle mesh",
+     "group": "Size and mass properties",
+     "label": "Volume (mesh)",
+     "unit": "input_units³",
+     "value": null
+    },
+    "zingg_IL": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (PCA box)",
+     "label": "Zingg ratio I/L",
+     "unit": "",
+     "value": 1.0
+    },
+    "zingg_SI": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (PCA box)",
+     "label": "Zingg ratio S/I",
+     "unit": "",
+     "value": 0.9999990463265931
+    }
+   },
+   "requires": [
+    "scipy",
+    "manifold3d"
+   ]
+  },
   "file:synthetic/sphere_with_two_cavities.stl|axes=fitted_ellipsoid": {
    "csv": [
     [
