@@ -1,0 +1,1940 @@
+{
+ "aliases": {
+  "analysis.AXES_METHODS": "bounding.AXES_METHODS",
+  "analysis.LoadedGeometry": "io.LoadedGeometry",
+  "analysis.closed_surface_inertia_tensor": "geometry.closed_surface_inertia_tensor",
+  "analysis.csv_text": "export.csv_text",
+  "analysis.form_parameters_angelidakis_et_al": "form.form_parameters_angelidakis_et_al",
+  "analysis.form_parameters_kong_and_fonseca": "form.form_parameters_kong_and_fonseca",
+  "analysis.form_parameters_potticary_et_al": "form.form_parameters_potticary_et_al",
+  "analysis.form_parameters_zingg": "form.form_parameters_zingg",
+  "analysis.load_geometry": "io.load_geometry",
+  "analysis.oriented_box": "bounding.oriented_box",
+  "analysis.prepare_mesh": "preprocess.prepare_mesh",
+  "analysis.sphericity_krumbein": "form.sphericity_krumbein",
+  "analysis.sphericity_wadell": "form.sphericity_wadell",
+  "analysis.surface_area": "geometry.surface_area",
+  "analysis.surface_orientation_tensor": "form.surface_orientation_tensor",
+  "analysis.validate_mesh": "preprocess.validate_mesh",
+  "batch.AXES_LABELS": "analysis.AXES_LABELS",
+  "batch.AnalysisResult": "analysis.AnalysisResult",
+  "batch.OUTPUT_UNITS": "analysis.OUTPUT_UNITS",
+  "batch.SUPPORTED_EXTENSIONS": "io.SUPPORTED_EXTENSIONS",
+  "batch.UNIT_SCALES": "analysis.UNIT_SCALES",
+  "batch.analyze_file": "analysis.analyze_file",
+  "batch.make_export_path": "export.make_export_path",
+  "batch.unit_label": "analysis.unit_label",
+  "gui.AXES_METHODS": "bounding.AXES_METHODS",
+  "gui.LoadedGeometry": "gui_core.LoadedGeometry",
+  "gui.Metric": "gui_core.Metric",
+  "gui.OUTPUT_UNITS": "analysis.OUTPUT_UNITS",
+  "gui.SUPPORTED_EXTENSIONS": "gui_core.SUPPORTED_EXTENSIONS",
+  "gui.UNIT_SCALES": "analysis.UNIT_SCALES",
+  "gui.apply_output_units": "analysis.apply_output_units",
+  "gui.axis_triad": "gui_core.axis_triad",
+  "gui.compute_metrics": "gui_core.compute_metrics",
+  "gui.geo_metadata_rows": "gui_core.geo_metadata_rows",
+  "gui.load_geometry": "gui_core.load_geometry",
+  "gui.make_export_path": "gui_core.make_export_path",
+  "gui.prepare_mesh": "preprocess.prepare_mesh",
+  "gui.reader_text": "gui_core.reader_text",
+  "gui.resolve_output_units": "analysis.resolve_output_units",
+  "gui.scale_nodes": "analysis.scale_nodes",
+  "gui.unit_label": "analysis.unit_label",
+  "gui.units_summary": "gui_core.units_summary",
+  "gui.write_csv": "gui_core.write_csv",
+  "gui_core.LoadedGeometry": "io.LoadedGeometry",
+  "gui_core.Metric": "analysis.Metric",
+  "gui_core.NATIVE_EXTENSIONS": "io.NATIVE_EXTENSIONS",
+  "gui_core.SUPPORTED_EXTENSIONS": "io.SUPPORTED_EXTENSIONS",
+  "gui_core.TRIMESH_EXTENSIONS": "io.TRIMESH_EXTENSIONS",
+  "gui_core.compute_metrics": "analysis.compute_metrics",
+  "gui_core.convex_hull_volume": "analysis.convex_hull_volume",
+  "gui_core.estimate_axes": "analysis.estimate_axes",
+  "gui_core.load_geometry": "io.load_geometry",
+  "gui_core.make_export_path": "export.make_export_path",
+  "gui_core.mesh_volume_centroid": "analysis.mesh_volume_centroid",
+  "gui_core.write_csv": "export.write_csv",
+  "preprocess.surface_area": "geometry.surface_area",
+  "web.AXES_LABELS": "analysis.AXES_LABELS",
+  "web.AnalysisResult": "analysis.AnalysisResult",
+  "web.LENGTH_POWERS": "analysis.LENGTH_POWERS",
+  "web.NATIVE_EXTENSIONS": "io.NATIVE_EXTENSIONS",
+  "web.OUTPUT_UNITS": "analysis.OUTPUT_UNITS",
+  "web.SUPPORTED_EXTENSIONS": "io.SUPPORTED_EXTENSIONS",
+  "web.UNIT_SCALES": "analysis.UNIT_SCALES",
+  "web.analyze_mesh": "analysis.analyze_mesh",
+  "web.attach_source": "analysis.attach_source",
+  "web.compute_metrics": "analysis.compute_metrics",
+  "web.load_geometry": "io.load_geometry",
+  "web.prepare_mesh": "preprocess.prepare_mesh",
+  "web.scale_nodes": "analysis.scale_nodes"
+ },
+ "cli": {
+  "pyshape-batch": {
+   "options": {
+    "--axes": {
+     "choices": "list(AXES_LABELS)",
+     "default": "'pca'"
+    },
+    "--keys": {},
+    "--no-overwrite": {
+     "action": "'store_true'"
+    },
+    "--output-units": {
+     "choices": "['same', *OUTPUT_UNITS]",
+     "default": "'m'"
+    },
+    "--recursive": {
+     "action": "'store_true'"
+    },
+    "--strict-stl": {
+     "action": "'store_true'"
+    },
+    "--suffix": {
+     "default": "''"
+    },
+    "--summary": {
+     "action": "'store_true'"
+    },
+    "--units": {
+     "choices": "list(UNIT_SCALES)",
+     "default": "'as-is'"
+    },
+    "folder": {
+     "type": "Path"
+    }
+   },
+   "target": "pyshape.batch:main"
+  },
+  "pyshape-gui": {
+   "options": {},
+   "target": "pyshape.gui:main"
+  },
+  "pyshape-web": {
+   "options": {
+    "--host": {
+     "default": "'127.0.0.1'"
+    },
+    "--port": {
+     "default": "8000",
+     "type": "int"
+    }
+   },
+   "target": "pyshape.web:main"
+  }
+ },
+ "exports": [
+  "AXES_METHODS",
+  "AnalysisResult",
+  "BatchItem",
+  "BatchResult",
+  "LoadedGeometry",
+  "Metric",
+  "OrientedBox",
+  "analyze_file",
+  "analyze_folder",
+  "analyze_mesh",
+  "closed_surface_inertia_tensor",
+  "compute_metrics",
+  "convexity",
+  "find_particle_files",
+  "form_functions_1",
+  "form_functions_2",
+  "form_parameters_angelidakis_et_al",
+  "form_parameters_kong_and_fonseca",
+  "form_parameters_potticary_et_al",
+  "form_parameters_zingg",
+  "load_geometry",
+  "load_stl",
+  "min_volume_box",
+  "oriented_box",
+  "pca_box",
+  "prepare_mesh",
+  "roughness_functions",
+  "sa",
+  "sdq",
+  "sku",
+  "sphericity_krumbein",
+  "sphericity_wadell",
+  "sq",
+  "ssk",
+  "surface_area",
+  "surface_orientation_tensor",
+  "volume_centroid_inertia_tensor"
+ ],
+ "objects": {
+  "analysis.AnalysisResult": {
+   "bases": [],
+   "deprecated": null,
+   "exported": true,
+   "interface": false,
+   "kind": "class",
+   "params": [
+    {
+     "annotation": "list[Metric]",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "metrics"
+    },
+    {
+     "annotation": "Optional[str]",
+     "default": "None",
+     "kind": "positional_or_keyword",
+     "name": "source_name"
+    },
+    {
+     "annotation": "str",
+     "default": "'as-is'",
+     "kind": "positional_or_keyword",
+     "name": "input_units"
+    },
+    {
+     "annotation": "float",
+     "default": "1.0",
+     "kind": "positional_or_keyword",
+     "name": "scale_factor"
+    },
+    {
+     "annotation": "str",
+     "default": "'pca'",
+     "kind": "positional_or_keyword",
+     "name": "axes_method"
+    },
+    {
+     "annotation": "str",
+     "default": "'m'",
+     "kind": "positional_or_keyword",
+     "name": "output_units"
+    },
+    {
+     "annotation": "float",
+     "default": "1.0",
+     "kind": "positional_or_keyword",
+     "name": "output_scale"
+    },
+    {
+     "annotation": "Optional[str]",
+     "default": "None",
+     "kind": "positional_or_keyword",
+     "name": "reader"
+    },
+    {
+     "annotation": "Optional[str]",
+     "default": "None",
+     "kind": "positional_or_keyword",
+     "name": "reader_version"
+    },
+    {
+     "annotation": "list[str]",
+     "default": "field(default_factory=list)",
+     "kind": "positional_or_keyword",
+     "name": "warnings"
+    }
+   ],
+   "returns": null
+  },
+  "analysis.AnalysisResult.metadata_rows": {
+   "bases": [],
+   "deprecated": null,
+   "exported": true,
+   "interface": false,
+   "kind": "method",
+   "params": [],
+   "returns": "list[tuple[str, str, str]]"
+  },
+  "analysis.AnalysisResult.to_csv": {
+   "bases": [],
+   "deprecated": null,
+   "exported": true,
+   "interface": false,
+   "kind": "method",
+   "params": [
+    {
+     "annotation": "Optional[Iterable[str]]",
+     "default": "None",
+     "kind": "positional_or_keyword",
+     "name": "keys"
+    }
+   ],
+   "returns": "str"
+  },
+  "analysis.AnalysisResult.to_dict": {
+   "bases": [],
+   "deprecated": null,
+   "exported": true,
+   "interface": false,
+   "kind": "method",
+   "params": [],
+   "returns": "dict[str, object]"
+  },
+  "analysis.AnalysisResult.values": {
+   "bases": [],
+   "deprecated": null,
+   "exported": true,
+   "interface": false,
+   "kind": "property",
+   "params": [],
+   "returns": "dict[str, Optional[float]]"
+  },
+  "analysis.AnalysisResult.write_csv": {
+   "bases": [],
+   "deprecated": null,
+   "exported": true,
+   "interface": false,
+   "kind": "method",
+   "params": [
+    {
+     "annotation": "str | Path",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "path"
+    },
+    {
+     "annotation": "Optional[Iterable[str]]",
+     "default": "None",
+     "kind": "positional_or_keyword",
+     "name": "keys"
+    }
+   ],
+   "returns": "None"
+  },
+  "analysis.Metric": {
+   "bases": [],
+   "deprecated": null,
+   "exported": true,
+   "interface": false,
+   "kind": "class",
+   "params": [
+    {
+     "annotation": "str",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "key"
+    },
+    {
+     "annotation": "str",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "label"
+    },
+    {
+     "annotation": "Optional[float]",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "value"
+    },
+    {
+     "annotation": "str",
+     "default": "'General'",
+     "kind": "positional_or_keyword",
+     "name": "group"
+    },
+    {
+     "annotation": "bool",
+     "default": "True",
+     "kind": "positional_or_keyword",
+     "name": "default_selected"
+    },
+    {
+     "annotation": "Optional[str]",
+     "default": "None",
+     "kind": "positional_or_keyword",
+     "name": "error"
+    },
+    {
+     "annotation": "str",
+     "default": "''",
+     "kind": "positional_or_keyword",
+     "name": "unit"
+    }
+   ],
+   "returns": null
+  },
+  "analysis.Metric.text": {
+   "bases": [],
+   "deprecated": null,
+   "exported": true,
+   "interface": false,
+   "kind": "property",
+   "params": [],
+   "returns": "str"
+  },
+  "analysis.analyze_file": {
+   "bases": [],
+   "deprecated": null,
+   "exported": true,
+   "interface": false,
+   "kind": "function",
+   "params": [
+    {
+     "annotation": "str | Path",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "path"
+    },
+    {
+     "annotation": "str",
+     "default": "'as-is'",
+     "kind": "keyword_only",
+     "name": "units"
+    },
+    {
+     "annotation": "str",
+     "default": "'pca'",
+     "kind": "keyword_only",
+     "name": "axes"
+    },
+    {
+     "annotation": "str",
+     "default": "'m'",
+     "kind": "keyword_only",
+     "name": "output_units"
+    },
+    {
+     "annotation": "bool",
+     "default": "False",
+     "kind": "keyword_only",
+     "name": "strict_stl"
+    }
+   ],
+   "returns": "AnalysisResult"
+  },
+  "analysis.analyze_mesh": {
+   "bases": [],
+   "deprecated": null,
+   "exported": true,
+   "interface": false,
+   "kind": "function",
+   "params": [
+    {
+     "annotation": "ArrayLike",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "nodes"
+    },
+    {
+     "annotation": "ArrayLike",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "faces"
+    },
+    {
+     "annotation": "str",
+     "default": "'as-is'",
+     "kind": "keyword_only",
+     "name": "units"
+    },
+    {
+     "annotation": "str",
+     "default": "'pca'",
+     "kind": "keyword_only",
+     "name": "axes"
+    },
+    {
+     "annotation": "str",
+     "default": "'m'",
+     "kind": "keyword_only",
+     "name": "output_units"
+    }
+   ],
+   "returns": "AnalysisResult"
+  },
+  "analysis.apply_output_units": {
+   "bases": [],
+   "deprecated": null,
+   "exported": false,
+   "interface": false,
+   "kind": "function",
+   "params": [
+    {
+     "annotation": "list['Metric']",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "metrics"
+    },
+    {
+     "annotation": "str",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "input_units"
+    },
+    {
+     "annotation": "str",
+     "default": "'m'",
+     "kind": "positional_or_keyword",
+     "name": "output_units"
+    }
+   ],
+   "returns": "tuple[str, float]"
+  },
+  "analysis.attach_source": {
+   "bases": [],
+   "deprecated": null,
+   "exported": false,
+   "interface": false,
+   "kind": "function",
+   "params": [
+    {
+     "annotation": "AnalysisResult",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "result"
+    },
+    {
+     "annotation": "LoadedGeometry",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "geometry"
+    },
+    {
+     "annotation": "Optional[str]",
+     "default": "None",
+     "kind": "positional_or_keyword",
+     "name": "name"
+    }
+   ],
+   "returns": "AnalysisResult"
+  },
+  "analysis.compute_metrics": {
+   "bases": [],
+   "deprecated": null,
+   "exported": true,
+   "interface": false,
+   "kind": "function",
+   "params": [
+    {
+     "annotation": "ArrayLike",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "nodes"
+    },
+    {
+     "annotation": "ArrayLike",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "faces"
+    },
+    {
+     "annotation": "str",
+     "default": "'pca'",
+     "kind": "keyword_only",
+     "name": "axes"
+    }
+   ],
+   "returns": "list[Metric]"
+  },
+  "analysis.convex_hull_volume": {
+   "bases": [],
+   "deprecated": null,
+   "exported": false,
+   "interface": false,
+   "kind": "function",
+   "params": [
+    {
+     "annotation": "np.ndarray",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "nodes"
+    }
+   ],
+   "returns": "float"
+  },
+  "analysis.estimate_axes": {
+   "bases": [],
+   "deprecated": null,
+   "exported": false,
+   "interface": false,
+   "kind": "function",
+   "params": [
+    {
+     "annotation": "np.ndarray",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "nodes"
+    }
+   ],
+   "returns": "tuple[float, float, float, np.ndarray]"
+  },
+  "analysis.mesh_volume_centroid": {
+   "bases": [],
+   "deprecated": null,
+   "exported": false,
+   "interface": false,
+   "kind": "function",
+   "params": [
+    {
+     "annotation": "np.ndarray",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "nodes"
+    },
+    {
+     "annotation": "np.ndarray",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "faces"
+    }
+   ],
+   "returns": "tuple[float, np.ndarray]"
+  },
+  "analysis.resolve_output_units": {
+   "bases": [],
+   "deprecated": null,
+   "exported": false,
+   "interface": false,
+   "kind": "function",
+   "params": [
+    {
+     "annotation": "str",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "input_units"
+    },
+    {
+     "annotation": "str",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "output_units"
+    }
+   ],
+   "returns": "str"
+  },
+  "analysis.scale_nodes": {
+   "bases": [],
+   "deprecated": null,
+   "exported": false,
+   "interface": false,
+   "kind": "function",
+   "params": [
+    {
+     "annotation": "np.ndarray",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "nodes"
+    },
+    {
+     "annotation": "str",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "units"
+    }
+   ],
+   "returns": "tuple[np.ndarray, float]"
+  },
+  "analysis.unit_label": {
+   "bases": [],
+   "deprecated": null,
+   "exported": false,
+   "interface": false,
+   "kind": "function",
+   "params": [
+    {
+     "annotation": "str",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "key"
+    },
+    {
+     "annotation": "str",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "units"
+    },
+    {
+     "annotation": "bool",
+     "default": "False",
+     "kind": "keyword_only",
+     "name": "ascii"
+    },
+    {
+     "annotation": "str",
+     "default": "'m'",
+     "kind": "keyword_only",
+     "name": "output_units"
+    }
+   ],
+   "returns": "str"
+  },
+  "batch.BatchItem": {
+   "bases": [],
+   "deprecated": null,
+   "exported": true,
+   "interface": false,
+   "kind": "class",
+   "params": [
+    {
+     "annotation": "Path",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "path"
+    },
+    {
+     "annotation": "Optional[AnalysisResult]",
+     "default": "None",
+     "kind": "positional_or_keyword",
+     "name": "result"
+    },
+    {
+     "annotation": "Optional[Path]",
+     "default": "None",
+     "kind": "positional_or_keyword",
+     "name": "csv_path"
+    },
+    {
+     "annotation": "Optional[str]",
+     "default": "None",
+     "kind": "positional_or_keyword",
+     "name": "error"
+    }
+   ],
+   "returns": null
+  },
+  "batch.BatchItem.ok": {
+   "bases": [],
+   "deprecated": null,
+   "exported": true,
+   "interface": false,
+   "kind": "property",
+   "params": [],
+   "returns": "bool"
+  },
+  "batch.BatchResult": {
+   "bases": [],
+   "deprecated": null,
+   "exported": true,
+   "interface": false,
+   "kind": "class",
+   "params": [
+    {
+     "annotation": "Path",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "folder"
+    },
+    {
+     "annotation": "list[BatchItem]",
+     "default": "field(default_factory=list)",
+     "kind": "positional_or_keyword",
+     "name": "items"
+    },
+    {
+     "annotation": "Optional[Path]",
+     "default": "None",
+     "kind": "positional_or_keyword",
+     "name": "summary_path"
+    }
+   ],
+   "returns": null
+  },
+  "batch.BatchResult.failed": {
+   "bases": [],
+   "deprecated": null,
+   "exported": true,
+   "interface": false,
+   "kind": "property",
+   "params": [],
+   "returns": "list[BatchItem]"
+  },
+  "batch.BatchResult.succeeded": {
+   "bases": [],
+   "deprecated": null,
+   "exported": true,
+   "interface": false,
+   "kind": "property",
+   "params": [],
+   "returns": "list[BatchItem]"
+  },
+  "batch.analyze_folder": {
+   "bases": [],
+   "deprecated": null,
+   "exported": true,
+   "interface": false,
+   "kind": "function",
+   "params": [
+    {
+     "annotation": "str | Path",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "folder"
+    },
+    {
+     "annotation": "str",
+     "default": "'as-is'",
+     "kind": "keyword_only",
+     "name": "units"
+    },
+    {
+     "annotation": "str",
+     "default": "'pca'",
+     "kind": "keyword_only",
+     "name": "axes"
+    },
+    {
+     "annotation": "str",
+     "default": "'m'",
+     "kind": "keyword_only",
+     "name": "output_units"
+    },
+    {
+     "annotation": "Optional[Iterable[str]]",
+     "default": "None",
+     "kind": "keyword_only",
+     "name": "keys"
+    },
+    {
+     "annotation": "str",
+     "default": "''",
+     "kind": "keyword_only",
+     "name": "suffix"
+    },
+    {
+     "annotation": "bool",
+     "default": "True",
+     "kind": "keyword_only",
+     "name": "write_csv"
+    },
+    {
+     "annotation": "bool",
+     "default": "False",
+     "kind": "keyword_only",
+     "name": "avoid_overwrite"
+    },
+    {
+     "annotation": "bool",
+     "default": "False",
+     "kind": "keyword_only",
+     "name": "recursive"
+    },
+    {
+     "annotation": "bool",
+     "default": "False",
+     "kind": "keyword_only",
+     "name": "summary"
+    },
+    {
+     "annotation": "Optional[Callable[[int, int, BatchItem], None]]",
+     "default": "None",
+     "kind": "keyword_only",
+     "name": "progress"
+    },
+    {
+     "annotation": "bool",
+     "default": "False",
+     "kind": "keyword_only",
+     "name": "strict_stl"
+    }
+   ],
+   "returns": "BatchResult"
+  },
+  "batch.find_particle_files": {
+   "bases": [],
+   "deprecated": null,
+   "exported": true,
+   "interface": false,
+   "kind": "function",
+   "params": [
+    {
+     "annotation": "str | Path",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "folder"
+    },
+    {
+     "annotation": "bool",
+     "default": "False",
+     "kind": "keyword_only",
+     "name": "recursive"
+    }
+   ],
+   "returns": "list[Path]"
+  },
+  "batch.main": {
+   "bases": [],
+   "deprecated": null,
+   "exported": false,
+   "interface": false,
+   "kind": "function",
+   "params": [
+    {
+     "annotation": "Optional[list[str]]",
+     "default": "None",
+     "kind": "positional_or_keyword",
+     "name": "argv"
+    }
+   ],
+   "returns": "int"
+  },
+  "batch.summary_csv_text": {
+   "bases": [],
+   "deprecated": null,
+   "exported": false,
+   "interface": false,
+   "kind": "function",
+   "params": [
+    {
+     "annotation": "Iterable[AnalysisResult]",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "results"
+    },
+    {
+     "annotation": "Optional[Iterable[str]]",
+     "default": "None",
+     "kind": "positional_or_keyword",
+     "name": "keys"
+    },
+    {
+     "annotation": "Optional[Iterable[str]]",
+     "default": "None",
+     "kind": "positional_or_keyword",
+     "name": "names"
+    }
+   ],
+   "returns": "str"
+  },
+  "bounding.OrientedBox": {
+   "bases": [
+    "NamedTuple"
+   ],
+   "deprecated": null,
+   "exported": true,
+   "interface": false,
+   "kind": "class",
+   "params": [],
+   "returns": null
+  },
+  "bounding.OrientedBox.volume": {
+   "bases": [],
+   "deprecated": null,
+   "exported": true,
+   "interface": false,
+   "kind": "property",
+   "params": [],
+   "returns": "float"
+  },
+  "bounding.min_volume_box": {
+   "bases": [],
+   "deprecated": null,
+   "exported": true,
+   "interface": false,
+   "kind": "function",
+   "params": [
+    {
+     "annotation": "ArrayLike",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "nodes"
+    }
+   ],
+   "returns": "OrientedBox"
+  },
+  "bounding.oriented_box": {
+   "bases": [],
+   "deprecated": null,
+   "exported": true,
+   "interface": false,
+   "kind": "function",
+   "params": [
+    {
+     "annotation": "ArrayLike",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "nodes"
+    },
+    {
+     "annotation": "str",
+     "default": "'pca'",
+     "kind": "positional_or_keyword",
+     "name": "method"
+    }
+   ],
+   "returns": "OrientedBox"
+  },
+  "bounding.pca_box": {
+   "bases": [],
+   "deprecated": null,
+   "exported": true,
+   "interface": false,
+   "kind": "function",
+   "params": [
+    {
+     "annotation": "ArrayLike",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "nodes"
+    }
+   ],
+   "returns": "OrientedBox"
+  },
+  "export.csv_text": {
+   "bases": [],
+   "deprecated": null,
+   "exported": false,
+   "interface": false,
+   "kind": "function",
+   "params": [
+    {
+     "annotation": "Iterable[Tuple[object, ...]]",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "rows"
+    },
+    {
+     "annotation": "Optional[str]",
+     "default": "None",
+     "kind": "positional_or_keyword",
+     "name": "source_name"
+    },
+    {
+     "annotation": "Iterable[Tuple[object, ...]]",
+     "default": "()",
+     "kind": "positional_or_keyword",
+     "name": "metadata"
+    }
+   ],
+   "returns": "str"
+  },
+  "export.make_export_path": {
+   "bases": [],
+   "deprecated": null,
+   "exported": false,
+   "interface": false,
+   "kind": "function",
+   "params": [
+    {
+     "annotation": "str | Path",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "input_path"
+    },
+    {
+     "annotation": "str",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "suffix"
+    },
+    {
+     "annotation": "bool",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "avoid_overwrite"
+    }
+   ],
+   "returns": "Path"
+  },
+  "export.write_csv": {
+   "bases": [],
+   "deprecated": null,
+   "exported": false,
+   "interface": false,
+   "kind": "function",
+   "params": [
+    {
+     "annotation": "str | Path",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "path"
+    },
+    {
+     "annotation": "Iterable[Tuple[object, ...]]",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "rows"
+    },
+    {
+     "annotation": "Optional[str]",
+     "default": "None",
+     "kind": "positional_or_keyword",
+     "name": "source_name"
+    },
+    {
+     "annotation": "Iterable[Tuple[object, ...]]",
+     "default": "()",
+     "kind": "positional_or_keyword",
+     "name": "metadata"
+    }
+   ],
+   "returns": "None"
+  },
+  "form.convexity": {
+   "bases": [],
+   "deprecated": null,
+   "exported": true,
+   "interface": false,
+   "kind": "function",
+   "params": [
+    {
+     "annotation": "float",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "volume"
+    },
+    {
+     "annotation": "float",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "volume_convex_hull"
+    }
+   ],
+   "returns": "float"
+  },
+  "form.form_functions_1": {
+   "bases": [],
+   "deprecated": null,
+   "exported": true,
+   "interface": false,
+   "kind": "function",
+   "params": [
+    {
+     "annotation": "float",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "surface_area"
+    },
+    {
+     "annotation": "float",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "volume"
+    },
+    {
+     "annotation": "float",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "volume_convex_hull"
+    }
+   ],
+   "returns": "Tuple[float, float]"
+  },
+  "form.form_functions_2": {
+   "bases": [],
+   "deprecated": null,
+   "exported": true,
+   "interface": false,
+   "kind": "function",
+   "params": [
+    {
+     "annotation": "float",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "S"
+    },
+    {
+     "annotation": "float",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "I"
+    },
+    {
+     "annotation": "float",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "L"
+    }
+   ],
+   "returns": "Tuple[float, float, float, float, float, float, float]"
+  },
+  "form.form_parameters_angelidakis_et_al": {
+   "bases": [],
+   "deprecated": null,
+   "exported": true,
+   "interface": false,
+   "kind": "function",
+   "params": [
+    {
+     "annotation": "float",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "S"
+    },
+    {
+     "annotation": "float",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "I"
+    },
+    {
+     "annotation": "float",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "L"
+    }
+   ],
+   "returns": "Tuple[float, float]"
+  },
+  "form.form_parameters_kong_and_fonseca": {
+   "bases": [],
+   "deprecated": null,
+   "exported": true,
+   "interface": false,
+   "kind": "function",
+   "params": [
+    {
+     "annotation": "float",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "S"
+    },
+    {
+     "annotation": "float",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "I"
+    },
+    {
+     "annotation": "float",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "L"
+    }
+   ],
+   "returns": "Tuple[float, float]"
+  },
+  "form.form_parameters_potticary_et_al": {
+   "bases": [],
+   "deprecated": null,
+   "exported": true,
+   "interface": false,
+   "kind": "function",
+   "params": [
+    {
+     "annotation": "float",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "S"
+    },
+    {
+     "annotation": "float",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "I"
+    },
+    {
+     "annotation": "float",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "L"
+    }
+   ],
+   "returns": "Tuple[float, float]"
+  },
+  "form.form_parameters_zingg": {
+   "bases": [],
+   "deprecated": null,
+   "exported": true,
+   "interface": false,
+   "kind": "function",
+   "params": [
+    {
+     "annotation": "float",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "S"
+    },
+    {
+     "annotation": "float",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "I"
+    },
+    {
+     "annotation": "float",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "L"
+    }
+   ],
+   "returns": "Tuple[float, float]"
+  },
+  "form.sphericity_krumbein": {
+   "bases": [],
+   "deprecated": null,
+   "exported": true,
+   "interface": false,
+   "kind": "function",
+   "params": [
+    {
+     "annotation": "float",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "S"
+    },
+    {
+     "annotation": "float",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "I"
+    },
+    {
+     "annotation": "float",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "L"
+    }
+   ],
+   "returns": "float"
+  },
+  "form.sphericity_wadell": {
+   "bases": [],
+   "deprecated": null,
+   "exported": true,
+   "interface": false,
+   "kind": "function",
+   "params": [
+    {
+     "annotation": "float",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "volume"
+    },
+    {
+     "annotation": "float",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "surface_area"
+    }
+   ],
+   "returns": "float"
+  },
+  "form.surface_orientation_tensor": {
+   "bases": [],
+   "deprecated": null,
+   "exported": true,
+   "interface": false,
+   "kind": "function",
+   "params": [
+    {
+     "annotation": "np.ndarray",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "nodes"
+    },
+    {
+     "annotation": "np.ndarray",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "faces"
+    }
+   ],
+   "returns": "Tuple[float, float, float, np.ndarray, np.ndarray]"
+  },
+  "geometry.closed_surface_inertia_tensor": {
+   "bases": [],
+   "deprecated": null,
+   "exported": true,
+   "interface": false,
+   "kind": "function",
+   "params": [
+    {
+     "annotation": "np.ndarray",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "nodes"
+    },
+    {
+     "annotation": "np.ndarray",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "faces"
+    },
+    {
+     "annotation": "Iterable[float]",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "centroid"
+    }
+   ],
+   "returns": "Tuple[np.ndarray, np.ndarray, np.ndarray]"
+  },
+  "geometry.surface_area": {
+   "bases": [],
+   "deprecated": null,
+   "exported": true,
+   "interface": false,
+   "kind": "function",
+   "params": [
+    {
+     "annotation": "np.ndarray",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "nodes"
+    },
+    {
+     "annotation": "np.ndarray",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "faces"
+    }
+   ],
+   "returns": "float"
+  },
+  "geometry.volume_centroid_inertia_tensor": {
+   "bases": [],
+   "deprecated": null,
+   "exported": true,
+   "interface": false,
+   "kind": "function",
+   "params": [
+    {
+     "annotation": "np.ndarray",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "nodes"
+    },
+    {
+     "annotation": "np.ndarray",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "elements"
+    },
+    {
+     "annotation": "bool",
+     "default": "True",
+     "kind": "positional_or_keyword",
+     "name": "calculate_inertia"
+    }
+   ],
+   "returns": "Tuple[float, np.ndarray, np.ndarray, np.ndarray, np.ndarray]"
+  },
+  "gui.ShapeGUI": {
+   "bases": [
+    "tk.Tk"
+   ],
+   "deprecated": null,
+   "exported": false,
+   "interface": true,
+   "kind": "class",
+   "params": [],
+   "returns": null
+  },
+  "gui.ShapeGUI.__init__": {
+   "bases": [],
+   "deprecated": null,
+   "exported": false,
+   "interface": true,
+   "kind": "method",
+   "params": [],
+   "returns": null
+  },
+  "gui.ShapeGUI.browse_file": {
+   "bases": [],
+   "deprecated": null,
+   "exported": false,
+   "interface": true,
+   "kind": "method",
+   "params": [],
+   "returns": null
+  },
+  "gui.ShapeGUI.calculate_metrics": {
+   "bases": [],
+   "deprecated": null,
+   "exported": false,
+   "interface": true,
+   "kind": "method",
+   "params": [],
+   "returns": null
+  },
+  "gui.ShapeGUI.export_csv": {
+   "bases": [],
+   "deprecated": null,
+   "exported": false,
+   "interface": true,
+   "kind": "method",
+   "params": [],
+   "returns": null
+  },
+  "gui.ShapeGUI.load_mesh": {
+   "bases": [],
+   "deprecated": null,
+   "exported": false,
+   "interface": true,
+   "kind": "method",
+   "params": [],
+   "returns": null
+  },
+  "gui.main": {
+   "bases": [],
+   "deprecated": null,
+   "exported": false,
+   "interface": true,
+   "kind": "function",
+   "params": [],
+   "returns": null
+  },
+  "gui_core.axis_triad": {
+   "bases": [],
+   "deprecated": null,
+   "exported": false,
+   "interface": false,
+   "kind": "function",
+   "params": [
+    {
+     "annotation": "np.ndarray",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "nodes"
+    }
+   ],
+   "returns": "tuple[np.ndarray, float]"
+  },
+  "gui_core.geo_metadata_rows": {
+   "bases": [],
+   "deprecated": null,
+   "exported": false,
+   "interface": false,
+   "kind": "function",
+   "params": [
+    {
+     "annotation": "LoadedGeometry",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "geo"
+    }
+   ],
+   "returns": "list[tuple[str, str, str]]"
+  },
+  "gui_core.reader_text": {
+   "bases": [],
+   "deprecated": null,
+   "exported": false,
+   "interface": false,
+   "kind": "function",
+   "params": [
+    {
+     "annotation": null,
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "reader"
+    },
+    {
+     "annotation": null,
+     "default": "None",
+     "kind": "positional_or_keyword",
+     "name": "version"
+    }
+   ],
+   "returns": "str"
+  },
+  "gui_core.units_summary": {
+   "bases": [],
+   "deprecated": null,
+   "exported": false,
+   "interface": false,
+   "kind": "function",
+   "params": [
+    {
+     "annotation": "str",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "units"
+    },
+    {
+     "annotation": "float",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "scale"
+    },
+    {
+     "annotation": "str",
+     "default": "'m'",
+     "kind": "positional_or_keyword",
+     "name": "output_units"
+    }
+   ],
+   "returns": "str"
+  },
+  "io.LoadedGeometry": {
+   "bases": [],
+   "deprecated": null,
+   "exported": true,
+   "interface": false,
+   "kind": "class",
+   "params": [
+    {
+     "annotation": "np.ndarray",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "nodes"
+    },
+    {
+     "annotation": "np.ndarray",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "faces"
+    },
+    {
+     "annotation": "Path",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "source_path"
+    },
+    {
+     "annotation": "str",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "source_format"
+    },
+    {
+     "annotation": "bool",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "converted_from_native"
+    },
+    {
+     "annotation": "Optional[str]",
+     "default": "None",
+     "kind": "positional_or_keyword",
+     "name": "reader"
+    },
+    {
+     "annotation": "Optional[str]",
+     "default": "None",
+     "kind": "positional_or_keyword",
+     "name": "reader_version"
+    },
+    {
+     "annotation": "list[str]",
+     "default": "field(default_factory=list)",
+     "kind": "positional_or_keyword",
+     "name": "warnings"
+    }
+   ],
+   "returns": null
+  },
+  "io.STLFallbackWarning": {
+   "bases": [
+    "UserWarning"
+   ],
+   "deprecated": null,
+   "exported": false,
+   "interface": false,
+   "kind": "class",
+   "params": [],
+   "returns": null
+  },
+  "io.STLParseError": {
+   "bases": [
+    "ValueError"
+   ],
+   "deprecated": null,
+   "exported": false,
+   "interface": false,
+   "kind": "class",
+   "params": [],
+   "returns": null
+  },
+  "io.load_geometry": {
+   "bases": [],
+   "deprecated": null,
+   "exported": true,
+   "interface": false,
+   "kind": "function",
+   "params": [
+    {
+     "annotation": "str | Path",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "path"
+    },
+    {
+     "annotation": "bool",
+     "default": "False",
+     "kind": "keyword_only",
+     "name": "strict_stl"
+    }
+   ],
+   "returns": "LoadedGeometry"
+  },
+  "io.load_stl": {
+   "bases": [],
+   "deprecated": null,
+   "exported": true,
+   "interface": false,
+   "kind": "function",
+   "params": [
+    {
+     "annotation": "str | Path",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "path"
+    },
+    {
+     "annotation": "bool",
+     "default": "True",
+     "kind": "positional_or_keyword",
+     "name": "merge_vertices"
+    },
+    {
+     "annotation": "int",
+     "default": "12",
+     "kind": "positional_or_keyword",
+     "name": "decimals"
+    },
+    {
+     "annotation": "bool",
+     "default": "False",
+     "kind": "keyword_only",
+     "name": "strict"
+    }
+   ],
+   "returns": "Tuple[np.ndarray, np.ndarray]"
+  },
+  "preprocess.prepare_mesh": {
+   "bases": [],
+   "deprecated": null,
+   "exported": true,
+   "interface": false,
+   "kind": "function",
+   "params": [
+    {
+     "annotation": "ArrayLike",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "nodes"
+    },
+    {
+     "annotation": "ArrayLike",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "faces"
+    }
+   ],
+   "returns": "tuple[np.ndarray, np.ndarray]"
+  },
+  "preprocess.validate_mesh": {
+   "bases": [],
+   "deprecated": null,
+   "exported": false,
+   "interface": false,
+   "kind": "function",
+   "params": [
+    {
+     "annotation": "ArrayLike",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "nodes"
+    },
+    {
+     "annotation": "ArrayLike",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "faces"
+    }
+   ],
+   "returns": "tuple[np.ndarray, np.ndarray]"
+  },
+  "roughness.roughness_functions": {
+   "bases": [],
+   "deprecated": null,
+   "exported": true,
+   "interface": false,
+   "kind": "function",
+   "params": [
+    {
+     "annotation": "np.ndarray",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "z"
+    },
+    {
+     "annotation": "float",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "dx"
+    },
+    {
+     "annotation": "float",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "dy"
+    }
+   ],
+   "returns": "Tuple[float, float, float, float, float]"
+  },
+  "roughness.sa": {
+   "bases": [],
+   "deprecated": null,
+   "exported": true,
+   "interface": false,
+   "kind": "function",
+   "params": [
+    {
+     "annotation": "np.ndarray",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "z"
+    }
+   ],
+   "returns": "float"
+  },
+  "roughness.sdq": {
+   "bases": [],
+   "deprecated": null,
+   "exported": true,
+   "interface": false,
+   "kind": "function",
+   "params": [
+    {
+     "annotation": "np.ndarray",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "z"
+    },
+    {
+     "annotation": "float",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "dx"
+    },
+    {
+     "annotation": "float",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "dy"
+    }
+   ],
+   "returns": "float"
+  },
+  "roughness.sku": {
+   "bases": [],
+   "deprecated": null,
+   "exported": true,
+   "interface": false,
+   "kind": "function",
+   "params": [
+    {
+     "annotation": "np.ndarray",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "z"
+    },
+    {
+     "annotation": "Optional[float]",
+     "default": "None",
+     "kind": "positional_or_keyword",
+     "name": "sq_value"
+    }
+   ],
+   "returns": "float"
+  },
+  "roughness.sq": {
+   "bases": [],
+   "deprecated": null,
+   "exported": true,
+   "interface": false,
+   "kind": "function",
+   "params": [
+    {
+     "annotation": "np.ndarray",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "z"
+    }
+   ],
+   "returns": "float"
+  },
+  "roughness.ssk": {
+   "bases": [],
+   "deprecated": null,
+   "exported": true,
+   "interface": false,
+   "kind": "function",
+   "params": [
+    {
+     "annotation": "np.ndarray",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "z"
+    },
+    {
+     "annotation": "Optional[float]",
+     "default": "None",
+     "kind": "positional_or_keyword",
+     "name": "sq_value"
+    }
+   ],
+   "returns": "float"
+  },
+  "web.AnalysisResponse": {
+   "bases": [
+    "BaseModel"
+   ],
+   "deprecated": null,
+   "exported": false,
+   "interface": true,
+   "kind": "class",
+   "params": [],
+   "returns": null
+  },
+  "web.ErrorMessage": {
+   "bases": [
+    "BaseModel"
+   ],
+   "deprecated": null,
+   "exported": false,
+   "interface": true,
+   "kind": "class",
+   "params": [],
+   "returns": null
+  },
+  "web.Health": {
+   "bases": [
+    "BaseModel"
+   ],
+   "deprecated": null,
+   "exported": false,
+   "interface": true,
+   "kind": "class",
+   "params": [],
+   "returns": null
+  },
+  "web.MetricRecord": {
+   "bases": [
+    "BaseModel"
+   ],
+   "deprecated": null,
+   "exported": false,
+   "interface": true,
+   "kind": "class",
+   "params": [],
+   "returns": null
+  },
+  "web.Preview": {
+   "bases": [
+    "BaseModel"
+   ],
+   "deprecated": null,
+   "exported": false,
+   "interface": true,
+   "kind": "class",
+   "params": [],
+   "returns": null
+  },
+  "web.create_app": {
+   "bases": [],
+   "deprecated": null,
+   "exported": false,
+   "interface": true,
+   "kind": "function",
+   "params": [],
+   "returns": "FastAPI"
+  },
+  "web.main": {
+   "bases": [],
+   "deprecated": null,
+   "exported": false,
+   "interface": true,
+   "kind": "function",
+   "params": [],
+   "returns": "None"
+  }
+ },
+ "routes": [
+  "GET /",
+  "GET /api/health",
+  "GET /batch",
+  "POST /api/analyze",
+  "POST /api/export"
+ ]
+}

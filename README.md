@@ -35,6 +35,8 @@ The Python package provides tools for 3D particle geometry and form analysis. It
 - `pyshape/web.py` and `pyshape/static/` — optional API and browser viewer
 - `examples/` — runnable demos and a bundled ASCII STL asset
 - `tests/` — unit tests
+- `tools/audit.py` and `tools/baseline/` — audit of functions and results
+  against a recorded baseline ([docs/audit.md](docs/audit.md))
 - `pyproject.toml` — package metadata and optional dependency groups
 - `requirements.txt` — convenience installation of all development/viewer extras
 
@@ -427,6 +429,19 @@ Tests cover the public Python API, existing helpers, STL reading and its fallbac
 unit conversion, explicit unavailable metrics, HTTP responses, CSV output,
 and bundled web assets. CI runs the suite and builds the distribution, then
 checks that the installed wheel imports and analyzes without UI dependencies.
+
+### Checking that existing behaviour is preserved
+
+The audit tool compares the code with a recorded baseline: public functions
+and their signatures, CLI options, HTTP routes, and the results of a fixed set
+of reference meshes. It also lists every function with its location and
+whether it is exported, documented, tested or deprecated. See
+[docs/audit.md](docs/audit.md).
+
+```bash
+python tools/audit.py tests   # unit tests + comparison with the baseline
+python tools/audit.py list    # inventory of functions, classes and methods
+```
 
 ## Building and publishing
 
