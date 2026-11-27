@@ -4,7 +4,7 @@ All notable changes to pySHAPE. Versions follow the tags of the GitHub
 repository; each release is archived on Zenodo (all versions:
 https://doi.org/10.5281/zenodo.24004678).
 
-## Unreleased
+## 0.2.1 (2026-11-27)
 
 ### New
 - Mesh diagnosis and repair (#3). The analysis is unchanged and never repairs
