@@ -4,7 +4,7 @@ All notable changes to pySHAPE. Versions follow the tags of the GitHub
 repository; each release is archived on Zenodo (all versions:
 https://doi.org/10.5281/zenodo.24004678).
 
-## Unreleased
+## 0.1.4 (2026-11-27)
 
 ### New
 - Principal dimensions from an equivalent ellipsoid (#6):
@@ -65,6 +65,19 @@ https://doi.org/10.5281/zenodo.24004678).
   comes after Wadell sphericity). The eigenvalues are labelled
   "Eigenvalue f1 (surface orientation tensor)" etc.
   `pyshape.analysis.result_groups(axes)` gives the group names in order.
+- The desktop viewer labels the axes control "Principal dimensions (S, I, L)",
+  as the browser interface does (it was "Principal axes").
+- The flatness/elongation indices of Angelidakis et al. are cited as 2022
+  (Powder Technology 396, 689-695; published online in 2021).
+
+### Development
+- `tools/audit.py` (see `docs/audit.md`): inventory of every function, class
+  and method (location, exported, documented, tested, deprecated) and a check
+  of the public interface, CLI options, HTTP routes and the results of
+  reference meshes against a recorded baseline (`tools/baseline/`).
+  `python tools/audit.py tests` runs the unit tests and the check;
+  `tests/test_audit.py` runs the check in pytest and CI.
+- `networkx` is part of the `dev` extra (validation meshes in the tests).
 
 ## 0.1.3 (2026-11-24)
 
