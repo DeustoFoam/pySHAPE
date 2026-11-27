@@ -44,6 +44,15 @@ td.value { font-variant-numeric: tabular-nums; }
 td.unit { color: #4a5a6a; white-space: nowrap; }
 tr.group th { background: #edf3fa; }
 .unavailable { color: #8b3d28; }
+button.help-button { display: inline-flex; align-items: center; justify-content: center; width: 1.25rem; height: 1.25rem; padding: 0; margin-left: .2rem; border-radius: 50%; font-size: .75rem; font-weight: 700; line-height: 1; vertical-align: middle; background: #e3edf7; color: #17629b; border: 1px solid #9ab8d4; }
+button.metric-name { background: none; color: inherit; padding: 0; border: 0; border-bottom: 1px dotted #7d93a8; border-radius: 0; text-align: left; font: inherit; cursor: help; }
+.metric-name:hover { color: #17629b; border-bottom-color: #17629b; }
+#help-dialog { max-width: min(40rem, calc(100vw - 2rem)); border: 1px solid #d7e0eb; border-radius: .6rem; padding: 1.2rem 1.4rem; color: #20334a; }
+#help-dialog::backdrop { background: rgb(23 46 72 / .45); }
+#help-dialog h3 { font-size: 1rem; margin: 1rem 0 .3rem; }
+#help-dialog code { font-size: .95rem; background: #f3f6fa; padding: .1rem .3rem; border-radius: .2rem; }
+#help-dialog ul { padding-left: 1.2rem; font-size: .9rem; }
+#help-dialog a { overflow-wrap: anywhere; }
 @media (max-width: 800px) {
   main { grid-template-columns: 1fr; padding: .8rem; }
   header { padding: 1rem; flex-wrap: wrap; }

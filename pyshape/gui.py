@@ -8,17 +8,22 @@ Lets a user:
     configurable filename suffix and optional progressive numbering to
     avoid overwriting previous exports,
   * preview the geometry in a slowly auto-rotating 3D view with an XYZ axes
-    triad scaled to the mesh's bounding box.
+    triad scaled to the mesh's bounding box,
+  * read what each result and control means: hovering shows a one-line
+    description and the "?" buttons open the definition, formula and
+    references (texts from :mod:`pyshape.descriptors`).
 
 Run with ``python -m pyshape.gui``.
 """
 from __future__ import annotations
 
+import re
 import sys
 import tkinter as tk
+import webbrowser
 from pathlib import Path
 from tkinter import filedialog, messagebox, ttk
-from typing import Dict, Optional
+from typing import Callable, Dict, Optional, Union
 
 import numpy as np
 
@@ -35,6 +40,7 @@ from .analysis import (
     scale_nodes,
     unit_label,
 )
+from . import descriptors
 from .bounding import AXES_METHODS
 from .preprocess import prepare_mesh
 from .gui_core import (
@@ -61,6 +67,52 @@ UNITS_HINT = (
     "the file's units and disables the output choice."
 )
 SAME_AS_INPUT = "same as input"
+TOOLTIP_DELAY_MS = 500
+
+
+class Tooltip:
+    """One-line help shown after a short delay while the pointer is over a widget."""
+
+    def __init__(self, widget: tk.Widget, text: Union[str, Callable[[], str]],
+                 delay: int = TOOLTIP_DELAY_MS):
+        self.widget, self.text, self.delay = widget, text, delay
+        self._job: Optional[str] = None
+        self._window: Optional[tk.Toplevel] = None
+        widget.bind("<Enter>", self._schedule, add="+")
+        widget.bind("<Leave>", self._hide, add="+")
+        widget.bind("<ButtonPress>", self._hide, add="+")
+
+    def _schedule(self, _event=None):
+        self._hide()
+        self._job = self.widget.after(self.delay, self._show)
+
+    def _show(self):
+        self._job = None
+        text = self.text() if callable(self.text) else self.text
+        if not text or not self.widget.winfo_exists():
+            return
+        x = self.widget.winfo_pointerx() + 12
+        y = self.widget.winfo_pointery() + 16
+        self._window = window = tk.Toplevel(self.widget)
+        window.wm_overrideredirect(True)
+        window.wm_geometry(f"+{x}+{y}")
+        tk.Label(window, text=text, justify="left", wraplength=360, background="#ffffe0",
+                 relief="solid", borderwidth=1, padx=4, pady=2).pack()
+
+    def _hide(self, _event=None):
+        if self._job is not None:
+            self.widget.after_cancel(self._job)
+            self._job = None
+        if self._window is not None:
+            self._window.destroy()
+            self._window = None
+
+
+def _short(kind: str, key: str) -> str:
+    """Tooltip text of a metric key, control name or axes method ("" if none)."""
+    entry = {"metrics": descriptors.metric_help, "controls": descriptors.control_help,
+             "axes": descriptors.axes_help}[kind](key)
+    return str(entry["short"]) if entry else ""
 
 
 def _shaded_colors(nodes: np.ndarray, faces: np.ndarray, base: str = "lightsteelblue") -> np.ndarray:
@@ -117,29 +169,36 @@ class ShapeGUI(tk.Tk):
 
     def _build_file_section(self, parent):
         row = 0
-        ttk.Label(parent, text="Geometry file").grid(row=row, column=0, sticky="w")
+        self._help_label(parent, "Geometry file", "file").grid(row=row, column=0, sticky="w")
         row += 1
         self.path_var = tk.StringVar()
-        ttk.Entry(parent, textvariable=self.path_var, width=40).grid(
-            row=row, column=0, columnspan=2, sticky="we", pady=(0, 4)
-        )
-        ttk.Button(parent, text="Browse…", command=self.browse_file).grid(row=row, column=2, padx=(6, 0))
+        entry = ttk.Entry(parent, textvariable=self.path_var, width=40)
+        entry.grid(row=row, column=0, columnspan=2, sticky="we", pady=(0, 4))
+        browse = ttk.Button(parent, text="Browse…", command=self.browse_file)
+        browse.grid(row=row, column=2, padx=(6, 0))
+        self._tooltip(entry, "file")
+        self._tooltip(browse, "file")
         row += 1
 
-        ttk.Label(parent, text="Input units (file)").grid(row=row, column=0, sticky="w", pady=(6, 0))
+        self._help_label(parent, "Input units (file)", "input_units").grid(
+            row=row, column=0, sticky="w", pady=(6, 0))
         self.units_var = tk.StringVar(value="as-is")
-        ttk.Combobox(
+        units_combo = ttk.Combobox(
             parent, textvariable=self.units_var, state="readonly", width=12,
             values=list(UNIT_SCALES.keys()),
-        ).grid(row=row, column=1, sticky="w", pady=(6, 0))
+        )
+        units_combo.grid(row=row, column=1, sticky="w", pady=(6, 0))
+        self._tooltip(units_combo, "input_units")
         row += 1
-        ttk.Label(parent, text="Output units").grid(row=row, column=0, sticky="w", pady=(4, 0))
+        self._help_label(parent, "Output units", "output_units").grid(
+            row=row, column=0, sticky="w", pady=(4, 0))
         self.output_units_var = tk.StringVar(value=SAME_AS_INPUT)
         self.output_units_combo = ttk.Combobox(
             parent, textvariable=self.output_units_var, state="readonly", width=12,
             values=[SAME_AS_INPUT, *OUTPUT_UNITS.keys()],
         )
         self.output_units_combo.grid(row=row, column=1, sticky="w", pady=(4, 0))
+        self._tooltip(self.output_units_combo, "output_units")
         self.units_var.trace_add("write", lambda *a: self._sync_output_state())
         self.output_units_var.trace_add("write", lambda *a: self._refresh_units_summary())
         self._sync_output_state()
@@ -149,17 +208,22 @@ class ShapeGUI(tk.Tk):
         )
         row += 1
 
-        ttk.Label(parent, text="Principal axes").grid(row=row, column=0, sticky="w", pady=(6, 0))
+        self._help_label(parent, "Principal dimensions (S, I, L)", "axes").grid(
+            row=row, column=0, sticky="w", pady=(6, 0))
         self.axes_var = tk.StringVar(value="pca")
-        ttk.Combobox(
+        axes_combo = ttk.Combobox(
             parent, textvariable=self.axes_var, state="readonly", width=17,
             values=list(AXES_METHODS),
-        ).grid(row=row, column=1, sticky="w", pady=(6, 0))
+        )
+        axes_combo.grid(row=row, column=1, sticky="w", pady=(6, 0))
+        # The tooltip also describes the method currently chosen.
+        Tooltip(axes_combo, lambda: f"{_short('controls', 'axes')}\n"
+                f"{self.axes_var.get()}: {_short('axes', self.axes_var.get())}")
         row += 1
 
-        ttk.Button(parent, text="Load", command=self.load_mesh).grid(
-            row=row, column=0, sticky="we", pady=(6, 8)
-        )
+        load = ttk.Button(parent, text="Load", command=self.load_mesh)
+        load.grid(row=row, column=0, sticky="we", pady=(6, 8))
+        self._tooltip(load, "load")
         self.file_info_var = tk.StringVar(value="No geometry loaded.")
         row += 1
         ttk.Label(parent, textvariable=self.file_info_var, wraplength=320, justify="left").grid(
@@ -173,11 +237,12 @@ class ShapeGUI(tk.Tk):
 
     def _build_results_section(self, parent):
         row = self._file_row_next
-        ttk.Button(parent, text="Calculate results", command=self.calculate_metrics).grid(
-            row=row, column=0, columnspan=2, sticky="we"
-        )
+        calculate = ttk.Button(parent, text="Calculate results", command=self.calculate_metrics)
+        calculate.grid(row=row, column=0, columnspan=2, sticky="we")
+        self._tooltip(calculate, "calculate")
         row += 1
-        ttk.Label(parent, text="Results (tick to export)").grid(row=row, column=0, sticky="w", pady=(8, 0))
+        self._help_label(parent, "Results (tick to export, ? for help)", "results").grid(
+            row=row, column=0, columnspan=3, sticky="w", pady=(8, 0))
         row += 1
         self.units_summary_var = tk.StringVar(value="")
         ttk.Label(parent, textvariable=self.units_summary_var, foreground="#555").grid(
@@ -186,10 +251,13 @@ class ShapeGUI(tk.Tk):
         row += 1
         btns = ttk.Frame(parent)
         btns.grid(row=row, column=0, columnspan=3, sticky="w")
-        ttk.Button(btns, text="Select all", command=lambda: self._set_all_metrics(True)).pack(side="left")
-        ttk.Button(btns, text="Select none", command=lambda: self._set_all_metrics(False)).pack(
-            side="left", padx=(6, 0)
-        )
+        select_all = ttk.Button(btns, text="Select all", command=lambda: self._set_all_metrics(True))
+        select_all.pack(side="left")
+        select_none = ttk.Button(btns, text="Select none",
+                                 command=lambda: self._set_all_metrics(False))
+        select_none.pack(side="left", padx=(6, 0))
+        self._tooltip(select_all, "select_all")
+        self._tooltip(select_none, "select_none")
         row += 1
 
         container = ttk.Frame(parent)
@@ -218,19 +286,23 @@ class ShapeGUI(tk.Tk):
         row = self._results_row_next
         ttk.Label(parent, text="Export").grid(row=row, column=0, sticky="w")
         row += 1
-        ttk.Label(parent, text="Filename suffix").grid(row=row, column=0, sticky="w")
+        self._help_label(parent, "Filename suffix", "suffix").grid(row=row, column=0, sticky="w")
         self.suffix_var = tk.StringVar(value="_SHAPE")
         self.suffix_var.trace_add("write", lambda *a: self._update_export_preview())
-        ttk.Entry(parent, textvariable=self.suffix_var, width=16).grid(row=row, column=1, sticky="w")
+        suffix = ttk.Entry(parent, textvariable=self.suffix_var, width=16)
+        suffix.grid(row=row, column=1, sticky="w")
+        self._tooltip(suffix, "suffix")
         row += 1
 
         self.avoid_overwrite_var = tk.BooleanVar(value=True)
         self.avoid_overwrite_var.trace_add("write", lambda *a: self._update_export_preview())
-        ttk.Checkbutton(
+        avoid = ttk.Checkbutton(
             parent,
             text="Avoid overwrite (append _1, _2, ... if file exists)",
             variable=self.avoid_overwrite_var,
-        ).grid(row=row, column=0, columnspan=3, sticky="w", pady=(2, 0))
+        )
+        avoid.grid(row=row, column=0, columnspan=3, sticky="w", pady=(2, 0))
+        self._tooltip(avoid, "avoid_overwrite")
         row += 1
 
         self.export_preview_var = tk.StringVar(value="")
@@ -238,18 +310,20 @@ class ShapeGUI(tk.Tk):
             row=row, column=0, columnspan=3, sticky="w", pady=(4, 4)
         )
         row += 1
-        ttk.Button(parent, text="Export CSV…", command=self.export_csv).grid(
-            row=row, column=0, columnspan=2, sticky="we"
-        )
+        export = ttk.Button(parent, text="Export CSV…", command=self.export_csv)
+        export.grid(row=row, column=0, columnspan=2, sticky="we")
+        self._tooltip(export, "export")
 
     def _build_preview(self, parent):
         top = ttk.Frame(parent)
         top.grid(row=0, column=0, sticky="we")
         self.rotate_var = tk.BooleanVar(value=True)
-        ttk.Checkbutton(
+        rotate = ttk.Checkbutton(
             top, text="Slow auto-rotate", variable=self.rotate_var,
             command=self._on_rotate_toggle,
-        ).pack(side="left")
+        )
+        rotate.pack(side="left")
+        self._tooltip(rotate, "auto_rotate")
 
         self.fig = Figure(figsize=(6, 5), dpi=100)
         self.ax = self.fig.add_subplot(111, projection="3d")
@@ -370,9 +444,11 @@ class ShapeGUI(tk.Tk):
         for metric in self.metrics:
             if metric.group != current_group:
                 current_group = metric.group
-                ttk.Label(
+                heading = ttk.Label(
                     self.results_frame, text=current_group, font=("TkDefaultFont", 9, "bold")
-                ).grid(row=r, column=0, sticky="w", pady=(6 if r else 0, 2))
+                )
+                heading.grid(row=r, column=0, columnspan=2, sticky="w", pady=(6 if r else 0, 2))
+                Tooltip(heading, descriptors.group_help(current_group))
                 r += 1
             var = tk.BooleanVar(value=metric.default_selected and metric.value is not None)
             self.metric_vars[metric.key] = var
@@ -383,8 +459,78 @@ class ShapeGUI(tk.Tk):
                 variable=var,
                 state=("normal" if metric.value is not None else "disabled"),
             )
-            cb.grid(row=r, column=0, sticky="w")
+            cb.grid(row=r, column=1, sticky="w")
+            self._tooltip(cb, metric.key, kind="metrics")
+            entry = descriptors.metric_help(metric.key)
+            if entry is not None:
+                self._help_button(self.results_frame, metric.label, entry).grid(
+                    row=r, column=0, sticky="w", padx=(0, 4))
             r += 1
+
+    # ------------------------------------------------------------------
+    # Help (texts from pyshape.descriptors, keyed by metric key or control name)
+    # ------------------------------------------------------------------
+    def _tooltip(self, widget: tk.Widget, key: str, kind: str = "controls") -> None:
+        Tooltip(widget, _short(kind, key))
+
+    def _help_button(self, parent, title: str, entry: dict, name: str = "") -> ttk.Label:
+        """A small "?" that opens the long explanation (click, or Enter/space when focused)."""
+        button = ttk.Label(parent, text="?", foreground="#17629b", cursor="hand2",
+                           takefocus=True, font=("TkDefaultFont", 9, "bold"))
+        if name == "axes":
+            text = descriptors.axes_control_explanation(AXES_METHODS, title)
+        else:
+            text = descriptors.explanation(entry, title)
+        for sequence in ("<Button-1>", "<Return>", "<space>"):
+            button.bind(sequence, lambda e: self._show_help(title, text))
+        Tooltip(button, "Click for the definition, formula and references.")
+        return button
+
+    def _help_label(self, parent, text: str, name: str) -> ttk.Frame:
+        """Label of a control with a tooltip and a "?" button; returned for gridding."""
+        frame = ttk.Frame(parent)
+        label = ttk.Label(frame, text=text)
+        label.pack(side="left")
+        self._tooltip(label, name)
+        entry = descriptors.control_help(name)
+        if entry is not None:
+            self._help_button(frame, text, entry, name).pack(side="left", padx=(4, 0))
+        return frame
+
+    def _show_help(self, title: str, text: str) -> None:
+        """Open (or replace) the help window; links open in the system browser."""
+        old = getattr(self, "_help_window", None)
+        if old is not None and old.winfo_exists():
+            old.destroy()
+        window = self._help_window = tk.Toplevel(self)
+        window.title(f"Help: {title}")
+        window.transient(self)
+        body = tk.Text(window, wrap="word", width=72, height=20, padx=10, pady=8,
+                       relief="flat", font=("TkDefaultFont", 10))
+        scrollbar = ttk.Scrollbar(window, orient="vertical", command=body.yview)
+        body.configure(yscrollcommand=scrollbar.set)
+        body.grid(row=0, column=0, sticky="nsew")
+        scrollbar.grid(row=0, column=1, sticky="ns")
+        window.rowconfigure(0, weight=1)
+        window.columnconfigure(0, weight=1)
+        position = 0
+        for n, match in enumerate(re.finditer(r"https?://\S+", text)):
+            body.insert("end", text[position:match.start()])
+            tag = f"link{n}"
+            body.insert("end", match.group(), ("link", tag))
+            body.tag_bind(tag, "<Button-1>", lambda e, url=match.group(): webbrowser.open(url))
+            position = match.end()
+        body.insert("end", text[position:])
+        body.tag_add("title", "1.0", "1.0 lineend")
+        body.tag_configure("title", font=("TkDefaultFont", 12, "bold"))
+        body.tag_configure("link", foreground="#17629b", underline=True)
+        body.tag_bind("link", "<Enter>", lambda e: body.configure(cursor="hand2"))
+        body.tag_bind("link", "<Leave>", lambda e: body.configure(cursor=""))
+        body.configure(state="disabled")
+        ttk.Button(window, text="Close", command=window.destroy).grid(
+            row=1, column=0, columnspan=2, pady=6)
+        window.bind("<Escape>", lambda e: window.destroy())
+        window.focus_set()
 
     def _set_all_metrics(self, value: bool):
         for metric in self.metrics:

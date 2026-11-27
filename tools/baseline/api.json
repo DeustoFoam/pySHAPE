@@ -989,6 +989,129 @@
    ],
    "returns": "OrientedBox"
   },
+  "descriptors.as_dict": {
+   "bases": [],
+   "deprecated": null,
+   "exported": false,
+   "interface": false,
+   "kind": "function",
+   "params": [],
+   "returns": "dict[str, object]"
+  },
+  "descriptors.axes_control_explanation": {
+   "bases": [],
+   "deprecated": null,
+   "exported": false,
+   "interface": false,
+   "kind": "function",
+   "params": [
+    {
+     "annotation": "Iterable[str]",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "methods"
+    },
+    {
+     "annotation": "str",
+     "default": "''",
+     "kind": "positional_or_keyword",
+     "name": "title"
+    }
+   ],
+   "returns": "str"
+  },
+  "descriptors.axes_help": {
+   "bases": [],
+   "deprecated": null,
+   "exported": false,
+   "interface": false,
+   "kind": "function",
+   "params": [
+    {
+     "annotation": "str",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "method"
+    }
+   ],
+   "returns": "Optional[dict[str, object]]"
+  },
+  "descriptors.control_help": {
+   "bases": [],
+   "deprecated": null,
+   "exported": false,
+   "interface": false,
+   "kind": "function",
+   "params": [
+    {
+     "annotation": "str",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "name"
+    }
+   ],
+   "returns": "Optional[dict[str, object]]"
+  },
+  "descriptors.explanation": {
+   "bases": [],
+   "deprecated": null,
+   "exported": false,
+   "interface": false,
+   "kind": "function",
+   "params": [
+    {
+     "annotation": "dict[str, object]",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "entry"
+    },
+    {
+     "annotation": "str",
+     "default": "''",
+     "kind": "positional_or_keyword",
+     "name": "title"
+    },
+    {
+     "annotation": "Iterable[str]",
+     "default": "()",
+     "kind": "positional_or_keyword",
+     "name": "extra"
+    }
+   ],
+   "returns": "str"
+  },
+  "descriptors.group_help": {
+   "bases": [],
+   "deprecated": null,
+   "exported": false,
+   "interface": false,
+   "kind": "function",
+   "params": [
+    {
+     "annotation": "str",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "name"
+    }
+   ],
+   "returns": "str"
+  },
+  "descriptors.metric_help": {
+   "bases": [],
+   "deprecated": null,
+   "exported": false,
+   "interface": false,
+   "kind": "function",
+   "params": [
+    {
+     "annotation": "str",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "key"
+    }
+   ],
+   "returns": "Optional[dict[str, object]]"
+  },
   "ellipsoid.Ellipsoid": {
    "bases": [
     "NamedTuple"
@@ -1650,6 +1773,43 @@
    "params": [],
    "returns": null
   },
+  "gui.Tooltip": {
+   "bases": [],
+   "deprecated": null,
+   "exported": false,
+   "interface": true,
+   "kind": "class",
+   "params": [],
+   "returns": null
+  },
+  "gui.Tooltip.__init__": {
+   "bases": [],
+   "deprecated": null,
+   "exported": false,
+   "interface": true,
+   "kind": "method",
+   "params": [
+    {
+     "annotation": "tk.Widget",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "widget"
+    },
+    {
+     "annotation": "Union[str, Callable[[], str]]",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "text"
+    },
+    {
+     "annotation": "int",
+     "default": "TOOLTIP_DELAY_MS",
+     "kind": "positional_or_keyword",
+     "name": "delay"
+    }
+   ],
+   "returns": null
+  },
   "gui.main": {
    "bases": [],
    "deprecated": null,
@@ -2064,6 +2224,17 @@
    "params": [],
    "returns": null
   },
+  "web.DescriptorHelp": {
+   "bases": [
+    "BaseModel"
+   ],
+   "deprecated": null,
+   "exported": false,
+   "interface": true,
+   "kind": "class",
+   "params": [],
+   "returns": null
+  },
   "web.ErrorMessage": {
    "bases": [
     "BaseModel"
@@ -2076,6 +2247,17 @@
    "returns": null
   },
   "web.Health": {
+   "bases": [
+    "BaseModel"
+   ],
+   "deprecated": null,
+   "exported": false,
+   "interface": true,
+   "kind": "class",
+   "params": [],
+   "returns": null
+  },
+  "web.HelpEntry": {
    "bases": [
     "BaseModel"
    ],
@@ -2108,6 +2290,17 @@
    "params": [],
    "returns": null
   },
+  "web.Reference": {
+   "bases": [
+    "BaseModel"
+   ],
+   "deprecated": null,
+   "exported": false,
+   "interface": true,
+   "kind": "class",
+   "params": [],
+   "returns": null
+  },
   "web.create_app": {
    "bases": [],
    "deprecated": null,
@@ -2129,6 +2322,7 @@
  },
  "routes": [
   "GET /",
+  "GET /api/descriptors",
   "GET /api/health",
   "GET /batch",
   "POST /api/analyze",

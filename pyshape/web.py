@@ -19,6 +19,7 @@ from .analysis import (
     AXES_LABELS, LENGTH_POWERS, OUTPUT_UNITS, UNIT_SCALES,
     AnalysisResult, analyze_mesh, attach_source, compute_metrics, scale_nodes,
 )
+from . import descriptors
 from . import io as io_module
 from .io import NATIVE_EXTENSIONS, SUPPORTED_EXTENSIONS, load_geometry
 from .preprocess import prepare_mesh
@@ -76,6 +77,29 @@ class ErrorMessage(BaseModel):
     detail: str = Field(description="What went wrong.")
 
 
+class HelpEntry(BaseModel):
+    short: str = Field(description="One line, shown as a tooltip.")
+    description: str = Field(description="A few sentences on what it is and how to read it.")
+    formula: str = Field(description="Definition in plain text, empty when there is none.")
+    depends_on: str = Field(description="What it needs, e.g. a closed mesh or the bounding box.")
+    references: list[str] = Field(description="Keys of `references`.")
+
+
+class Reference(BaseModel):
+    citation: str = Field(description="Authors, year and source.")
+    url: str = Field(description="DOI link, empty when not given.")
+
+
+class DescriptorHelp(BaseModel):
+    metrics: dict[str, HelpEntry] = Field(description="One entry per metric key.")
+    controls: dict[str, HelpEntry] = Field(description="One entry per control of the "
+                                           "interfaces, e.g. `input_units`, `axes`.")
+    axes_methods: dict[str, HelpEntry] = Field(description="One entry per value of `axes`.")
+    groups: dict[str, str] = Field(description="Optional line per result group; the part "
+                                   "of a group name before ` (` is looked up too.")
+    references: dict[str, Reference] = Field(description="Cited works, by key.")
+
+
 class Health(BaseModel):
     status: str = Field(description="Always `ok` when the server is running.", examples=["ok"])
 
@@ -103,12 +127,13 @@ def _metric_table() -> str:
     """Markdown table of every metric key, built from a reference tetrahedron."""
     nodes = np.array([[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]], dtype=float)
     faces = np.array([[0, 2, 1], [0, 1, 3], [1, 2, 3], [2, 0, 3]])
-    rows = ["| Key | Result | Group | Unit | Exported by default |",
-            "| --- | --- | --- | --- | --- |"]
+    rows = ["| Key | Result | Group | Unit | Exported by default | Description |",
+            "| --- | --- | --- | --- | --- | --- |"]
     for metric in compute_metrics(nodes, faces):
         unit = _POWER_TEXT.get(LENGTH_POWERS.get(metric.key, 0), "–")
         rows.append(f"| `{metric.key}` | {metric.label} | {metric.group} | {unit} | "
-                    f"{'yes' if metric.default_selected else 'no'} |")
+                    f"{'yes' if metric.default_selected else 'no'} | "
+                    f"{(descriptors.metric_help(metric.key) or {}).get('short', '')} |")
     return "\n".join(rows)
 
 
@@ -166,7 +191,9 @@ it to untrusted networks. Uploads other than STL are parsed by trimesh (version 
 later, which refuses references outside the upload's temporary folder).
 
 The browser interface is at [/](/) (single particle) and [/batch](/batch) (a folder of
-particles).
+particles). Hover over a result or a control there for a one-line description, and
+click a result's name for its definition, formula and references. The same texts are
+served as JSON by `GET /api/descriptors`.
 
 ### Metric keys
 
@@ -331,6 +358,7 @@ def create_app() -> FastAPI:
         license_info={"name": "GPL-3.0", "url": "https://www.gnu.org/licenses/gpl-3.0.html"},
         openapi_tags=[
             {"name": "analysis", "description": "Analyse an uploaded mesh file."},
+            {"name": "help", "description": "Descriptions of the results and controls."},
             {"name": "service", "description": "Server status."},
         ],
     )
@@ -352,6 +380,17 @@ def create_app() -> FastAPI:
     def health() -> dict[str, str]:
         """Returns `{"status": "ok"}`; use it to wait for the server to start."""
         return {"status": "ok"}
+
+    @application.get(
+        "/api/descriptors", tags=["help"],
+        summary="Descriptions of the results and controls",
+        response_model=DescriptorHelp,
+    )
+    def descriptor_help() -> dict[str, object]:
+        """Returns the help texts of the interfaces: for every metric key and control a
+        one-line `short` text, a `description`, the `formula`, what it `depends_on` and
+        its `references`. Help is keyed by metric key, never by label or group."""
+        return descriptors.as_dict()
 
     @application.post(
         "/api/analyze", tags=["analysis"], summary="Analyse a mesh file (JSON results)",

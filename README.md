@@ -25,6 +25,8 @@ The Python package provides tools for 3D particle geometry and form analysis. It
   as a recorded fallback, and other formats through trimesh
 - An installable, headless Python library with JSON-compatible analysis results
 - Optional local HTTP API and HTML viewer, plus the existing desktop viewer
+- In-app help in both viewers: a short description on hover and, on click, the definition,
+  formula and references of each result and control
 
 ## Project layout
 
@@ -34,6 +36,7 @@ The Python package provides tools for 3D particle geometry and form analysis. It
   shells and solid union (`prepare_mesh`)
 - `pyshape/analysis.py` — shared analysis service (descriptors and results),
   independent of the interfaces
+- `pyshape/descriptors.py` — help texts of the results and controls, used by both viewers
 - `pyshape/web.py` and `pyshape/static/` — optional API and browser viewer
 - `examples/` — runnable demos and a bundled ASCII STL asset
 - `tests/` — unit tests
@@ -347,6 +350,13 @@ Open <http://127.0.0.1:8000>. The interface has two pages:
   optional summary CSV. To write the CSVs straight next to the files, use
   `pyshape-batch` instead.
 
+**In-app help.** On both pages, hovering over a control or a result shows a
+one-line description. The **?** next to a control, or a click on a result's
+name, opens its definition, formula, what it depends on (e.g. the bounding box)
+and its references. The texts live in `pyshape.descriptors`, keyed by metric
+key and control name, and are served as JSON by `GET /api/descriptors`; the
+desktop viewer shows the same texts.
+
 ![pySHAPE browser interface showing a generated multi-sphere particle, its solid-union preview, and grouped analysis results](docs/images/web-viewer.png)
 
 *Browser viewer analyzing a generated three-sphere demonstration mesh as one
@@ -445,6 +455,9 @@ It lets you:
   Krumbein sphericity, the surface orientation tensor (compactness C, flakiness F, elongation E), Potticary,
   Kong & Fonseca and Zingg form parameters, convexity, and PCA-estimated
   axes, each shown with a checkbox.
+- **Read what a result or control means** — hovering shows a one-line
+  description; the **?** next to it opens a help window with the definition,
+  formula and references (links open in the system browser).
 - **Export to CSV** — by default the file is written next to the input as
   `<name><suffix>.csv` (suffix defaults to `_SHAPE`, and is editable). Toggle
   "Avoid overwrite" to automatically append a progressive counter
