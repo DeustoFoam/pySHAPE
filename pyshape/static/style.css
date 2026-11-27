@@ -28,6 +28,7 @@ label.check { display: flex; align-items: center; gap: .5rem; }
 progress { width: 100%; height: .8rem; margin: .6rem 0 1rem; }
 td.ok { color: #237538; }
 td.failed { color: #9c2525; overflow-wrap: anywhere; }
+td.warning { color: #8a5a00; overflow-wrap: anywhere; }
 td.pending { color: #526478; }
 .hint { font-size: .85rem; color: #526478; }
 #status { padding: .8rem; background: #eef5fc; overflow-wrap: anywhere; }

@@ -43,8 +43,10 @@ from .gui_core import (
     SUPPORTED_EXTENSIONS,
     axis_triad,
     compute_metrics,
+    geo_metadata_rows,
     load_geometry,
     make_export_path,
+    reader_text,
     units_summary,
     write_csv,
 )
@@ -303,12 +305,16 @@ class ShapeGUI(tk.Tk):
             f"{geo.source_path.name}\n"
             f"format: {geo.source_format.upper()}"
             + (" (converted to a triangle mesh)" if geo.converted_from_native else "")
+            + f"\nreader: {reader_text(geo.reader, geo.reader_version)}"
             + f"\nvertices: {nodes.shape[0]}  faces: {faces.shape[0]}"
+            + "".join(f"\nWarning: {text}" for text in geo.warnings)
         )
         self.file_info_var.set(info)
         self._update_export_preview()
         self._render_mesh()
         self._start_rotation()
+        if geo.warnings:
+            messagebox.showwarning("Read with a fallback", "\n\n".join(geo.warnings))
 
     def _output_choice(self) -> str:
         choice = self.output_units_var.get()
@@ -431,7 +437,8 @@ class ShapeGUI(tk.Tk):
         if not out_path:
             return
         try:
-            write_csv(out_path, selected, source_name=self.geo.source_path.name)
+            write_csv(out_path, selected, source_name=self.geo.source_path.name,
+                      metadata=geo_metadata_rows(self.geo))
         except Exception as exc:
             messagebox.showerror("Export error", str(exc))
             return

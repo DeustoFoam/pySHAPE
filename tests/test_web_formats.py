@@ -61,8 +61,11 @@ def test_export_of_other_formats_matches_stl(client, cube_mesh, file_type):
     stl = _upload(client, "/api/export", "cube.stl", _mesh_bytes(cube_mesh, "stl"), **form)
     other = _upload(client, "/api/export", f"cube.{file_type}", _mesh_bytes(cube_mesh, file_type), **form)
     assert other.status_code == 200, other.text
-    rows = lambda r: [row for row in csv.reader(io.StringIO(r.text)) if row[0] != "source_file"]
+    metadata = {"source_file", "reader", "reader_version"}
+    rows = lambda r: [row for row in csv.reader(io.StringIO(r.text)) if row[0] not in metadata]
     assert rows(other) == rows(stl)
+    assert ["reader", "trimesh", ""] in csv.reader(io.StringIO(other.text))
+    assert ["reader", "builtin-stl", ""] in csv.reader(io.StringIO(stl.text))
 
 
 def test_uppercase_extension_is_accepted(client, cube_mesh):
@@ -94,6 +97,40 @@ def test_non_stl_without_trimesh_names_the_extra(client, cube_mesh, monkeypatch)
     assert "pyshape[mesh]" in response.json()["detail"]
     stl = _upload(client, "/api/analyze", "cube.stl", _mesh_bytes(cube_mesh, "stl"))
     assert stl.status_code == 200  # STL still works with the built-in parser
+
+
+def test_stl_reader_is_reported(client, cube_mesh):
+    response = _upload(client, "/api/analyze", "cube.stl", _mesh_bytes(cube_mesh, "stl"))
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["reader"] == "builtin-stl"
+    assert payload["reader_version"] is None and payload["warnings"] == []
+
+
+def test_stl_fallback_warning_in_api(client, cube_mesh, monkeypatch):
+    trimesh = pytest.importorskip("trimesh")
+    data = _mesh_bytes(cube_mesh, "stl")
+    reason = "binary STL: the header gives 99 triangles"
+
+    def reject(data):
+        raise pyshape_io.STLParseError(reason)
+
+    monkeypatch.setattr(pyshape_io, "_parse_stl", reject)  # simulate a file the parser rejects
+    response = _upload(client, "/api/analyze", "cube.stl", data, include_csv="true")
+    assert response.status_code == 200, response.text
+    payload = response.json()
+    assert payload["reader"] == "trimesh-fallback"
+    assert payload["reader_version"] == trimesh.__version__
+    assert len(payload["warnings"]) == 1 and reason in payload["warnings"][0]
+    assert _values(payload)["volume"] == pytest.approx(1.0)
+    rows = list(csv.reader(io.StringIO(payload["csv"])))
+    assert ["reader", "trimesh-fallback", ""] in rows
+    assert any(row[0] == "warning" and reason in row[1] for row in rows)
+    export = _upload(client, "/api/export", "cube.stl", data)
+    assert any(row[0] == "warning" for row in csv.reader(io.StringIO(export.text)))
+    monkeypatch.setattr(pyshape_io, "HAS_TRIMESH", False)
+    failed = _upload(client, "/api/analyze", "cube.stl", data)
+    assert failed.status_code == 422 and reason in failed.json()["detail"]
 
 
 def test_missing_format_package_is_named(client, monkeypatch):

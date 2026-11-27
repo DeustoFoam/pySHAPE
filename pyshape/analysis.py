@@ -1,7 +1,7 @@
 """Headless triangle-mesh analysis used by every pySHAPE interface."""
 from __future__ import annotations
 
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Iterable, Optional
 
@@ -20,7 +20,7 @@ from .form import (
     surface_orientation_tensor,
 )
 from .geometry import closed_surface_inertia_tensor, surface_area
-from .io import load_geometry
+from .io import LoadedGeometry, load_geometry
 from .preprocess import _volume_error, prepare_mesh, validate_mesh  # noqa: F401 (re-exported)
 
 UNIT_SCALES = {"as-is": 1.0, "um": 1e-6, "mm": 1e-3, "cm": 1e-2, "m": 1.0, "inch": 0.0254}
@@ -121,7 +121,14 @@ class Metric:
 
 @dataclass
 class AnalysisResult:
-    """Analysis metadata and descriptors, without UI or HTTP dependencies."""
+    """Analysis metadata and descriptors, without UI or HTTP dependencies.
+
+    For a file, ``reader`` names the reader that loaded it (``"builtin-stl"``,
+    ``"trimesh"`` or ``"trimesh-fallback"``, see :func:`pyshape.load_geometry`),
+    ``reader_version`` the trimesh version when trimesh was used, and
+    ``warnings`` lists notes about the input, e.g. an STL file read by the
+    trimesh fallback. All three are empty for arrays.
+    """
 
     metrics: list[Metric]
     source_name: Optional[str] = None
@@ -130,6 +137,19 @@ class AnalysisResult:
     axes_method: str = "pca"
     output_units: str = "m"
     output_scale: float = 1.0
+    reader: Optional[str] = None
+    reader_version: Optional[str] = None
+    warnings: list[str] = field(default_factory=list)
+
+    def metadata_rows(self) -> list[tuple[str, str, str]]:
+        """CSV rows after ``source_file``: reader, its version and each warning."""
+        rows = []
+        if self.reader is not None:
+            rows.append(("reader", self.reader, ""))
+        if self.reader_version is not None:
+            rows.append(("reader_version", self.reader_version, ""))
+        rows.extend(("warning", text, "") for text in self.warnings)
+        return rows
 
     @property
     def values(self) -> dict[str, Optional[float]]:
@@ -144,7 +164,9 @@ class AnalysisResult:
         """Export available results using stable metric keys.
 
         With no selection, export the default-selected available metrics.
-        Explicit unknown or unavailable keys raise ValueError.
+        Explicit unknown or unavailable keys raise ValueError. For a file, the
+        rows ``source_file``, ``reader``, ``reader_version`` (when trimesh was
+        used) and ``warning`` (one per warning) come before the results.
         """
         by_key = {metric.key: metric for metric in self.metrics}
         if keys is None:
@@ -168,6 +190,7 @@ class AnalysisResult:
               unit_label(m.key, self.input_units, ascii=True, output_units=self.output_units))
              for m in selected),
             self.source_name,
+            self.metadata_rows(),
         )
 
     def write_csv(self, path: str | Path, keys: Optional[Iterable[str]] = None) -> None:
@@ -357,11 +380,29 @@ def analyze_mesh(
 
 def analyze_file(
     path: str | Path, *, units: str = "as-is", axes: str = "pca", output_units: str = "m",
+    strict_stl: bool = False,
 ) -> AnalysisResult:
-    """Load and analyze a supported mesh file; no GUI or server is needed."""
-    geometry = load_geometry(path)
+    """Load and analyze a supported mesh file; no GUI or server is needed.
+
+    The reader is chosen by the extension (see :func:`pyshape.load_geometry`):
+    STL files are read by the built-in parser, with trimesh as a fallback when
+    the parser rejects a file, unless ``strict_stl=True``. The result records
+    the reader, and a fallback adds a warning. Every mesh is then prepared in
+    the same way (:func:`pyshape.prepare_mesh`).
+    """
+    geometry = load_geometry(path, strict_stl=strict_stl)
     result = analyze_mesh(
         geometry.nodes, geometry.faces, units=units, axes=axes, output_units=output_units,
     )
-    result.source_name = geometry.source_path.name
+    return attach_source(result, geometry)
+
+
+def attach_source(
+    result: AnalysisResult, geometry: LoadedGeometry, name: Optional[str] = None,
+) -> AnalysisResult:
+    """Copy the file name (or ``name``), the reader and the load warnings onto ``result``."""
+    result.source_name = geometry.source_path.name if name is None else name
+    result.reader = geometry.reader
+    result.reader_version = geometry.reader_version
+    result.warnings = [*geometry.warnings, *result.warnings]
     return result

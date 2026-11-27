@@ -35,6 +35,32 @@ def units_summary(units: str, scale: float, output_units: str = "m") -> str:
     return f"Input: {_UNIT_NAMES.get(units, units)} → results in {result}"
 
 
+_READER_NAMES = {
+    "builtin-stl": "built-in STL parser",
+    "trimesh": "trimesh",
+    "trimesh-fallback": "trimesh (fallback: the built-in STL parser rejected the file)",
+}
+
+
+def reader_text(reader, version=None) -> str:
+    """Human-readable name of the reader of a file, with the trimesh version."""
+    text = _READER_NAMES.get(reader, reader or "unknown")
+    if version:
+        text = text.replace("trimesh", f"trimesh {version}", 1)
+    return text
+
+
+def geo_metadata_rows(geo: LoadedGeometry) -> list[tuple[str, str, str]]:
+    """CSV metadata rows of a loaded file, as in ``AnalysisResult.to_csv``."""
+    rows = []
+    if geo.reader is not None:
+        rows.append(("reader", geo.reader, ""))
+    if geo.reader_version is not None:
+        rows.append(("reader_version", geo.reader_version, ""))
+    rows.extend(("warning", text, "") for text in geo.warnings)
+    return rows
+
+
 def axis_triad(nodes: np.ndarray) -> tuple[np.ndarray, float]:
     """Return the center and arm length of a bounding-box-scaled XYZ triad."""
     mins = nodes.min(axis=0)

@@ -82,10 +82,12 @@ def test_summary_and_keys(folder):
     batch = analyze_folder(folder, units="mm", output_units="mm", keys=["volume", "n_faces"],
                            summary=True, recursive=True)
     table = rows(batch.summary_path)
-    assert table[0] == ["source_file", "volume [mm^3]", "n_faces"]
+    assert table[0] == ["source_file", "volume [mm^3]", "n_faces", "reader", "warnings"]
     assert [row[0] for row in table[1:]] == ["a_particle.STL", "b_particle.stl", "sub/c_particle.stl"]
     assert float(table[1][1]) == pytest.approx(batch.succeeded[0].result.values["volume"])
-    assert [row[0] for row in rows(batch.succeeded[0].csv_path)[2:]] == ["volume", "n_faces"]
+    assert all(row[3:] == ["builtin-stl", ""] for row in table[1:])
+    assert [row[0] for row in rows(batch.succeeded[0].csv_path)[1:]] == [
+        "source_file", "reader", "volume", "n_faces"]
 
 
 def test_unknown_key_fails_each_file(folder):

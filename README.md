@@ -19,7 +19,8 @@ The Python package provides tools for 3D particle geometry and form analysis. It
 - Form: convexity, Wadell and Krumbein sphericities, Zingg ratios, and Potticary, Kong-Fonseca and Angelidakis et al. (2021) flatness/elongation parameters
 - Surface orientation tensor
 - Surface roughness statistics
-- STL loading, with `trimesh` support and a built-in fallback
+- STL loading with a built-in ASCII/binary parser (no extra package), trimesh
+  as a recorded fallback, and other formats through trimesh
 - An installable, headless Python library with JSON-compatible analysis results
 - Optional local HTTP API and HTML viewer, plus the existing desktop viewer
 
@@ -148,7 +149,10 @@ pyshape-batch particles/ --recursive --summary --suffix _SHAPE --no-overwrite
 Options: `suffix` (added to each CSV name), `avoid_overwrite` (number new
 CSVs instead of overwriting, `--no-overwrite`), `recursive` (include
 subfolders), `summary` (also write `pyshape_summary.csv` with one row per
-particle), `keys` (choose the metrics) and `write_csv=False` (results only).
+particle, with `reader` and `warnings` columns), `keys` (choose the metrics),
+`write_csv=False` (results only) and `strict_stl` (`--strict-stl`, see
+[Reading STL files](#reading-stl-files)). Warnings are in
+`item.result.warnings` and printed by the command.
 Every format `analyze_file` reads is included. Inputs with the same name
 (`a.stl` and `a.obj`) never overwrite each other's CSV.
 
@@ -191,6 +195,33 @@ np.savez("particle_prepared.npz", nodes=nodes, faces=faces)
 An open mesh is returned unchanged; a closed surface that cannot be oriented
 (e.g. a Klein bottle) raises `ValueError`. Its docstring (`help(prepare_mesh)`)
 lists the steps and the cases accepted without a warning.
+
+### Reading STL files
+
+STL files are always read by pySHAPE's own ASCII/binary parser, which needs no
+extra package. A file is binary when its size is exactly 84 + 50 × the
+triangle count of its header (even if the header starts with `solid`),
+otherwise ASCII; duplicate vertices are merged after rounding to 12 decimals
+and kept in order of first appearance. A binary file whose size does not
+match its triangle count is rejected with the exact reason, and NaN or
+infinite coordinates are an error.
+
+If the parser rejects a file and trimesh is installed, trimesh is tried. The
+result then says so: every result of a file records its reader,
+
+```python
+result = analyze_file("particle.stl")
+result.reader          # "builtin-stl", "trimesh" (other formats) or "trimesh-fallback"
+result.reader_version  # trimesh version when trimesh read the file, else None
+result.warnings        # e.g. why the built-in parser rejected the file
+```
+
+and CSV files carry the rows `reader`, `reader_version` (when trimesh was used)
+and `warning`, after `source_file`. The interfaces show the reader and the
+warning. `analyze_file(..., strict_stl=True)`, `load_geometry(...,
+strict_stl=True)` and `pyshape-batch --strict-stl` disable the fallback and
+raise the parser's error instead. Other formats read by trimesh give no
+warning.
 
 ### Input and result contract
 
@@ -282,8 +313,8 @@ Open <http://127.0.0.1:8000>. The interface has two pages:
 solid particle. The logo, mesh, and screenshot shown here were created for pySHAPE.*
 
 Both pages and the HTTP API accept the formats of the library except the text
-glTF (`.gltf`), up to 32 MiB per file: STL, the native format, which needs no
-extra package, and OBJ, PLY, OFF, GLB, 3MF and DAE, read by trimesh (any case
+glTF (`.gltf`), up to 32 MiB per file: STL, the native format, read by
+pySHAPE's built-in parser (see [Reading STL files](#reading-stl-files)), and OBJ, PLY, OFF, GLB, 3MF and DAE, read by trimesh (any case
 of the extension). The
 reader is chosen by the extension, and every mesh is then
 prepared in the same way (orientation of closed shells, solid union). Each
@@ -313,7 +344,8 @@ curl -F "file=@particle.stl" -F "units=mm" \
   optional `include_preview` (default `false`), optional `include_csv`
   (default `false`) with optional `keys`. Returns the same JSON data
   as the Python result, plus `preview` and `csv` (the text `/api/export`
-  returns) when requested.
+  returns) when requested. `reader`, `reader_version` and `warnings` tell
+  which reader loaded the file and why a fallback was used.
 - `POST /api/export`: multipart `file`, optional `units`, optional
   comma-separated `keys`. Returns CSV.
 - `GET /api/health`: readiness response.
@@ -328,8 +360,8 @@ binds to loopback by default and is intended for local use. It has no
 authentication, deployment-level request-body limits, or resource isolation.
 Do not expose it directly to untrusted users; remote deployment needs
 appropriate authentication, proxy limits, and workload isolation.
-STL uploads are read by pySHAPE's own parser or trimesh; uploads in the other
-formats are parsed by trimesh. Some of these formats can refer to other files,
+STL uploads are read by pySHAPE's own parser (trimesh only as the fallback
+described above); uploads in the other formats are parsed by trimesh. Some of these formats can refer to other files,
 so pySHAPE requires trimesh 5.0 or later, which refuses references outside the
 upload's temporary folder (that folder holds only the uploaded file), and
 rejects `.gltf` uploads and `.glb` files that refer to external buffers or images before
@@ -391,7 +423,7 @@ python -m pip install -e ".[mesh,analysis,web,dev]"
 python -m pytest -q tests
 ```
 
-Tests cover the public Python API, existing helpers, fallback STL loading,
+Tests cover the public Python API, existing helpers, STL reading and its fallback,
 unit conversion, explicit unavailable metrics, HTTP responses, CSV output,
 and bundled web assets. CI runs the suite and builds the distribution, then
 checks that the installed wheel imports and analyzes without UI dependencies.
