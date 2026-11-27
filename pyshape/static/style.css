@@ -36,6 +36,12 @@ td.pending { color: #526478; }
 .preview-heading { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: .5rem; }
 .preview-heading label { margin: 0 0 .7rem; }
 .preview-heading button { padding: .4rem .7rem; }
+.preview-controls { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+.preview-controls input[type=range] { vertical-align: middle; width: 7rem; }
+.legend { margin: 0 0 .4rem; }
+.swatch { display: inline-block; width: .8em; height: .8em; border-radius: .15em; vertical-align: -.05em; margin-left: .4em; }
+.swatch.outside { background: hsl(209, 40%, 63%); }
+.swatch.inside { background: hsl(212, 28%, 38%); }
 canvas { display: block; width: 100%; height: 360px; background: #f3f6fa; border-radius: .4rem; touch-action: none; }
 .table-scroll { overflow: auto; }
 table { border-collapse: collapse; width: 100%; font-size: .9rem; }

@@ -68,3 +68,48 @@ def axis_triad(nodes: np.ndarray) -> tuple[np.ndarray, float]:
     center = (mins + maxs) / 2.0
     extent = float((maxs - mins).max())
     return center, 0.6 * extent if extent > 0 else 1.0
+
+
+# Preview colours (RGB in 0..1): the outer side of the surface is light blue,
+# the inner side (a triangle seen from behind) a darker shade of the same blue,
+# so that the inside of the surface showing through an opening or a
+# transparent surface is not confused with the outside. Orange is reserved for
+# nested shells (cavities). The browser preview uses the same colours.
+OUTSIDE_RGB = (0.69, 0.77, 0.87)   # light steel blue
+INSIDE_RGB = (0.36, 0.43, 0.53)    # darker shade of the same blue
+PREVIEW_LIGHT = (0.15, -1.1, 0.95)
+
+
+def view_direction(elev: float, azim: float) -> np.ndarray:
+    """Unit vector from the scene towards a Matplotlib 3D camera (degrees)."""
+    e, a = np.radians(elev), np.radians(azim)
+    return np.array([np.cos(e) * np.cos(a), np.cos(e) * np.sin(a), np.sin(e)])
+
+
+def face_normals(nodes: np.ndarray, faces: np.ndarray) -> np.ndarray:
+    """Unit normals of the triangles (zero for degenerate ones), from their winding."""
+    nodes = np.asarray(nodes, dtype=float)
+    faces = np.asarray(faces)
+    normals = np.cross(nodes[faces[:, 1]] - nodes[faces[:, 0]], nodes[faces[:, 2]] - nodes[faces[:, 0]])
+    lengths = np.linalg.norm(normals, axis=1)
+    return np.divide(normals, lengths[:, None], out=np.zeros_like(normals),
+                     where=lengths[:, None] > 0)
+
+
+def preview_face_colors(
+    normals: np.ndarray, view: np.ndarray, opacity: float = 1.0,
+) -> np.ndarray:
+    """RGBA face colours for the desktop preview.
+
+    Triangles whose normal points towards the camera show the outer side
+    (light blue); the others show the inner side (darker blue). Both are shaded by a fixed
+    light (Lambert, two-sided), and ``opacity`` (0 to 1) sets their alpha.
+    """
+    light = np.asarray(PREVIEW_LIGHT) / np.linalg.norm(PREVIEW_LIGHT)
+    front = normals @ np.asarray(view, dtype=float) >= 0
+    side = np.where(front, 1.0, -1.0)
+    intensity = 0.3 + 0.7 * np.clip(side * (normals @ light), 0.0, 1.0)
+    base = np.where(front[:, None], np.asarray(OUTSIDE_RGB)[None, :], np.asarray(INSIDE_RGB)[None, :])
+    rgb = np.clip(base * intensity[:, None], 0.0, 1.0)
+    alpha = np.full((len(normals), 1), float(np.clip(opacity, 0.0, 1.0)))
+    return np.hstack([rgb, alpha])

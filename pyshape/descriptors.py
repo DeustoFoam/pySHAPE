@@ -335,6 +335,20 @@ CONTROLS: dict[str, dict[str, object]] = {
         "Append _1, _2, ... instead of overwriting an existing CSV.",
         "When a CSV with the same name exists, a progressive number is appended to the new "
         "file name."),
+    "opacity": _entry(
+        "Opacity of the surface in the preview.",
+        "Lower values make the surface transparent, so that what lies behind or inside it "
+        "(e.g. the inner side of the surface, or internal shells) can be seen. Display only.",
+    ),
+    "surface_sides": _entry(
+        "Light blue: outer side of the surface; dark blue: inner side.",
+        "Each triangle is coloured by the side that faces the viewer: light blue for the "
+        "outer side (its normal points towards the viewer), a darker blue for the inner "
+        "side. The inner "
+        "side shows through openings of open meshes, through a transparent surface, or "
+        "where the preview's depth sorting is imperfect; it is not a separate part of the "
+        "particle. Closed shells are oriented outwards before display. Display only.",
+    ),
     "auto_rotate": _entry(
         "Rotate the preview slowly.",
         "Turns the slow rotation of the 3D preview on or off. Dragging rotates the view by "

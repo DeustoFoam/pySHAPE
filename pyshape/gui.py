@@ -28,7 +28,6 @@ from typing import Callable, Dict, Optional, Union
 import numpy as np
 
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
-from matplotlib.colors import to_rgb
 from matplotlib.figure import Figure
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 
@@ -44,6 +43,9 @@ from . import descriptors
 from .bounding import AXES_METHODS
 from .preprocess import prepare_mesh
 from .gui_core import (
+    face_normals,
+    preview_face_colors,
+    view_direction,
     LoadedGeometry,
     Metric,
     SUPPORTED_EXTENSIONS,
@@ -113,16 +115,6 @@ def _short(kind: str, key: str) -> str:
     entry = {"metrics": descriptors.metric_help, "controls": descriptors.control_help,
              "axes": descriptors.axes_help}[kind](key)
     return str(entry["short"]) if entry else ""
-
-
-def _shaded_colors(nodes: np.ndarray, faces: np.ndarray, base: str = "lightsteelblue") -> np.ndarray:
-    """Lambertian face colours for outward-oriented triangles (fixed light)."""
-    normals = np.cross(nodes[faces[:, 1]] - nodes[faces[:, 0]], nodes[faces[:, 2]] - nodes[faces[:, 0]])
-    lengths = np.linalg.norm(normals, axis=1)
-    normals = np.divide(normals, lengths[:, None], out=np.zeros_like(normals), where=lengths[:, None] > 0)
-    light = np.array([0.15, -1.1, 0.95])
-    intensity = 0.3 + 0.7 * np.clip(normals @ (light / np.linalg.norm(light)), 0.0, 1.0)
-    return np.clip(np.asarray(to_rgb(base))[None, :] * intensity[:, None], 0.0, 1.0)
 
 
 class ShapeGUI(tk.Tk):
@@ -324,11 +316,25 @@ class ShapeGUI(tk.Tk):
         )
         rotate.pack(side="left")
         self._tooltip(rotate, "auto_rotate")
+        opacity_label = ttk.Label(top, text="Opacity")
+        opacity_label.pack(side="left", padx=(16, 4))
+        self.opacity_var = tk.DoubleVar(value=1.0)
+        opacity = ttk.Scale(top, from_=0.2, to=1.0, variable=self.opacity_var, length=120,
+                            command=lambda _value: self._recolor_mesh(force=True))
+        opacity.pack(side="left")
+        self._tooltip(opacity, "opacity")
+        legend = ttk.Label(top, text="light: outside, dark: inside of the surface",
+                           foreground="#555555")
+        legend.pack(side="left", padx=(12, 0))
+        self._tooltip(legend, "surface_sides")
 
         self.fig = Figure(figsize=(6, 5), dpi=100)
         self.ax = self.fig.add_subplot(111, projection="3d")
         self.ax.set_box_aspect([1, 1, 1])
         self.canvas = FigureCanvasTkAgg(self.fig, master=parent)
+        self._mesh_collection = None
+        self._mesh_view = None
+        self.canvas.mpl_connect("draw_event", self._on_draw)
         self.canvas.draw()
         self.canvas.get_tk_widget().grid(row=1, column=0, sticky="nsew")
         parent.rowconfigure(1, weight=1)
@@ -595,6 +601,7 @@ class ShapeGUI(tk.Tk):
     # ------------------------------------------------------------------
     def _render_mesh(self):
         self.ax.clear()
+        self._mesh_collection = None
         self.ax.set_title("Geometry preview")
         if self.nodes is None or self.faces is None:
             self.canvas.draw()
@@ -602,11 +609,13 @@ class ShapeGUI(tk.Tk):
         verts = [self.nodes[idx] for idx in self.faces]
         # Edges help on coarse meshes but turn dense meshes black; shade instead.
         dense = len(self.faces) > EDGE_FACE_LIMIT
-        coll = Poly3DCollection(
-            verts, facecolors=_shaded_colors(self.nodes, self.faces),
-            edgecolors="none" if dense else "k", linewidths=0.3,
+        self._normals = face_normals(self.nodes, self.faces)
+        self._mesh_view = None
+        self._mesh_collection = Poly3DCollection(
+            verts, facecolors=self._face_colors(),
+            edgecolors="none" if dense else (0, 0, 0, 0.6), linewidths=0.3,
         )
-        self.ax.add_collection3d(coll)
+        self.ax.add_collection3d(self._mesh_collection)
 
         mins = self.nodes.min(axis=0)
         maxs = self.nodes.max(axis=0)
@@ -622,7 +631,30 @@ class ShapeGUI(tk.Tk):
 
         self._draw_axis_triad()
         self.ax.view_init(elev=20, azim=self._azim)
+        self._mesh_collection.set_facecolor(self._face_colors())
         self.canvas.draw()
+
+    def _face_colors(self):
+        """Colours for the current view: outer side light blue, inner side darker blue."""
+        self._mesh_view = (float(self.ax.elev), float(self.ax.azim))
+        return preview_face_colors(self._normals, view_direction(*self._mesh_view),
+                                   self.opacity_var.get())
+
+    def _recolor_mesh(self, force: bool = False):
+        """Recolour the faces when the view (or the opacity) has changed."""
+        collection = getattr(self, "_mesh_collection", None)
+        if collection is None or self.nodes is None:
+            return
+        view = (float(self.ax.elev), float(self.ax.azim))
+        if force or view != self._mesh_view:
+            collection.set_facecolor(self._face_colors())
+            self.canvas.draw_idle()
+
+    def _on_draw(self, _event):
+        # Dragging changes the view inside Matplotlib; recolour after such a draw.
+        if getattr(self, "_mesh_collection", None) is not None and self._mesh_view != (
+                float(self.ax.elev), float(self.ax.azim)):
+            self.after_idle(self._recolor_mesh)
 
     def _draw_axis_triad(self):
         center, length = axis_triad(self.nodes)
@@ -651,6 +683,7 @@ class ShapeGUI(tk.Tk):
         if self.nodes is not None and not self._rotating_paused:
             self._azim = (self._azim + ROTATION_DEG_PER_TICK) % 360.0
             self.ax.view_init(elev=20, azim=self._azim)
+            self._recolor_mesh()
             self.canvas.draw_idle()
         self._rotation_job = self.after(ROTATION_INTERVAL_MS, self._tick_rotation)
 

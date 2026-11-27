@@ -73,10 +73,11 @@ def _web_control_names(page):
 @pytest.mark.parametrize("names, expected", [
     (_gui_control_names(), {"file", "input_units", "output_units", "axes", "load", "calculate",
                             "results", "select_all", "select_none", "suffix", "avoid_overwrite",
-                            "export", "auto_rotate"}),
+                            "export", "auto_rotate", "opacity", "surface_sides"}),
     (_web_control_names("index.html"), {"file", "input_units", "output_units", "axes",
                                         "calculate", "results", "select_all", "select_none",
-                                        "suffix", "export", "auto_rotate"}),
+                                        "suffix", "export", "auto_rotate", "opacity",
+                                        "surface_sides"}),
     (_web_control_names("batch.html"), {"folder", "files", "recursive", "input_units",
                                         "output_units", "axes", "suffix", "summary", "run",
                                         "stop", "download_all"}),
