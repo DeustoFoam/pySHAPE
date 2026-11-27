@@ -650,6 +650,11 @@ class ShapeGUI(tk.Tk):
             verts, facecolors=self._face_colors(),
             edgecolors="none" if dense else (0, 0, 0, 0.6), linewidths=0.3,
         )
+        # Draw the axes beneath the translucent surface, which then veils them where
+        # they are inside or behind the particle (Matplotlib cannot interleave the
+        # axis lines with the mesh triangles, so the order is fixed).
+        self.ax.computed_zorder = False
+        self._mesh_collection.set_zorder(2)
         self.ax.add_collection3d(self._mesh_collection)
 
         mins = self.nodes.min(axis=0)
@@ -698,9 +703,10 @@ class ShapeGUI(tk.Tk):
             end = center + direction * length
             self.ax.plot(
                 [center[0], end[0]], [center[1], end[1]], [center[2], end[2]],
-                color=colors[axis_name], linewidth=2,
+                color=colors[axis_name], linewidth=2, zorder=1,
             )
-            self.ax.text(*end, axis_name, color=colors[axis_name], fontsize=10, fontweight="bold")
+            self.ax.text(*end, axis_name, color=colors[axis_name], fontsize=10, fontweight="bold",
+                         zorder=3)
 
     def _on_rotate_toggle(self):
         if self.rotate_var.get():
