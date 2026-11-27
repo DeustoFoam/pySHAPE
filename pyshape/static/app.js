@@ -206,17 +206,25 @@ function draw() {
   const projected = triangles.map((triangle) => triangle.map(project));
   projected.sort((a, b) => a.reduce((s, p) => s + p[2], 0) - b.reduce((s, p) => s + p[2], 0));
   ctx.lineWidth = 0.4 * ratio;
-  ctx.strokeStyle = "#516b86";
+  const opacity = Number($("opacity").value);
+  ctx.globalAlpha = opacity;
   for (const points of projected) {
     const depth = points.reduce((sum, point) => sum + point[2], 0) / 3;
     const light = Math.max(40, Math.min(82, 63 + depth * 18));
-    ctx.fillStyle = `hsl(209, 40%, ${light}%)`;
+    // Seen from outside, an outward-oriented triangle has a positive signed area
+    // in canvas coordinates (y pointing down); otherwise its inner side is visible.
+    const [p0, p1, p2] = points;
+    const outside = (p1[0] - p0[0]) * (p2[1] - p0[1]) - (p1[1] - p0[1]) * (p2[0] - p0[0]) >= 0;
+    // Inner side: a darker shade of the same blue (orange is kept for nested shells).
+    ctx.fillStyle = outside ? `hsl(209, 40%, ${light}%)` : `hsl(212, 28%, ${light * 0.6}%)`;
+    ctx.strokeStyle = outside ? "#516b86" : "#2f3e50";
     ctx.beginPath();
     points.forEach((point, index) => index ? ctx.lineTo(point[0], point[1]) : ctx.moveTo(point[0], point[1]));
     ctx.closePath();
     ctx.fill();
     ctx.stroke();
   }
+  ctx.globalAlpha = 1;
   if (triangles.length) {
     const origin = project([0, 0, 0]);
     for (const [axis, color, point] of [
@@ -235,6 +243,8 @@ function draw() {
     }
   }
 }
+
+$("opacity").addEventListener("input", () => draw());
 
 canvas.addEventListener("pointerdown", (event) => {
   pointer = { x: event.clientX, y: event.clientY };

@@ -71,8 +71,14 @@
       <section class="preview-panel">
         <div class="preview-heading">
           <h2>Geometry preview</h2>
-          <label data-help="auto_rotate"><input id="rotate" type="checkbox" checked> Auto-rotate</label>
+          <div class="preview-controls">
+            <label data-help="auto_rotate"><input id="rotate" type="checkbox" checked> Auto-rotate</label>
+            <label data-help="opacity">Opacity <input id="opacity" type="range" min="0.2" max="1"
+              step="0.05" value="1"></label>
+          </div>
         </div>
+        <p class="hint legend" data-help="surface_sides"><span class="swatch outside"></span> outside
+          <span class="swatch inside"></span> inside of the surface</p>
         <canvas id="preview" width="800" height="360"
           aria-label="3D mesh preview. Drag to rotate, scroll to zoom."></canvas>
         <p id="preview-info" class="hint">Drag to rotate. Scroll to zoom.</p>

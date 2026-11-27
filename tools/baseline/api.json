@@ -35,15 +35,18 @@
   "gui.apply_output_units": "analysis.apply_output_units",
   "gui.axis_triad": "gui_core.axis_triad",
   "gui.compute_metrics": "gui_core.compute_metrics",
+  "gui.face_normals": "gui_core.face_normals",
   "gui.geo_metadata_rows": "gui_core.geo_metadata_rows",
   "gui.load_geometry": "gui_core.load_geometry",
   "gui.make_export_path": "gui_core.make_export_path",
   "gui.prepare_mesh": "preprocess.prepare_mesh",
+  "gui.preview_face_colors": "gui_core.preview_face_colors",
   "gui.reader_text": "gui_core.reader_text",
   "gui.resolve_output_units": "analysis.resolve_output_units",
   "gui.scale_nodes": "analysis.scale_nodes",
   "gui.unit_label": "analysis.unit_label",
   "gui.units_summary": "gui_core.units_summary",
+  "gui.view_direction": "gui_core.view_direction",
   "gui.write_csv": "gui_core.write_csv",
   "gui_core.LoadedGeometry": "io.LoadedGeometry",
   "gui_core.Metric": "analysis.Metric",
@@ -1835,6 +1838,28 @@
    ],
    "returns": "tuple[np.ndarray, float]"
   },
+  "gui_core.face_normals": {
+   "bases": [],
+   "deprecated": null,
+   "exported": false,
+   "interface": false,
+   "kind": "function",
+   "params": [
+    {
+     "annotation": "np.ndarray",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "nodes"
+    },
+    {
+     "annotation": "np.ndarray",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "faces"
+    }
+   ],
+   "returns": "np.ndarray"
+  },
   "gui_core.geo_metadata_rows": {
    "bases": [],
    "deprecated": null,
@@ -1850,6 +1875,34 @@
     }
    ],
    "returns": "list[tuple[str, str, str]]"
+  },
+  "gui_core.preview_face_colors": {
+   "bases": [],
+   "deprecated": null,
+   "exported": false,
+   "interface": false,
+   "kind": "function",
+   "params": [
+    {
+     "annotation": "np.ndarray",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "normals"
+    },
+    {
+     "annotation": "np.ndarray",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "view"
+    },
+    {
+     "annotation": "float",
+     "default": "1.0",
+     "kind": "positional_or_keyword",
+     "name": "opacity"
+    }
+   ],
+   "returns": "np.ndarray"
   },
   "gui_core.reader_text": {
    "bases": [],
@@ -1900,6 +1953,28 @@
     }
    ],
    "returns": "str"
+  },
+  "gui_core.view_direction": {
+   "bases": [],
+   "deprecated": null,
+   "exported": false,
+   "interface": false,
+   "kind": "function",
+   "params": [
+    {
+     "annotation": "float",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "elev"
+    },
+    {
+     "annotation": "float",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "azim"
+    }
+   ],
+   "returns": "np.ndarray"
   },
   "io.LoadedGeometry": {
    "bases": [],

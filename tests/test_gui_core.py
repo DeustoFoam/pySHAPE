@@ -134,3 +134,30 @@ def test_load_geometry_unsupported_extension(tmp_path):
     import pytest
     with pytest.raises(ValueError):
         load_geometry(bogus)
+
+
+def test_preview_colours_distinguish_outer_and_inner_side(cube_mesh):
+    from pyshape import prepare_mesh
+    from pyshape.gui_core import (
+        INSIDE_RGB, OUTSIDE_RGB, face_normals, preview_face_colors, view_direction)
+
+    nodes, faces = prepare_mesh(*cube_mesh)
+    normals = face_normals(nodes, faces)
+    view = view_direction(20, -60)
+    colors = preview_face_colors(normals, view, opacity=0.4)
+    assert colors.shape == (len(faces), 4)
+    assert np.allclose(colors[:, 3], 0.4)
+    towards = normals @ view >= 0
+
+    def outer(rgba):
+        # Shading only scales the base colour, so the channel ratios identify the side.
+        ratio = rgba[:, :3] / np.asarray(OUTSIDE_RGB)
+        return np.ptp(ratio, axis=1) < 1e-9
+
+    assert np.array_equal(outer(colors), towards) and towards.any() and (~towards).any()
+    # The inner side is a darker shade of the same blue (orange is kept for nested shells).
+    assert INSIDE_RGB[2] > INSIDE_RGB[0] and sum(INSIDE_RGB) < sum(OUTSIDE_RGB)
+    # Reversing the view swaps the sides; a reversed (inward) shell looks inside-out.
+    assert np.array_equal(outer(preview_face_colors(normals, -view)), ~towards)
+    flipped = preview_face_colors(face_normals(nodes, faces[:, ::-1]), view)
+    assert np.array_equal(outer(flipped), ~towards)

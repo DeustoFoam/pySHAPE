@@ -339,7 +339,9 @@ Open <http://127.0.0.1:8000>. The interface has two pages:
 
 - **Single particle** (`/`): upload a mesh file, choose input units,
   view grouped results, select descriptors, and download CSV. The interactive
-  mesh preview supports drag rotation, zoom, an XYZ triad, and auto-rotation.
+  mesh preview supports drag rotation, zoom, an XYZ triad, auto-rotation and
+  an opacity control; the outer side of the surface is light blue and the
+  inner side darker blue.
   For large meshes only the preview is sampled (at most 5000 triangles);
   analysis always uses the full mesh.
 - **Batch** (`/batch`): choose a folder (optionally with subfolders) or several
@@ -465,7 +467,9 @@ It lets you:
   export.
 - **Preview the geometry** — a 3D view with an XYZ axes triad scaled to the
   mesh's bounding box and a slow auto-rotation (pauses while you drag to
-  rotate manually).
+  rotate manually). The outer side of the surface is light blue and the inner
+  side darker blue, so the inside showing through an opening is not mistaken
+  for the outside; the opacity slider makes the surface transparent.
 
 ## Tests
 
