@@ -4,6 +4,21 @@ All notable changes to pySHAPE. Versions follow the tags of the GitHub
 repository; each release is archived on Zenodo (all versions:
 https://doi.org/10.5281/zenodo.24004678).
 
+## Unreleased
+
+### Changed
+- Convexity: the convex hull is built from coordinates relative to the vertex
+  mean, so its precision no longer depends on how far the particle is from
+  the coordinate origin (#32; about 2e-12 relative at 1e6 particle sizes
+  before, round-off now). Values near the origin are unchanged.
+
+### Documentation
+- Where the boxes and ellipsoids of the principal dimensions are centred
+  (#32): box centre, barycentre (inertia-equivalent ellipsoid) or fitted
+  centre (fitted ellipsoid); never the coordinate origin. Docstrings, help
+  texts and README. New tests check that every result is invariant under
+  translation and that the centres move with the particle.
+
 ## 0.2.0 (2026-11-27)
 
 ### New

@@ -325,6 +325,15 @@ warning.
   reach but little material, so the form indices and Zingg classes from them are not directly
   comparable with box-based ones. The equivalent ellipsoid generally does not
   have the particle's volume.
+- None of the four methods assumes that the particle is at the coordinate
+  origin. The boxes are centred on the midpoint of the vertex extents along
+  their directions, the inertia-equivalent ellipsoid on the barycentre (volume
+  centroid), and the fitted ellipsoid on the centre of the fitted quadric,
+  which is fitted along with the axes and need not be the barycentre.
+  `pca_box`, `min_volume_box`, `inertia_ellipsoid` and `fitted_ellipsoid`
+  return the centre (`.center`) with the directions. No result depends on
+  where the particle is: the tests check this for offsets up to 10⁵ times the
+  particle size.
 - Closed, orientable mesh shells have their triangle winding corrected
   automatically by `prepare_mesh`, including wholly reversed shells; the original arrays/files
   are not changed. Volume requires nonzero enclosed volume. Open/non-manifold

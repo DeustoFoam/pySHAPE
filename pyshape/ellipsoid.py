@@ -27,6 +27,12 @@ full axis lengths (twice the semi-axes c <= b <= a):
     of returning signed radii. ``weighting="none"`` uses unweighted vertices,
     as SHAPE does. The fit is invariant to rotation and translation.
 
+Both ellipsoids are placed with the particle, never at the coordinate origin:
+the inertia-equivalent ellipsoid is centred on the barycentre (volume
+centroid) and the fitted ellipsoid on the centre of the fitted quadric, which
+is not constrained to the barycentre. ``Ellipsoid.center`` gives the centre;
+S, I, L do not depend on it or on the position of the particle.
+
 In :func:`pyshape.compute_metrics` (``axes="inertia_ellipsoid"`` or
 ``"fitted_ellipsoid"``), both use the outer surface when cavities are kept
 (``cavities="keep"``): the envelope's volume and inertia, or its vertices.
@@ -42,7 +48,12 @@ ELLIPSOID_METHODS = ("inertia_ellipsoid", "fitted_ellipsoid")
 
 
 class Ellipsoid(NamedTuple):
-    """Semi-axes ``a >= b >= c`` with unit ``directions`` (rows: S, I, L) and ``center``."""
+    """Semi-axes ``a >= b >= c`` with unit ``directions`` (rows: S, I, L) and ``center``.
+
+    ``center`` is in the coordinates of the mesh: the barycentre for
+    :func:`inertia_ellipsoid`, the centre of the fitted quadric for
+    :func:`fitted_ellipsoid`.
+    """
 
     a: float
     b: float
