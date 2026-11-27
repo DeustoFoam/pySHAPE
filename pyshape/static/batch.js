@@ -150,8 +150,9 @@ $("batch-form").addEventListener("submit", async (event) => {
       outputs.push({ path: name, text: result.csv });
       summaryRows.push({ path, result });
       const unavailable = result.metrics.filter((metric) => metric.error).length;
-      state.textContent = unavailable ? `done (${unavailable} parameters unavailable)` : "done";
-      state.className = "ok";
+      state.textContent = (unavailable ? `done (${unavailable} parameters unavailable)` : "done")
+        + result.warnings.map((text) => `. Warning: ${text}`).join("");
+      state.className = result.warnings.length ? "warning" : "ok";
       link.replaceChildren(downloadLink(result.csv, name));
       if (!$("metadata").textContent) {
         $("metadata").textContent = `Input: ${result.input_units} | Output: ${result.output_units}`
@@ -180,10 +181,12 @@ function summaryCsv(rows) {
   const ascii = (unit) => unit.replace("µ", "u").replace("²", "^2").replace("³", "^3").replace("⁵", "^5");
   const quote = (value) => /[",\r\n]/.test(value) ? `"${value.replace(/"/g, '""')}"` : value;
   const columns = rows[0].result.metrics.filter((metric) => metric.default_selected);
-  const lines = [["source_file", ...columns.map((m) => m.unit ? `${m.key} [${ascii(m.unit)}]` : m.key)]];
+  const lines = [["source_file", ...columns.map((m) => m.unit ? `${m.key} [${ascii(m.unit)}]` : m.key),
+    "reader", "warnings"]];
   for (const { path, result } of rows) {
     const values = Object.fromEntries(result.metrics.map((m) => [m.key, m.value]));
-    lines.push([path, ...columns.map((m) => values[m.key] === null || values[m.key] === undefined ? "" : String(values[m.key]))]);
+    lines.push([path, ...columns.map((m) => values[m.key] === null || values[m.key] === undefined ? "" : String(values[m.key])),
+      result.reader || "", result.warnings.join(" | ")]);
   }
   return lines.map((line) => line.map(quote).join(",")).join("\r\n") + "\r\n";
 }

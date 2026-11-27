@@ -14,9 +14,32 @@ https://doi.org/10.5281/zenodo.24004678).
   and images; DAE also needs `pycollada`. Results for STL files are
   unchanged.
 
+- Every result of a file records its reader: `reader` is `builtin-stl`,
+  `trimesh` (formats other than STL) or `trimesh-fallback`, with
+  `reader_version` (the trimesh version when trimesh was used) and `warnings`.
+  They are in the JSON results and the HTTP API, in CSV files (rows `reader`,
+  `reader_version`, `warning` after `source_file`), in the batch summary
+  (columns `reader`, `warnings`) and in both interfaces.
+- `strict_stl=True` (`load_geometry`, `analyze_file`, `analyze_folder`) and
+  `pyshape-batch --strict-stl` read STL files only with the built-in parser.
+
 ### Changed
 - trimesh 5.0 or later is required (extras `mesh`, `gui`, `web`): it refuses
   references of uploaded files to files outside their folder.
+- STL files are always read by the built-in parser, also when trimesh is
+  installed (before, trimesh read them whenever it was installed). If the
+  parser rejects a file and trimesh is installed, trimesh is tried and the
+  result carries a warning with the parser's reason. Results for well-formed
+  STL files are unchanged: merged vertices are now kept in order of first
+  appearance, as trimesh did. Without trimesh, the vertex order changes from
+  sorted to first appearance, which can change the PCA box of shapes whose
+  principal directions are not unique.
+- The STL parser gives the exact reason for a rejected file (e.g. a triangle
+  count that does not match the file size), reads ASCII files with 8-bit
+  (e.g. Latin-1) names, and rejects NaN or infinite coordinates in binary files
+  too.
+- CSV exports of files have the new metadata rows, and the batch summary the
+  new columns, described above.
 
 ## 0.1.3 (2026-11-24)
 

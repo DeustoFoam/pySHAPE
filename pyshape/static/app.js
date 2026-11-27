@@ -17,6 +17,16 @@ function status(message, error = false) {
   $("status").classList.toggle("error", error);
 }
 
+// Same names as pyshape.gui_core.reader_text.
+function readerText(result) {
+  const version = result.reader_version ? ` ${result.reader_version}` : "";
+  return {
+    "builtin-stl": "built-in STL parser",
+    "trimesh": `trimesh${version}`,
+    "trimesh-fallback": `trimesh${version} (fallback: the built-in STL parser rejected the file)`,
+  }[result.reader] || result.reader || "unknown";
+}
+
 function setBusy(value) {
   busy = value;
   $("analyze").disabled = value;
@@ -113,8 +123,10 @@ $("analyze-form").addEventListener("submit", async (event) => {
     $("preview-info").textContent = `Showing ${result.preview.shown_faces} of ${result.preview.total_faces} faces. `
       + "Large meshes are simplified for display only; calculations always use the full mesh. "
       + "Drag to rotate, scroll to zoom.";
+    $("metadata").textContent += ` Read by: ${readerText(result)}.`;
     const failed = result.metrics.filter((metric) => metric.error).length;
-    status(failed ? `Analysis complete. ${failed} parameters unavailable; see results.` : "Analysis complete.");
+    status((failed ? `Analysis complete. ${failed} parameters unavailable; see results.` : "Analysis complete.")
+      + result.warnings.map((text) => ` Warning: ${text}`).join(""), result.warnings.length > 0);
     draw();
   } catch (error) {
     status(error.message, true);

@@ -45,7 +45,7 @@ def test_public_api_and_result_shape(tetra_mesh):
     payload = json.loads(json.dumps(result.to_dict(), allow_nan=False))
     assert set(payload) == {
         "source_name", "input_units", "scale_factor", "axes_method", "metrics",
-        "output_units", "output_scale",
+        "output_units", "output_scale", "reader", "reader_version", "warnings",
     }
     assert payload["axes_method"] == "pca"
     assert set(payload["metrics"][0]) == {

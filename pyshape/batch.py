@@ -71,8 +71,9 @@ def summary_csv_text(
     """One row per particle and one column per metric, with units in the header.
 
     Columns are ``keys`` or, by default, every default-selected metric of the
-    first result. Unavailable values are left empty. ``names`` replaces the
-    ``source_file`` column (default: each result's ``source_name``).
+    first result, followed by ``reader`` and ``warnings`` (joined by ``" | "``).
+    Unavailable values are left empty. ``names`` replaces the ``source_file``
+    column (default: each result's ``source_name``).
     """
     results = list(results)
     names = [r.source_name or "" for r in results] if names is None else list(names)
@@ -92,6 +93,7 @@ def summary_csv_text(
     for key in keys:
         unit = unit_label(key, first.input_units, ascii=True, output_units=first.output_units)
         header.append(f"{key} [{unit}]" if unit else key)
+    header += ["reader", "warnings"]
     stream = StringIO(newline="")
     writer = csv.writer(stream)
     writer.writerow(header)
@@ -100,6 +102,7 @@ def summary_csv_text(
         writer.writerow(
             [name]
             + ["" if values.get(key) is None else values[key] for key in keys]
+            + [result.reader or "", " | ".join(result.warnings)]
         )
     return stream.getvalue()
 
@@ -117,11 +120,13 @@ def analyze_folder(
     recursive: bool = False,
     summary: bool = False,
     progress: Optional[Callable[[int, int, BatchItem], None]] = None,
+    strict_stl: bool = False,
 ) -> BatchResult:
     """Analyse every supported particle file in ``folder``.
 
-    ``units``, ``axes`` and ``output_units`` are as in :func:`pyshape.analyze_file`
-    and apply to every file. With ``write_csv`` (default) each result is
+    ``units``, ``axes``, ``output_units`` and ``strict_stl`` are as in
+    :func:`pyshape.analyze_file` and apply to every file; warnings (e.g. an STL
+    file read by the trimesh fallback) are in each item's ``result.warnings``. With ``write_csv`` (default) each result is
     written next to its input as ``<stem><suffix>.csv`` (``keys`` selects the
     metrics, as in :meth:`AnalysisResult.to_csv`). Existing CSVs are
     overwritten unless ``avoid_overwrite``, which appends ``_1``, ``_2``, ...
@@ -146,7 +151,9 @@ def analyze_folder(
     for index, path in enumerate(files, 1):
         item = BatchItem(path)
         try:
-            item.result = analyze_file(path, units=units, axes=axes, output_units=output_units)
+            item.result = analyze_file(
+                path, units=units, axes=axes, output_units=output_units, strict_stl=strict_stl,
+            )
             if write_csv:
                 text = item.result.to_csv(keys)
                 target = make_export_path(path, suffix, avoid_overwrite)
@@ -193,19 +200,24 @@ def main(argv: Optional[list[str]] = None) -> int:
     parser.add_argument("--recursive", action="store_true", help="include subfolders")
     parser.add_argument("--summary", action="store_true",
                         help=f"also write {SUMMARY_NAME} with one row per particle")
+    parser.add_argument("--strict-stl", action="store_true",
+                        help="read STL files only with the built-in parser: a file it "
+                             "rejects fails instead of being retried with trimesh")
     args = parser.parse_args(argv)
 
     def report(done: int, total: int, item: BatchItem) -> None:
         name = item.path.relative_to(args.folder) if item.path.is_relative_to(args.folder) else item.path
         outcome = f"-> {item.csv_path.name}" if item.ok and item.csv_path else f"FAILED: {item.error}"
         print(f"[{done}/{total}] {name} {outcome}", flush=True)
+        for text in item.result.warnings if item.result is not None else ():
+            print(f"    warning: {text}", flush=True)
 
     try:
         batch = analyze_folder(
             args.folder, units=args.units, axes=args.axes, output_units=args.output_units,
             keys=None if args.keys is None else args.keys.split(","), suffix=args.suffix,
             avoid_overwrite=args.no_overwrite, recursive=args.recursive,
-            summary=args.summary, progress=report,
+            summary=args.summary, progress=report, strict_stl=args.strict_stl,
         )
     except (ValueError, NotADirectoryError) as exc:
         parser.error(str(exc))

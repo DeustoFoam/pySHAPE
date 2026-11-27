@@ -17,7 +17,7 @@ from pydantic import BaseModel, Field
 from . import __version__
 from .analysis import (
     AXES_LABELS, LENGTH_POWERS, OUTPUT_UNITS, UNIT_SCALES,
-    AnalysisResult, analyze_mesh, compute_metrics, scale_nodes,
+    AnalysisResult, analyze_mesh, attach_source, compute_metrics, scale_nodes,
 )
 from . import io as io_module
 from .io import NATIVE_EXTENSIONS, SUPPORTED_EXTENSIONS, load_geometry
@@ -60,6 +60,13 @@ class AnalysisResponse(BaseModel):
     axes_method: str = Field(description="How S, I and L were measured: pca or min_volume.")
     output_units: str = Field(description="Length unit of the results, or as-is.")
     output_scale: float = Field(description="Factor applied to lengths after conversion to metres.")
+    reader: Optional[str] = Field(description="Reader of the file: `builtin-stl` (STL, built-in "
+                                  "parser), `trimesh` (other formats) or `trimesh-fallback` (an "
+                                  "STL file rejected by the built-in parser and read by trimesh).")
+    reader_version: Optional[str] = Field(description="trimesh version when trimesh read the "
+                                          "file, otherwise null.")
+    warnings: list[str] = Field(description="Notes about the input, e.g. why an STL file was "
+                                "read by the trimesh fallback. Empty for most files.")
     preview: Optional[Preview] = Field(None, description="Only with `include_preview=true`.")
     csv: Optional[str] = Field(None, description="Only with `include_csv=true`: the CSV text "
                                "that `/api/export` returns for the same request.")
@@ -120,9 +127,10 @@ OUTPUT_DOC = ("Length unit of the results: areas in its square, volumes in its c
 KEYS_DOC = ("Comma-separated metric keys to export, e.g. `volume,convexity` (see the table "
             "of metric keys above). Default: the keys exported by default. An unknown or "
             "unavailable key gives 422.")
-FILE_DOC = (f"Mesh file, up to {MAX_UPLOAD_BYTES // 2**20} MiB: STL (ASCII or binary; native, "
-            f"no extra package needed), or OBJ, PLY, OFF, GLB, 3MF or DAE (read by trimesh). The reader is chosen by the extension "
-            f"({ACCEPTED}, any case).")
+FILE_DOC = (f"Mesh file, up to {MAX_UPLOAD_BYTES // 2**20} MiB: STL (ASCII or binary, read by "
+            "pySHAPE's built-in parser, no extra package needed), or OBJ, PLY, OFF, GLB, 3MF or "
+            f"DAE (read by trimesh). The reader is chosen by the extension ({ACCEPTED}, any "
+            "case) and returned as `reader`.")
 
 API_DESCRIPTION = f"""
 Three-dimensional particle shape analysis: the same results as the pySHAPE Python
@@ -139,8 +147,11 @@ curl -F "file=@particle.stl" -F "units=mm" -F "keys=volume,convexity" \\
 ```
 
 **Formats and limits.** {ACCEPTED} (any case), up to {MAX_UPLOAD_BYTES // 2**20} MiB.
-STL is the native format and needs no extra package; the other formats are read by
-trimesh. Each upload must be a
+STL is the native format: it is always read by pySHAPE's built-in parser, which needs
+no extra package. If the parser rejects an STL file and trimesh is installed, trimesh
+is tried: the response then has `reader: "trimesh-fallback"` and a `warnings` entry
+with the parser's reason. The other formats are read by trimesh (`reader: "trimesh"`).
+Each upload must be a
 single self-contained file: the text glTF format (`.gltf`), whose buffers are usually
 separate files, is not accepted (export `.glb`), and references of OBJ or DAE files
 to other files (materials, textures) are not available. Every mesh is then prepared in the same way (orientation of closed
@@ -236,7 +247,7 @@ def _analyze_upload(
             raise HTTPException(
                 503, f"Reading {extension} files needs a package that is not installed on "
                 f"the server: {exc}") from exc
-        except ValueError as exc:
+        except ValueError as exc:  # includes io.STLParseError
             raise HTTPException(422, str(exc)) from exc
         except Exception as exc:  # third-party readers raise many exception types
             if extension in NATIVE_EXTENSIONS:
@@ -251,7 +262,7 @@ def _analyze_upload(
             raise HTTPException(422, str(exc)) from exc
         except ImportError as exc:
             raise HTTPException(503, str(exc)) from exc
-        result.source_name = name
+        attach_source(result, geometry, name)  # file name, reader and load warnings
         nodes, _ = scale_nodes(geometry.nodes, units)
         return result, nodes, geometry.faces
 
@@ -374,10 +385,12 @@ def create_app() -> FastAPI:
         "/api/export", tags=["analysis"], summary="Analyse a mesh file (CSV download)",
         response_class=Response,
         responses={
-            200: {"description": "CSV with columns parameter, value, unit; the second row "
-                                 "names the source file.",
+            200: {"description": "CSV with columns parameter, value, unit. The first rows "
+                                 "name the source file and its reader (`reader`, and "
+                                 "`reader_version` when trimesh read it), then one `warning` "
+                                 "row per warning, then the results.",
                   "content": {"text/csv": {"schema": {"type": "string"}, "example":
-                      "parameter,value,unit\nsource_file,particle.stl,\n"
+                      "parameter,value,unit\nsource_file,particle.stl,\nreader,builtin-stl,\n"
                       "volume,0.1666666666666667,mm^3\nconvexity,1.0,\n"}}},
             **UPLOAD_ERRORS,
         },
