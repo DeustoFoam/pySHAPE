@@ -11,7 +11,8 @@ full axis lengths (twice the semi-axes c <= b <= a):
     It needs a closed surface, no fitting and no extra dependency. It is
     unique, rotation-invariant and insensitive to vertex density. Its volume
     4/3 pi a b c is in general not V, and its axes are not enclosing
-    dimensions: for angular particles they are shorter than box dimensions.
+    dimensions: they differ from box dimensions by a shape-dependent factor
+    (for a cuboid, sqrt(5/3) ~ 1.29 times the sides).
 
 ``fitted_ellipsoid``
     Least-squares fit of a quadric

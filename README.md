@@ -288,9 +288,10 @@ warning.
     error. At least nine vertices are needed. `fitted_ellipsoid(nodes, faces,
     weighting="none")` reproduces SHAPE's unweighted fit.
 
-  Ellipsoid axes are not enclosing dimensions: for angular particles they are
-  shorter than box dimensions, and a thin tip or corner adds reach but little
-  material, so the form indices and Zingg classes from them are not directly
+  Ellipsoid axes are not enclosing dimensions: they differ from box dimensions
+  by a factor that depends on the shape (the inertia-equivalent ellipsoid of a
+  cuboid has axes √(5/3) ≈ 1.29 times its sides), and a thin tip or corner adds
+  reach but little material, so the form indices and Zingg classes from them are not directly
   comparable with box-based ones. The equivalent ellipsoid generally does not
   have the particle's volume.
 - Closed, orientable mesh shells have their triangle winding corrected
