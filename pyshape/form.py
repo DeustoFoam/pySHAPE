@@ -138,8 +138,9 @@ def form_parameters_potticary_et_al(S: float, I: float, L: float) -> Tuple[float
 
 
 def form_parameters_angelidakis_et_al(S: float, I: float, L: float) -> Tuple[float, float]:
-    """Flatness and elongation of Angelidakis et al. (2021), as in SHAPE's
-    Form_parameters_Angelidakis_et_al.m, with c, b, a = S, I, L.
+    """Flatness and elongation of Angelidakis et al. (2022, Powder Technol. 396,
+    689-695, Eq. 5; published online in 2021, the year given in SHAPE's
+    Form_parameters_Angelidakis_et_al.m), with c, b, a = S, I, L.
 
     Both lie in [0, 1] and flatness + elongation = (L - S) / (L + S), so the
     feasible chart domain is the triangle below flatness + elongation = 1.
