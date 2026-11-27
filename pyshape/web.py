@@ -38,7 +38,7 @@ class MetricRecord(BaseModel):
     key: str = Field(description="Stable identifier, used in `keys` and in CSV files.")
     label: str = Field(description="Human-readable name.")
     value: Optional[float] = Field(description="Result, or null when unavailable (see `error`).")
-    group: str = Field(description="Group shown in the interfaces, e.g. Geometry, Sphericity.")
+    group: str = Field(description="Group shown in the interfaces, by what the descriptor depends on, e.g. \"Size and mass properties\" or \"Form from S, I, L (PCA box)\".")
     default_selected: bool = Field(description="Exported when no `keys` are given.")
     error: Optional[str] = Field(description="Why the value is unavailable, e.g. open mesh.")
     unit: str = Field(description="Unit of the value, empty for dimensionless results.")

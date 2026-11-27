@@ -600,6 +600,22 @@
    ],
    "returns": "str"
   },
+  "analysis.result_groups": {
+   "bases": [],
+   "deprecated": null,
+   "exported": false,
+   "interface": false,
+   "kind": "function",
+   "params": [
+    {
+     "annotation": "str",
+     "default": "'pca'",
+     "kind": "positional_or_keyword",
+     "name": "axes"
+    }
+   ],
+   "returns": "list[str]"
+  },
   "analysis.scale_nodes": {
    "bases": [],
    "deprecated": null,
