@@ -251,14 +251,30 @@ AXES_METHODS: dict[str, dict[str, object]] = {
         "roughly quadratically with the number of hull vertices.",
         depends_on="SciPy (pyshape[analysis]).", references=("shape2021",)),
     "inertia_ellipsoid": _entry(
-        "Ellipsoid with the same inertia as the particle.",
-        "S, I, L are the axes of the ellipsoid that has the same principal moments of inertia "
-        "as the particle. It needs a closed mesh.",
-        depends_on="A closed mesh."),
+        "Full axes of the ellipsoid with the particle's volume and principal moments of inertia.",
+        "S, I, L are the full axes 2c, 2b, 2a of the uniform ellipsoid that has the particle's "
+        "volume V and principal moments of inertia, along the principal directions of "
+        "inertia. No fitting is involved: the result is unique, independent of the mesh "
+        "orientation and of how vertices are distributed, and gives equal lengths for the "
+        "Platonic solids. For a cuboid the ratios equal the box ratios. The axes are not "
+        "enclosing dimensions: for angular particles they are shorter than box dimensions, "
+        "so Zingg classes and form indices from them are not directly comparable with "
+        "box-based ones. The ellipsoid generally does not have the particle's volume.",
+        formula="a² = 5(I2 + I3 − I1)/(2V), b² = 5(I1 + I3 − I2)/(2V), "
+                "c² = 5(I1 + I2 − I3)/(2V), with I1 ≤ I2 ≤ I3; S = 2c, I = 2b, L = 2a",
+        depends_on="A closed mesh (volume and inertia)."),
     "fitted_ellipsoid": _entry(
-        "Ellipsoid fitted to the surface by least squares.",
-        "S, I, L are the axes of the ellipsoid fitted to the surface points by least squares.",
-        depends_on="The surface points."),
+        "Full axes of the ellipsoid fitted to the surface vertices by least squares.",
+        "S, I, L are the full axes 2c, 2b, 2a of the ellipsoid fitted to the surface vertices "
+        "by algebraic least squares with the constraint A + B + C = 3, as the fitted "
+        "ellipsoid of SHAPE. Unlike SHAPE, each vertex is weighted by its share of the "
+        "surface area, and the fitted quadric is checked: if it is not an ellipsoid (or the "
+        "mesh has fewer than nine vertices), S, I, L and the indices derived from them are "
+        "reported as unavailable. The axes are not enclosing dimensions, so Zingg classes "
+        "and form indices from them are not directly comparable with box-based ones.",
+        formula="A x² + B y² + C z² + 2D xy + 2E xz + 2F yz + 2G x + 2H y + 2I z + J = 0, "
+                "A + B + C = 3; S = 2c, I = 2b, L = 2a",
+        depends_on="The surface vertices (at least nine).", references=("shape2021",)),
 }
 
 CONTROLS: dict[str, dict[str, object]] = {
