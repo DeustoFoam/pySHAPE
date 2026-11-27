@@ -1,5 +1,6 @@
 """STL files: built-in parser first, trimesh only as a recorded fallback (issue #20)."""
 import csv
+import importlib.util
 import re
 import io as std_io
 import struct
@@ -319,8 +320,26 @@ def _validation_meshes():
     yield "random", *meshes.random_particle(3, subdivisions=3, roughness=0.3)
 
 
+def _is_multi_component(faces):
+    """True if the triangles form more than one vertex-connected component."""
+    parent = np.arange(int(faces.max()) + 1)
+
+    def find(i):
+        while parent[i] != i:
+            parent[i] = parent[parent[i]]
+            i = parent[i]
+        return i
+
+    for a, b, c in faces:
+        ra, rb, rc = find(a), find(b), find(c)
+        parent[rb] = ra
+        parent[find(rc)] = ra
+    return len({find(i) for i in np.unique(faces)}) > 1
+
+
 def test_builtin_parser_and_trimesh_agree(tmp_path):
     trimesh = pytest.importorskip("trimesh")
+    has_union = importlib.util.find_spec("manifold3d") is not None
     files = sorted(ASSETS.glob("*.stl"))
     for name, nodes, faces in _validation_meshes():
         triangles = nodes[faces]
@@ -334,6 +353,8 @@ def test_builtin_parser_and_trimesh_agree(tmp_path):
         nodes, faces = _trimesh_arrays(trimesh, path)
         assert np.array_equal(builtin.nodes, nodes), path.name
         assert np.array_equal(builtin.faces, faces), path.name
+        if not has_union and _is_multi_component(faces):
+            continue  # analysing it needs the solid union (manifold3d)
         for axes in ("pca", "min_volume"):
             assert (analyze_mesh(builtin.nodes, builtin.faces, axes=axes).values
                     == analyze_mesh(nodes, faces, axes=axes).values), (path.name, axes)
