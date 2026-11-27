@@ -82,6 +82,8 @@ INSIDE_RGB = (0.36, 0.43, 0.53)    # darker shade of the same blue
 CAVITY_RGB = (0.93, 0.62, 0.32)    # orange: cavity walls (nested shells)
 CAVITY_INSIDE_RGB = (0.55, 0.36, 0.18)  # darker orange: back of a cavity wall
 PREVIEW_LIGHT = (0.15, -1.1, 0.95)
+# Default opacity of the previews: low, so that inner sides and cavities show through.
+PREVIEW_OPACITY = 0.2
 
 
 def view_direction(elev: float, azim: float) -> np.ndarray:

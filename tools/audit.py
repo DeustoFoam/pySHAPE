@@ -471,7 +471,13 @@ def run_case(case: dict, meshes: dict) -> dict:
         nodes, faces = (np.asarray(a) for a in mesh)
         result = analyze_mesh(nodes, faces, **options)
     data = result.to_dict()
-    excluded = sorted(BOX_KEYS) if case["axes"] == "pca" and not _pca_unique(np.asarray(nodes, float)) else []
+    excluded = []
+    if case["axes"] == "pca":
+        # The PCA box is measured on the envelope (outer surface) of the prepared mesh.
+        from pyshape import prepare_solid
+        envelope = prepare_solid(nodes, faces, cavities=case.get("cavities", "fill")).envelope_nodes
+        if not _pca_unique(np.asarray(envelope, float)):
+            excluded = sorted(BOX_KEYS)
     record = {
         "requires": ["scipy"] + (["manifold3d"] if _components(np.asarray(faces)) > 1 else []),
         "meta": {k: data[k] for k in ("source_name", "input_units", "scale_factor", "axes_method",

@@ -23,7 +23,7 @@ https://doi.org/10.5281/zenodo.24004678).
   the viewer, light blue for the outer side and darker blue for the inner
   side (orange is kept for nested shells), so that
   the inside of the surface showing through openings or depth-sorting gaps is
-  not mistaken for the outside; an opacity control makes the surface
+  not mistaken for the outside; an opacity control (default 20 %) makes the surface
   transparent (in preparation for showing internal shells and cavities).
   Display only; results are unchanged.
 

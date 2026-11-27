@@ -373,9 +373,10 @@ CONTROLS: dict[str, dict[str, object]] = {
         "When a CSV with the same name exists, a progressive number is appended to the new "
         "file name."),
     "opacity": _entry(
-        "Opacity of the surface in the preview.",
-        "Lower values make the surface transparent, so that what lies behind or inside it "
-        "(e.g. the inner side of the surface, or internal shells) can be seen. Display only.",
+        "Opacity of the surface in the preview (default 20 %).",
+        "The default is low (20 %), so that what lies behind or inside the surface (the "
+        "inner side of the surface, cavity walls) shows through; raise it to see the outer "
+        "surface alone. Display only.",
     ),
     "surface_sides": _entry(
         "Light blue: outer side of the surface; dark blue: inner side.",

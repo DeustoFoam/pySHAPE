@@ -43,6 +43,7 @@ from . import descriptors
 from .bounding import AXES_METHODS
 from .preprocess import CAVITY_MODES, prepare_solid
 from .gui_core import (
+    PREVIEW_OPACITY,
     face_normals,
     preview_face_colors,
     view_direction,
@@ -334,8 +335,8 @@ class ShapeGUI(tk.Tk):
         self._tooltip(rotate, "auto_rotate")
         opacity_label = ttk.Label(top, text="Opacity")
         opacity_label.pack(side="left", padx=(16, 4))
-        self.opacity_var = tk.DoubleVar(value=1.0)
-        opacity = ttk.Scale(top, from_=0.2, to=1.0, variable=self.opacity_var, length=120,
+        self.opacity_var = tk.DoubleVar(value=PREVIEW_OPACITY)
+        opacity = ttk.Scale(top, from_=0.05, to=1.0, variable=self.opacity_var, length=120,
                             command=lambda _value: self._recolor_mesh(force=True))
         opacity.pack(side="left")
         self._tooltip(opacity, "opacity")

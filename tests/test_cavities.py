@@ -40,6 +40,7 @@ def test_assets_exist():
 
 def test_default_fill_is_unchanged_and_reports_cavities_as_unavailable():
     # A sphere inside a sphere (e.g. a DEM clump) is solid by default: the outer sphere.
+    pytest.importorskip("manifold3d")  # "fill" merges the shells with Manifold
     result = analyze_file(SYNTHETIC / "hollow_sphere.stl")
     assert result.cavities == "fill"
     assert result.values["volume"] == pytest.approx(_volume(*shells("hollow_sphere")[0]), rel=1e-6)
@@ -75,6 +76,7 @@ def test_form_descriptors_use_the_envelope():
     # the inertia ellipsoid of the envelope. "fill" merges the shells with Manifold
     # (single precision), hence the tolerance.
     pytest.importorskip("scipy")
+    pytest.importorskip("manifold3d")
     path = SYNTHETIC / "cube_with_spherical_void.stl"
     for axes in ("min_volume", "inertia_ellipsoid"):
         fill = analyze_file(path, axes=axes).values
@@ -185,8 +187,9 @@ def test_batch_and_web_accept_cavities(tmp_path):
         assert payload["preview"]["cavity_triangles"]
         assert len(payload["preview"]["triangles"]) + len(payload["preview"]["cavity_triangles"]) \
             == payload["preview"]["shown_faces"]
+        assert client.post("/api/analyze", files={"file": ("p.stl", target.read_bytes())},
+                           data={"cavities": "x"}).status_code == 422
+        pytest.importorskip("manifold3d")  # "fill" merges the shells with Manifold
         fill = client.post("/api/analyze", files={"file": ("p.stl", target.read_bytes())},
                            data={"include_preview": "true"}).json()
         assert fill["preview"]["cavity_triangles"] == []
-        assert client.post("/api/analyze", files={"file": ("p.stl", target.read_bytes())},
-                           data={"cavities": "x"}).status_code == 422

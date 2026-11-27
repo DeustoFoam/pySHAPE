@@ -51,7 +51,10 @@ def test_other_formats_give_the_same_results_as_stl(client, cube_mesh, file_type
     expected, got = _values(stl.json()), _values(other.json())
     assert got.keys() == expected.keys()
     for key, value in expected.items():
-        assert got[key] == pytest.approx(value, rel=1e-9, abs=1e-15), key
+        if value is None:  # unavailable in both (e.g. cavity results with cavities="fill")
+            assert got[key] is None, key
+        else:
+            assert got[key] == pytest.approx(value, rel=1e-9, abs=1e-15), key
     assert got["volume"] == pytest.approx(1e-9)  # 1 mm^3 in m^3
 
 

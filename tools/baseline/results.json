@@ -16456,7 +16456,20 @@
      ""
     ]
    ],
-   "excluded": [],
+   "excluded": [
+    "angelidakis_elongation",
+    "angelidakis_flatness",
+    "axis_I",
+    "axis_L",
+    "axis_S",
+    "kongfonseca_elongation",
+    "kongfonseca_flatness",
+    "potticary_elongation",
+    "potticary_flatness",
+    "sphericity_krumbein",
+    "zingg_IL",
+    "zingg_SI"
+   ],
    "meta": {
     "axes_method": "pca",
     "input_units": "as-is",
@@ -16825,7 +16838,20 @@
      ""
     ]
    ],
-   "excluded": [],
+   "excluded": [
+    "angelidakis_elongation",
+    "angelidakis_flatness",
+    "axis_I",
+    "axis_L",
+    "axis_S",
+    "kongfonseca_elongation",
+    "kongfonseca_flatness",
+    "potticary_elongation",
+    "potticary_flatness",
+    "sphericity_krumbein",
+    "zingg_IL",
+    "zingg_SI"
+   ],
    "meta": {
     "axes_method": "pca",
     "input_units": "as-is",
@@ -21495,20 +21521,7 @@
    ]
   },
   "two_sphere_union|axes=pca": {
-   "excluded": [
-    "angelidakis_elongation",
-    "angelidakis_flatness",
-    "axis_I",
-    "axis_L",
-    "axis_S",
-    "kongfonseca_elongation",
-    "kongfonseca_flatness",
-    "potticary_elongation",
-    "potticary_flatness",
-    "sphericity_krumbein",
-    "zingg_IL",
-    "zingg_SI"
-   ],
+   "excluded": [],
    "meta": {
     "axes_method": "pca",
     "input_units": "as-is",

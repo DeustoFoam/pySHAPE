@@ -126,8 +126,6 @@ $("analyze-form").addEventListener("submit", async (event) => {
     triangles = result.preview.triangles;
     cavityTriangles = result.preview.cavity_triangles || [];
     analysisCavities = cavities;
-    // Cavities are inside the material: make the surface see-through to show them.
-    if (cavityTriangles.length && Number($("opacity").value) > 0.6) $("opacity").value = "0.45";
     zoom = 1;
     const unitNames = { m: "m", mm: "mm", um: "µm", cm: "cm", inch: "in" };
     const out = unitNames[result.output_units];

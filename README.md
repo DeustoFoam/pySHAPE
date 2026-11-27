@@ -335,8 +335,8 @@ warning.
   Shells of the same depth that may overlap (e.g. two overlapping voids) are
   merged with Manifold; a solid with separate cavities needs no extra package.
   `pyshape.prepare_solid` returns the material surface, the envelope and the
-  cavity-wall flags. In the previews, cavity walls are orange (lower the
-  opacity to see them).
+  cavity-wall flags. In the previews, cavity walls are orange; they show
+  through the outer surface at the default opacity (20 %).
 - Each metric has `key`, `label`, `value`, `group`, `default_selected`,
   and `error`. Unavailable values are `None` (`null` in JSON), with an
   explanatory error. Missing SciPy affects only convexity. Other unexpected
@@ -364,7 +364,7 @@ Open <http://127.0.0.1:8000>. The interface has two pages:
 - **Single particle** (`/`): upload a mesh file, choose input units,
   view grouped results, select descriptors, and download CSV. The interactive
   mesh preview supports drag rotation, zoom, an XYZ triad, auto-rotation and
-  an opacity control; the outer side of the surface is light blue and the
+  an opacity control (default 20 %); the outer side of the surface is light blue and the
   inner side darker blue.
   For large meshes only the preview is sampled (at most 5000 triangles);
   analysis always uses the full mesh.
@@ -493,7 +493,8 @@ It lets you:
   mesh's bounding box and a slow auto-rotation (pauses while you drag to
   rotate manually). The outer side of the surface is light blue and the inner
   side darker blue, so the inside showing through an opening is not mistaken
-  for the outside; the opacity slider makes the surface transparent.
+  for the outside; the surface is drawn at 20 % opacity by default (slider
+  from 5 % to opaque).
 
 ## Tests
 
