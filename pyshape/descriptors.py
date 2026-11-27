@@ -259,7 +259,8 @@ AXES_METHODS: dict[str, dict[str, object]] = {
         "inertia. No fitting is involved: the result is unique, independent of the mesh "
         "orientation and of how vertices are distributed, and gives equal lengths for the "
         "Platonic solids. For a cuboid the ratios equal the box ratios. The axes are not "
-        "enclosing dimensions: for angular particles they are shorter than box dimensions, "
+        "enclosing dimensions: they differ from box dimensions by a factor that depends on "
+        "the shape (for a cuboid, √(5/3) ≈ 1.29 times the sides), "
         "so Zingg classes and form indices from them are not directly comparable with "
         "box-based ones. The ellipsoid generally does not have the particle's volume.",
         formula="a² = 5(I2 + I3 − I1)/(2V), b² = 5(I1 + I3 − I2)/(2V), "
