@@ -44,6 +44,7 @@ Repository = "https://github.com/DeustoFoam/pySHAPE"
 pyshape-gui = "pyshape.gui:main"
 pyshape-web = "pyshape.web:main"
 pyshape-batch = "pyshape.batch:main"
+pyshape-repair = "pyshape.repair:main"
 
 [tool.setuptools.dynamic]
 version = {attr = "pyshape.__version__"}

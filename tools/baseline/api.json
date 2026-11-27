@@ -12,6 +12,7 @@
   "analysis.form_parameters_zingg": "form.form_parameters_zingg",
   "analysis.inertia_ellipsoid_from_moments": "ellipsoid.inertia_ellipsoid_from_moments",
   "analysis.load_geometry": "io.load_geometry",
+  "analysis.open_mesh_warning": "repair.open_mesh_warning",
   "analysis.oriented_box": "bounding.oriented_box",
   "analysis.prepare_mesh": "preprocess.prepare_mesh",
   "analysis.prepare_solid": "preprocess.prepare_solid",
@@ -34,6 +35,7 @@
   "gui.LoadedGeometry": "gui_core.LoadedGeometry",
   "gui.Metric": "gui_core.Metric",
   "gui.OUTPUT_UNITS": "analysis.OUTPUT_UNITS",
+  "gui.PREVIEW_OPACITY": "gui_core.PREVIEW_OPACITY",
   "gui.SUPPORTED_EXTENSIONS": "gui_core.SUPPORTED_EXTENSIONS",
   "gui.UNIT_SCALES": "analysis.UNIT_SCALES",
   "gui.apply_output_units": "analysis.apply_output_units",
@@ -43,6 +45,7 @@
   "gui.geo_metadata_rows": "gui_core.geo_metadata_rows",
   "gui.load_geometry": "gui_core.load_geometry",
   "gui.make_export_path": "gui_core.make_export_path",
+  "gui.open_mesh_warning": "repair.open_mesh_warning",
   "gui.prepare_solid": "preprocess.prepare_solid",
   "gui.preview_face_colors": "gui_core.preview_face_colors",
   "gui.reader_text": "gui_core.reader_text",
@@ -65,6 +68,8 @@
   "gui_core.mesh_volume_centroid": "analysis.mesh_volume_centroid",
   "gui_core.write_csv": "export.write_csv",
   "preprocess.surface_area": "geometry.surface_area",
+  "repair.surface_area": "geometry.surface_area",
+  "repair.validate_mesh": "preprocess.validate_mesh",
   "web.AXES_LABELS": "analysis.AXES_LABELS",
   "web.AnalysisResult": "analysis.AnalysisResult",
   "web.CAVITY_MODES": "preprocess.CAVITY_MODES",
@@ -125,6 +130,37 @@
    "options": {},
    "target": "pyshape.gui:main"
   },
+  "pyshape-repair": {
+   "options": {
+    "--check": {
+     "action": "'store_true'"
+    },
+    "--no-overwrite": {
+     "action": "'store_true'"
+    },
+    "--rel-tol": {
+     "default": "DEFAULT_REL_TOL",
+     "type": "float"
+    },
+    "--strict-stl": {
+     "action": "'store_true'"
+    },
+    "--suffix": {
+     "default": "'_repaired'"
+    },
+    "--tol": {
+     "type": "float"
+    },
+    "-o --output": {
+     "type": "Path"
+    },
+    "files": {
+     "nargs": "'+'",
+     "type": "Path"
+    }
+   },
+   "target": "pyshape.repair:main"
+  },
   "pyshape-web": {
    "options": {
     "--host": {
@@ -147,15 +183,18 @@
   "ELLIPSOID_METHODS",
   "Ellipsoid",
   "LoadedGeometry",
+  "MeshDiagnosis",
   "Metric",
   "OrientedBox",
   "PreparedSolid",
+  "RepairReport",
   "analyze_file",
   "analyze_folder",
   "analyze_mesh",
   "closed_surface_inertia_tensor",
   "compute_metrics",
   "convexity",
+  "diagnose_mesh",
   "find_particle_files",
   "fitted_ellipsoid",
   "form_functions_1",
@@ -172,6 +211,7 @@
   "pca_box",
   "prepare_mesh",
   "prepare_solid",
+  "repair_mesh",
   "roughness_functions",
   "sa",
   "sdq",
@@ -182,7 +222,8 @@
   "ssk",
   "surface_area",
   "surface_orientation_tensor",
-  "volume_centroid_inertia_tensor"
+  "volume_centroid_inertia_tensor",
+  "write_stl"
  ],
  "objects": {
   "analysis.AnalysisResult": {
@@ -2160,6 +2201,46 @@
    ],
    "returns": "Tuple[np.ndarray, np.ndarray]"
   },
+  "io.write_stl": {
+   "bases": [],
+   "deprecated": null,
+   "exported": true,
+   "interface": false,
+   "kind": "function",
+   "params": [
+    {
+     "annotation": "str | Path",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "path"
+    },
+    {
+     "annotation": "np.ndarray",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "nodes"
+    },
+    {
+     "annotation": "np.ndarray",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "faces"
+    },
+    {
+     "annotation": "Optional[bool]",
+     "default": "None",
+     "kind": "keyword_only",
+     "name": "binary"
+    },
+    {
+     "annotation": "str",
+     "default": "'pySHAPE'",
+     "kind": "keyword_only",
+     "name": "name"
+    }
+   ],
+   "returns": "None"
+  },
   "preprocess.PreparedSolid": {
    "bases": [],
    "deprecated": null,
@@ -2289,6 +2370,393 @@
     }
    ],
    "returns": "tuple[np.ndarray, np.ndarray]"
+  },
+  "repair.MeshDiagnosis": {
+   "bases": [],
+   "deprecated": null,
+   "exported": true,
+   "interface": false,
+   "kind": "class",
+   "params": [
+    {
+     "annotation": "int",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "n_vertices"
+    },
+    {
+     "annotation": "int",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "n_faces"
+    },
+    {
+     "annotation": "int",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "n_boundary_edges"
+    },
+    {
+     "annotation": "int",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "n_nonmanifold_edges"
+    },
+    {
+     "annotation": "int",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "n_boundary_vertices"
+    },
+    {
+     "annotation": "int",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "n_near_boundary_vertices"
+    },
+    {
+     "annotation": "int",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "n_degenerate_faces"
+    },
+    {
+     "annotation": "int",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "n_duplicate_faces"
+    },
+    {
+     "annotation": "int",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "n_zero_area_faces"
+    },
+    {
+     "annotation": "float",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "median_edge_length"
+    },
+    {
+     "annotation": "float",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "tolerance"
+    },
+    {
+     "annotation": "Optional[float]",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "rel_tol"
+    }
+   ],
+   "returns": null
+  },
+  "repair.MeshDiagnosis.closed": {
+   "bases": [],
+   "deprecated": null,
+   "exported": true,
+   "interface": false,
+   "kind": "property",
+   "params": [],
+   "returns": "bool"
+  },
+  "repair.MeshDiagnosis.message": {
+   "bases": [],
+   "deprecated": null,
+   "exported": true,
+   "interface": false,
+   "kind": "method",
+   "params": [],
+   "returns": "Optional[str]"
+  },
+  "repair.MeshDiagnosis.to_dict": {
+   "bases": [],
+   "deprecated": null,
+   "exported": true,
+   "interface": false,
+   "kind": "method",
+   "params": [],
+   "returns": "dict[str, object]"
+  },
+  "repair.RepairReport": {
+   "bases": [],
+   "deprecated": null,
+   "exported": true,
+   "interface": false,
+   "kind": "class",
+   "params": [
+    {
+     "annotation": "float",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "tolerance"
+    },
+    {
+     "annotation": "Optional[float]",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "rel_tol"
+    },
+    {
+     "annotation": "float",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "median_edge_length"
+    },
+    {
+     "annotation": "int",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "n_vertices_before"
+    },
+    {
+     "annotation": "int",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "n_faces_before"
+    },
+    {
+     "annotation": "int",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "merged_coincident_vertices"
+    },
+    {
+     "annotation": "int",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "removed_degenerate_faces"
+    },
+    {
+     "annotation": "int",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "removed_duplicate_faces"
+    },
+    {
+     "annotation": "int",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "stitched_vertices"
+    },
+    {
+     "annotation": "float",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "max_displacement"
+    },
+    {
+     "annotation": "int",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "removed_collapsed_faces"
+    },
+    {
+     "annotation": "int",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "removed_unreferenced_vertices"
+    },
+    {
+     "annotation": "int",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "n_vertices_after"
+    },
+    {
+     "annotation": "int",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "n_faces_after"
+    },
+    {
+     "annotation": "int",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "boundary_edges_before"
+    },
+    {
+     "annotation": "int",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "boundary_edges_after"
+    },
+    {
+     "annotation": "int",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "nonmanifold_edges_before"
+    },
+    {
+     "annotation": "int",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "nonmanifold_edges_after"
+    },
+    {
+     "annotation": "float",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "surface_area_before"
+    },
+    {
+     "annotation": "float",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "surface_area_after"
+    },
+    {
+     "annotation": "Optional[str]",
+     "default": "None",
+     "kind": "positional_or_keyword",
+     "name": "refused"
+    }
+   ],
+   "returns": null
+  },
+  "repair.RepairReport.changed": {
+   "bases": [],
+   "deprecated": null,
+   "exported": true,
+   "interface": false,
+   "kind": "property",
+   "params": [],
+   "returns": "bool"
+  },
+  "repair.RepairReport.closed": {
+   "bases": [],
+   "deprecated": null,
+   "exported": true,
+   "interface": false,
+   "kind": "property",
+   "params": [],
+   "returns": "bool"
+  },
+  "repair.RepairReport.summary": {
+   "bases": [],
+   "deprecated": null,
+   "exported": true,
+   "interface": false,
+   "kind": "method",
+   "params": [],
+   "returns": "list[str]"
+  },
+  "repair.RepairReport.to_dict": {
+   "bases": [],
+   "deprecated": null,
+   "exported": true,
+   "interface": false,
+   "kind": "method",
+   "params": [],
+   "returns": "dict[str, object]"
+  },
+  "repair.diagnose_mesh": {
+   "bases": [],
+   "deprecated": null,
+   "exported": true,
+   "interface": false,
+   "kind": "function",
+   "params": [
+    {
+     "annotation": "ArrayLike",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "nodes"
+    },
+    {
+     "annotation": "ArrayLike",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "faces"
+    },
+    {
+     "annotation": "Optional[float]",
+     "default": "None",
+     "kind": "keyword_only",
+     "name": "tol"
+    },
+    {
+     "annotation": "float",
+     "default": "DEFAULT_REL_TOL",
+     "kind": "keyword_only",
+     "name": "rel_tol"
+    }
+   ],
+   "returns": "MeshDiagnosis"
+  },
+  "repair.main": {
+   "bases": [],
+   "deprecated": null,
+   "exported": false,
+   "interface": false,
+   "kind": "function",
+   "params": [
+    {
+     "annotation": "Optional[Sequence[str]]",
+     "default": "None",
+     "kind": "positional_or_keyword",
+     "name": "argv"
+    }
+   ],
+   "returns": "int"
+  },
+  "repair.open_mesh_warning": {
+   "bases": [],
+   "deprecated": null,
+   "exported": false,
+   "interface": false,
+   "kind": "function",
+   "params": [
+    {
+     "annotation": "ArrayLike",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "nodes"
+    },
+    {
+     "annotation": "ArrayLike",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "faces"
+    }
+   ],
+   "returns": "Optional[str]"
+  },
+  "repair.repair_mesh": {
+   "bases": [],
+   "deprecated": null,
+   "exported": true,
+   "interface": false,
+   "kind": "function",
+   "params": [
+    {
+     "annotation": "ArrayLike",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "nodes"
+    },
+    {
+     "annotation": "ArrayLike",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "faces"
+    },
+    {
+     "annotation": "Optional[float]",
+     "default": "None",
+     "kind": "keyword_only",
+     "name": "tol"
+    },
+    {
+     "annotation": "float",
+     "default": "DEFAULT_REL_TOL",
+     "kind": "keyword_only",
+     "name": "rel_tol"
+    }
+   ],
+   "returns": "tuple[np.ndarray, np.ndarray, RepairReport]"
   },
   "roughness.roughness_functions": {
    "bases": [],

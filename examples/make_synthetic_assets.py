@@ -92,6 +92,19 @@ def torus(major: float, minor: float, n_ring: int = 64, n_section: int = 24):
     return nodes, np.array(faces)
 
 
+def seam_gaps(nodes, faces, gap: float):
+    """Split a closed mesh along z = 0: the upper triangles get their own copies of the
+    seam vertices, moved outwards by ``gap``."""
+    upper = nodes[faces].mean(axis=1)[:, 2] > 0
+    seam = np.intersect1d(np.unique(faces[upper]), np.unique(faces[~upper]))
+    remap = np.arange(len(nodes))
+    remap[seam] = np.arange(len(nodes), len(nodes) + len(seam))
+    moved = nodes[seam] * (1.0 + gap / np.linalg.norm(nodes[seam], axis=1))[:, None]
+    new_faces = faces.copy()
+    new_faces[upper] = remap[faces[upper]]
+    return np.vstack([nodes, moved]), new_faces
+
+
 def rotation(a: float, b: float, c: float):
     rx = np.array([[1, 0, 0], [0, np.cos(a), -np.sin(a)], [0, np.sin(a), np.cos(a)]])
     ry = np.array([[np.cos(b), 0, np.sin(b)], [0, 1, 0], [-np.sin(b), 0, np.cos(b)]])
@@ -130,6 +143,7 @@ def catalogue():
     tetra = (np.array([[1, 1, 1], [1, -1, -1], [-1, 1, -1], [-1, -1, 1]], float),
              np.array([[0, 1, 2], [0, 3, 1], [0, 2, 3], [1, 3, 2]]))
     big_cube = subdivide_flat(*cuboid(2.0, 2.0, 2.0), 3)
+    gap_nodes, gap_faces = seam_gaps(*s3, 1e-6)
     return {
         "sphere": (*s4, "Sphere, radius 1 (5,120 triangles): S = I = L, sphericities close to 1."),
         "ellipsoid_3_2_1": (ellipsoid, s4[1], "Scalene ellipsoid, semi-axes 3, 2, 1, rotated and "
@@ -148,6 +162,10 @@ def catalogue():
         "open_ellipsoid": (open_nodes, open_faces, "Ellipsoid with one end cut off (open "
                            "surface): volume-based results unavailable; the preview shows the "
                            "inner side through the opening."),
+        "sphere_with_gaps": (gap_nodes, gap_faces, "Sphere of radius 1 whose hemispheres do "
+                             "not share their seam vertices: the upper copies lie 1e-6 further "
+                             "out, as after an export that rounds each patch separately. Open "
+                             "surface; pyshape-repair closes it."),
         "hollow_sphere": (*combine(s3, icosphere(3, 0.5)),
                           "Sphere of radius 1 with a concentric spherical cavity of radius 0.5; "
                           "both shells wound outwards in the file (cavities are found by "

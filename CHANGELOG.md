@@ -4,6 +4,32 @@ All notable changes to pySHAPE. Versions follow the tags of the GitHub
 repository; each release is archived on Zenodo (all versions:
 https://doi.org/10.5281/zenodo.24004678).
 
+## Unreleased
+
+### New
+- Mesh diagnosis and repair (#3). The analysis is unchanged and never repairs
+  a mesh. For an open or non-manifold mesh, the result `warnings` (and so the
+  CSV files, the batch summary and both interfaces) say whether the openings
+  look like small gaps left by export or rounding (boundary vertices within a
+  tolerance of another boundary vertex) or like holes. New
+  `pyshape.diagnose_mesh` / `MeshDiagnosis`.
+- `pyshape-repair` command and `pyshape.repair_mesh` / `RepairReport`: merge
+  coincident vertices, remove degenerate and duplicate triangles, and stitch
+  boundary vertices within a tolerance (default 1e-3 x the median edge
+  length; only boundary vertices move, by at most the tolerance; no chaining;
+  refused if it would create non-manifold edges). Holes are not filled. The
+  repaired mesh is written to a new file with a JSON report (every step, the
+  largest displacement, area before and after, pySHAPE version, SHA-256 of
+  the input).
+- `pyshape.write_stl`: binary STL when lossless, otherwise ASCII with 17
+  significant digits.
+- `examples/assets/synthetic/sphere_with_gaps.stl`: a sphere whose
+  hemispheres do not share their seam vertices (gaps of 1e-6).
+
+### Development
+- `tools/audit.py`: reference cases for the open synthetic files
+  (`open_ellipsoid`, `sphere_with_gaps`), including their warnings.
+
 ## 0.2.0 (2026-11-27)
 
 ### New

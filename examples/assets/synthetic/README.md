@@ -13,6 +13,7 @@ A fixed collection of synthetic particles for tests, examples and trying the int
 | `rough_particle.stl` | 5,120 | Irregular, non-convex particle (seeded). |
 | `two_spheres_overlapping.stl` | 2,560 | Two overlapping spheres (radii 1 and 0.6): a clump analysed as their solid union. |
 | `open_ellipsoid.stl` | 1,088 | Ellipsoid with one end cut off (open surface): volume-based results unavailable; the preview shows the inner side through the opening. |
+| `sphere_with_gaps.stl` | 1,280 | Sphere of radius 1 whose hemispheres do not share their seam vertices: the upper copies lie 1e-6 further out, as after an export that rounds each patch separately. Open surface; pyshape-repair closes it. |
 | `hollow_sphere.stl` | 2,560 | Sphere of radius 1 with a concentric spherical cavity of radius 0.5; both shells wound outwards in the file (cavities are found by nesting). cavities='keep': porosity 0.125; 'fill': solid sphere. |
 | `cube_with_spherical_void.stl` | 2,048 | Cube of side 2 with an off-centre spherical cavity (radius 0.5, wound inwards in the file): the material centroid moves away from the void. |
 | `sphere_with_two_cavities.stl` | 3,840 | Sphere of radius 2 with two separate spherical cavities (radii 0.5 and 0.4): n_cavities = 2. |

@@ -317,3 +317,45 @@ def load_stl(
     if note:
         warnings.warn(note, STLFallbackWarning, stacklevel=2)
     return nodes, faces
+
+
+def write_stl(
+    path: str | Path, nodes: np.ndarray, faces: np.ndarray, *, binary: Optional[bool] = None,
+    name: str = "pySHAPE",
+) -> None:
+    """Write a triangle mesh as an STL file that the built-in parser reads back exactly.
+
+    With ``binary=None`` (default) the file is binary when every coordinate is
+    exactly representable in single precision (as for a mesh read from a
+    binary STL file), so nothing is rounded, and ASCII with 17 significant
+    digits otherwise. ``binary=True`` rounds the coordinates to single
+    precision. Facet normals are computed from the winding. ``name`` goes in
+    the header (binary) or after ``solid`` (ASCII).
+    """
+    vertices = np.asarray(nodes, dtype=np.float64)
+    tri = vertices[np.asarray(faces, dtype=np.intp)]
+    normals = np.cross(tri[:, 1] - tri[:, 0], tri[:, 2] - tri[:, 0])
+    lengths = np.linalg.norm(normals, axis=1, keepdims=True)
+    normals = np.divide(normals, lengths, out=np.zeros_like(normals), where=lengths > 0)
+    if binary is None:
+        binary = bool(np.array_equal(vertices.astype(np.float32).astype(np.float64), vertices))
+    label = " ".join(name.split()) or "pySHAPE"
+    if binary:
+        records = np.zeros(len(tri), dtype=_FACET)
+        records["normal"], records["v"] = normals, tri
+        header = label.encode("ascii", "replace")[:80].ljust(80, b" ")
+        if header[:5].lower() == b"solid":
+            header = b"pySHAPE " + header[:72]
+        with Path(path).open("wb") as stream:
+            stream.write(header + struct.pack("<I", len(tri)))
+            stream.write(records.tobytes())
+        return
+    lines = [f"solid {label}"]
+    for normal, corners in zip(normals, tri):
+        lines.append("  facet normal {:.17g} {:.17g} {:.17g}".format(*normal))
+        lines.append("    outer loop")
+        lines.extend("      vertex {:.17g} {:.17g} {:.17g}".format(*corner) for corner in corners)
+        lines.append("    endloop")
+        lines.append("  endfacet")
+    lines.append(f"endsolid {label}")
+    Path(path).write_text("\n".join(lines) + "\n", encoding="ascii", errors="replace")
