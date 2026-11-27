@@ -6,6 +6,7 @@ available from :mod:`pyshape.analysis` for compatibility.
 """
 from __future__ import annotations
 
+from dataclasses import dataclass
 from importlib import import_module
 from typing import Optional
 
@@ -14,7 +15,11 @@ from numpy.typing import ArrayLike
 
 from .geometry import surface_area
 
-__all__ = ["prepare_mesh", "validate_mesh"]
+__all__ = ["CAVITY_MODES", "PreparedSolid", "prepare_mesh", "prepare_solid", "validate_mesh"]
+
+# How nested closed shells are treated: "fill" (every shell is solid; default)
+# or "keep" (even-odd nesting: a shell inside one other shell is a cavity).
+CAVITY_MODES = ("fill", "keep")
 
 
 def validate_mesh(nodes: ArrayLike, faces: ArrayLike) -> tuple[np.ndarray, np.ndarray]:
@@ -57,7 +62,9 @@ def _volume_error(faces: np.ndarray) -> Optional[str]:
     return None
 
 
-def prepare_mesh(nodes: ArrayLike, faces: ArrayLike) -> tuple[np.ndarray, np.ndarray]:
+def prepare_mesh(
+    nodes: ArrayLike, faces: ArrayLike, *, cavities: str = "fill",
+) -> tuple[np.ndarray, np.ndarray]:
     """Validate a triangle mesh, orient its closed shells outwards and merge them.
 
     This is the first step of :func:`pyshape.analysis.compute_metrics`, and
@@ -81,9 +88,13 @@ def prepare_mesh(nodes: ArrayLike, faces: ArrayLike) -> tuple[np.ndarray, np.nda
        in the same direction as the triangle it is reached from is reversed.
     4. Each shell is reversed as a whole if its signed volume is negative, so
        that its normals point outwards.
-    5. Two or more closed shells are treated as solid components (not cavities)
-       and merged by a Boolean union with Manifold, so that overlapping material
-       is counted once and internal surfaces are removed.
+    5. With ``cavities="fill"`` (default), two or more closed shells are treated
+       as solid components (not cavities) and merged by a Boolean union with
+       Manifold, so that overlapping material is counted once and internal
+       surfaces are removed. With ``cavities="keep"``, nested shells follow the
+       even-odd rule (a shell inside one other shell is a cavity, inside two a
+       solid island, and so on): cavity shells are oriented inwards, so that
+       the returned surface bounds the material; see :func:`prepare_solid`.
 
     Parameters
     ----------
@@ -91,6 +102,8 @@ def prepare_mesh(nodes: ArrayLike, faces: ArrayLike) -> tuple[np.ndarray, np.nda
         Vertex coordinates.
     faces : (M, 3) array_like of int
         Triangle vertex indices, zero- or one-based.
+    cavities : {"fill", "keep"}
+        How nested closed shells are treated (step 5).
 
     Returns
     -------
@@ -128,18 +141,168 @@ def prepare_mesh(nodes: ArrayLike, faces: ArrayLike) -> tuple[np.ndarray, np.nda
     >>> oriented_faces.tolist()
     [[2, 1, 0], [1, 3, 0], [2, 3, 1], [0, 3, 2]]
     """
+    solid = prepare_solid(nodes, faces, cavities=cavities)
+    return solid.nodes, solid.faces
+
+
+@dataclass
+class PreparedSolid:
+    """Surface of the material and of its envelope, after :func:`prepare_mesh` step 5.
+
+    ``nodes``/``faces`` bound the material (cavity walls oriented inwards);
+    ``envelope_nodes``/``envelope_faces`` are the outer surface only (cavities
+    filled). ``cavity_faces`` flags the faces of ``faces`` that are cavity
+    walls. ``n_cavities`` counts the cavity shells (``None`` with
+    ``cavities="fill"``, where nested shells are filled). For an open mesh or a
+    single shell, material and envelope are the same surface.
+    """
+
+    nodes: np.ndarray
+    faces: np.ndarray
+    envelope_nodes: np.ndarray
+    envelope_faces: np.ndarray
+    cavity_faces: np.ndarray
+    n_cavities: Optional[int]
+    cavities: str = "fill"
+
+
+def prepare_solid(nodes: ArrayLike, faces: ArrayLike, *, cavities: str = "fill") -> PreparedSolid:
+    """Prepare a mesh as :func:`prepare_mesh` does, and also return its envelope and cavities.
+
+    With ``cavities="keep"``, each closed shell's nesting depth is the number
+    of other shells that contain it completely (tested with generalised
+    winding numbers on a sample of its vertices). Even depths are solid
+    (outer surfaces and islands), odd depths are cavities. Shells of the same
+    depth that may overlap are merged by a Boolean union (Manifold); properly
+    nested levels are combined without Boolean operations, so a single solid
+    with separate cavities needs no extra package. A shell that crosses a shell
+    of different parity (e.g. a cavity breaking through the outer surface) is
+    rejected with a ``ValueError``. The result does not depend on how the shells
+    are wound in the input.
+    """
+    if cavities not in CAVITY_MODES:
+        raise ValueError(f"Unknown cavities mode '{cavities}'. Choose one of: {', '.join(CAVITY_MODES)}")
+    nodes, oriented, components = _oriented_shells(nodes, faces)
+    no_cavities = np.zeros(len(oriented), dtype=bool)
+    if components is None or len(components) == 1:
+        return PreparedSolid(nodes, oriented, nodes, oriented, no_cavities,
+                             None if cavities == "fill" else 0, cavities)
+    if cavities == "fill":
+        merged = _union_shells(nodes, oriented, components)
+        return PreparedSolid(*merged, *merged, np.zeros(len(merged[1]), dtype=bool), None, "fill")
+
+    shells = [oriented[np.asarray(component)] for component in components]
+    depths = _nesting_depths(nodes, shells)
+    levels = []  # (nodes, faces, is_cavity) per depth
+    for depth in sorted(set(depths)):
+        members = [shell for shell, d in zip(shells, depths) if d == depth]
+        level_nodes, level_faces = _merge_level(nodes, members)
+        if depth % 2:
+            level_faces = level_faces[:, ::-1]
+        levels.append((level_nodes, level_faces, depth % 2 == 1))
+    # Overlapping cavity shells merge into one cavity: count the shells after merging.
+    n_cavities = sum(len(_oriented_shells(level_nodes, level_faces)[2] or [])
+                     for level_nodes, level_faces, is_cavity in levels if is_cavity)
+    all_nodes, all_faces, flags, offset = [], [], [], 0
+    for level_nodes, level_faces, is_cavity in levels:
+        all_nodes.append(level_nodes)
+        all_faces.append(level_faces + offset)
+        flags.append(np.full(len(level_faces), is_cavity))
+        offset += len(level_nodes)
+    envelope_nodes, envelope_faces = levels[0][0], levels[0][1]
+    return PreparedSolid(
+        np.vstack(all_nodes), np.vstack(all_faces).astype(np.intp), envelope_nodes,
+        envelope_faces, np.concatenate(flags), n_cavities, "keep")
+
+
+def _compact(nodes: np.ndarray, faces: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+    used, inverse = np.unique(faces, return_inverse=True)
+    return nodes[used], inverse.reshape(faces.shape).astype(np.intp)
+
+
+def _boxes_overlap(a: tuple, b: tuple) -> bool:
+    return bool(np.all(a[0] <= b[1]) and np.all(b[0] <= a[1]))
+
+
+def _merge_level(nodes: np.ndarray, shells: list) -> tuple[np.ndarray, np.ndarray]:
+    """Outward surface of shells of one nesting depth: a union only where boxes overlap."""
+    boxes = [(nodes[s].reshape(-1, 3).min(axis=0), nodes[s].reshape(-1, 3).max(axis=0))
+             for s in shells]
+    overlapping = any(_boxes_overlap(boxes[i], boxes[j])
+                      for i in range(len(shells)) for j in range(i + 1, len(shells)))
+    faces = np.vstack(shells)
+    if not overlapping:
+        return _compact(nodes, faces)
+    offsets = np.cumsum([0] + [len(s) for s in shells])
+    components = [list(range(offsets[k], offsets[k + 1])) for k in range(len(shells))]
+    return _union_shells(nodes, faces, components)
+
+
+def _nesting_depths(nodes: np.ndarray, shells: list, samples: int = 100) -> list[int]:
+    """Number of shells that completely contain each shell; rejects crossing shells."""
+    boxes = [(nodes[s].reshape(-1, 3).min(axis=0), nodes[s].reshape(-1, 3).max(axis=0))
+             for s in shells]
+    contains = np.zeros((len(shells), len(shells)), dtype=bool)   # [i, j]: i contains j
+    partial = np.zeros_like(contains)
+    for j, shell in enumerate(shells):
+        vertices = np.unique(shell)
+        points = nodes[vertices[np.linspace(0, len(vertices) - 1, min(samples, len(vertices))).astype(int)]]
+        for i, other in enumerate(shells):
+            if i == j or not _boxes_overlap(boxes[i], boxes[j]):
+                continue
+            inside = _winding_numbers(points, nodes[other]) > 0.5
+            contains[i, j] = bool(inside.all())
+            partial[i, j] = bool(inside.any() and not inside.all())
+    depths = contains.sum(axis=0).tolist()
+    for i, j in zip(*np.nonzero(partial | partial.T)):
+        if i < j and depths[i] % 2 != depths[j] % 2:
+            raise ValueError(
+                f"closed shells {i} and {j} cross each other although one is a cavity "
+                "and the other solid; cavities must lie entirely inside the material")
+    return depths
+
+
+def _winding_numbers(points: np.ndarray, triangles: np.ndarray) -> np.ndarray:
+    """Generalised winding number of each point with respect to closed, outward triangles.
+
+    About 1 inside the surface and 0 outside (solid angles of Van Oosterom and
+    Strackee, summed over the triangles and divided by 4 pi).
+    """
+    out = np.zeros(len(points))
+    chunk = max(1, 2_000_000 // max(1, len(triangles)))
+    for start in range(0, len(points), chunk):
+        rel = triangles[None, :, :, :] - points[start:start + chunk, None, None, :]
+        a, b, c = rel[..., 0, :], rel[..., 1, :], rel[..., 2, :]
+        la, lb, lc = (np.linalg.norm(v, axis=-1) for v in (a, b, c))
+        numerator = np.einsum("pti,pti->pt", a, np.cross(b, c))
+        denominator = (la * lb * lc + np.einsum("pti,pti->pt", a, b) * lc
+                       + np.einsum("pti,pti->pt", a, c) * lb
+                       + np.einsum("pti,pti->pt", b, c) * la)
+        out[start:start + chunk] = 2 * np.arctan2(numerator, denominator).sum(axis=1)
+    return out / (4 * np.pi)
+
+
+def _oriented_shells(
+    nodes: ArrayLike, faces: ArrayLike,
+) -> tuple[np.ndarray, np.ndarray, Optional[list]]:
+    """Validated nodes, faces with every closed shell oriented outwards, and the shells.
+
+    Steps 1 to 4 of :func:`prepare_mesh`. ``components`` (lists of face indices,
+    one per shell) is None for an open or non-manifold mesh, whose faces are
+    returned unchanged.
+    """
     nodes, faces = validate_mesh(nodes, faces)
     edges = np.concatenate((faces[:, [0, 1]], faces[:, [1, 2]], faces[:, [2, 0]]))
     _, inverse, counts = np.unique(
         np.sort(edges, axis=1), axis=0, return_inverse=True, return_counts=True
     )
     if np.any(counts != 2):
-        return nodes, faces
+        return nodes, faces, None
 
     pairs = np.argsort(inverse, kind="stable").reshape(-1, 2)
     components = _consistent_components(len(faces), edges, pairs)
     if components is not None:
-        return _orient_and_union(nodes, faces, np.zeros(len(faces), dtype=np.int8), components)
+        return _orient(nodes, faces, np.zeros(len(faces), dtype=np.int8), components)
 
     adjacency: list[list[tuple[int, bool]]] = [[] for _ in faces]
     for first, second in pairs:
@@ -167,7 +330,7 @@ def prepare_mesh(nodes: ArrayLike, faces: ArrayLike) -> tuple[np.ndarray, np.nda
                 elif flips[neighbor] != flip:
                     raise ValueError("mesh surface is not orientable")
         components.append(component)
-    return _orient_and_union(nodes, faces, flips, components)
+    return _orient(nodes, faces, flips, components)
 
 
 def _consistent_components(
@@ -193,9 +356,9 @@ def _consistent_components(
     return np.split(order, np.cumsum(np.bincount(labels, minlength=count))[:-1])
 
 
-def _orient_and_union(
+def _orient(
     nodes: np.ndarray, faces: np.ndarray, flips: np.ndarray, components: list,
-) -> tuple[np.ndarray, np.ndarray]:
+) -> tuple[np.ndarray, np.ndarray, list]:
     oriented = faces.copy()
     mask = flips == 1
     oriented[mask] = oriented[mask, ::-1]
@@ -208,9 +371,7 @@ def _orient_and_union(
         ).sum() / 6.0
         if signed_volume < 0:
             oriented[component] = shell[:, ::-1]
-    if len(components) == 1:
-        return nodes, oriented
-    return _union_shells(nodes, oriented, components)
+    return nodes, oriented, components
 
 
 def _union_shells(

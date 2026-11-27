@@ -22,7 +22,9 @@ from .form import (
 )
 from .geometry import closed_surface_inertia_tensor, surface_area
 from .io import LoadedGeometry, load_geometry
-from .preprocess import _volume_error, prepare_mesh, validate_mesh  # noqa: F401 (re-exported)
+from .preprocess import (  # noqa: F401 (prepare_mesh, validate_mesh re-exported)
+    CAVITY_MODES, _volume_error, prepare_mesh, prepare_solid, validate_mesh,
+)
 
 UNIT_SCALES = {"as-is": 1.0, "um": 1e-6, "mm": 1e-3, "cm": 1e-2, "m": 1.0, "inch": 0.0254}
 # Result groups, ordered by what each descriptor depends on (issue #7).
@@ -48,7 +50,7 @@ def result_groups(axes: str = "pca") -> list[str]:
 # Power of length of each dimensional metric; all other metrics are dimensionless
 # (counts, ratios, indices). Inertia is per unit density, hence length^5.
 LENGTH_POWERS = {
-    "surface_area": 2, "volume": 3,
+    "surface_area": 2, "surface_area_outer": 2, "volume": 3, "cavity_volume": 3,
     "centroid_x": 1, "centroid_y": 1, "centroid_z": 1,
     "inertia_I1": 5, "inertia_I2": 5, "inertia_I3": 5,
     "axis_S": 1, "axis_I": 1, "axis_L": 1,
@@ -145,7 +147,8 @@ class AnalysisResult:
     ``"trimesh"`` or ``"trimesh-fallback"``, see :func:`pyshape.load_geometry`),
     ``reader_version`` the trimesh version when trimesh was used, and
     ``warnings`` lists notes about the input, e.g. an STL file read by the
-    trimesh fallback. All three are empty for arrays.
+    trimesh fallback. All three are empty for arrays. ``cavities`` records how
+    nested closed shells were treated (``"fill"`` or ``"keep"``).
     """
 
     metrics: list[Metric]
@@ -158,6 +161,7 @@ class AnalysisResult:
     reader: Optional[str] = None
     reader_version: Optional[str] = None
     warnings: list[str] = field(default_factory=list)
+    cavities: str = "fill"
 
     def metadata_rows(self) -> list[tuple[str, str, str]]:
         """CSV rows after ``source_file``: reader, its version and each warning."""
@@ -260,7 +264,9 @@ def convex_hull_volume(nodes: np.ndarray) -> float:
         raise ValueError("Cannot construct a three-dimensional convex hull") from exc
 
 
-def compute_metrics(nodes: ArrayLike, faces: ArrayLike, *, axes: str = "pca") -> list[Metric]:
+def compute_metrics(
+    nodes: ArrayLike, faces: ArrayLike, *, axes: str = "pca", cavities: str = "fill",
+) -> list[Metric]:
     """Calculate mesh descriptors with a stable set of keys.
 
     Closed shells are oriented and combined as a solid union. Open meshes retain
@@ -279,10 +285,25 @@ def compute_metrics(nodes: ArrayLike, faces: ArrayLike, *, axes: str = "pca") ->
     :mod:`pyshape.ellipsoid`. Ellipsoid axes are not enclosing dimensions. If
     they cannot be computed, S, I, L and the indices derived from them carry
     an error.
+
+    ``cavities`` sets how nested closed shells are treated (see
+    :func:`pyshape.prepare_solid`): ``"fill"`` (default) treats every shell as
+    solid; ``"keep"`` applies the even-odd rule, so that a shell inside another
+    is a cavity. With cavities kept, the mass properties (volume, centroid,
+    inertia) and ``surface_area`` refer to the material (cavity walls
+    included), while the form descriptors (Wadell sphericity, convexity,
+    surface orientation tensor, principal dimensions and the indices from
+    them) refer to the outer envelope, so that internal voids do not change
+    the particle's form. ``n_cavities``, ``cavity_volume`` and ``porosity``
+    (cavity volume / envelope volume) are reported only with ``"keep"``.
     """
     if axes not in AXES_METHODS:
         raise ValueError(f"Unknown axes method '{axes}'. Choose one of: {', '.join(AXES_METHODS)}")
-    nodes, faces = prepare_mesh(nodes, faces)
+    solid = prepare_solid(nodes, faces, cavities=cavities)
+    nodes, faces = solid.nodes, solid.faces
+    separate_envelope = solid.n_cavities is not None and solid.n_cavities > 0
+    env_nodes, env_faces = (solid.envelope_nodes, solid.envelope_faces) if separate_envelope \
+        else (nodes, faces)
     metrics: list[Metric] = []
 
     def add(
@@ -299,6 +320,9 @@ def compute_metrics(nodes: ArrayLike, faces: ArrayLike, *, axes: str = "pca") ->
     add("n_faces", "Face count", len(faces), GROUP_MESH, False)
     area = surface_area(nodes, faces)
     add("surface_area", "Surface area", area, GROUP_SIZE)
+    outer_area = surface_area(env_nodes, env_faces) if separate_envelope else area
+    add("surface_area_outer", "Surface area of the envelope (outer surface)", outer_area,
+        GROUP_SIZE, False)
     volume_error = _volume_error(faces)
     volume = None
     centroid = None
@@ -321,17 +345,38 @@ def compute_metrics(nodes: ArrayLike, faces: ArrayLike, *, axes: str = "pca") ->
         add(f"inertia_I{i}", f"Principal inertia I{i} (unit density)", value,
             GROUP_SIZE, False, volume_error)
 
+    # Envelope (outer surface, cavities filled): the form descriptors use it.
+    env_volume, env_centroid, env_moments, env_axes = volume, centroid, moments, principal_axes
+    if separate_envelope and volume is not None:
+        env_volume, env_centroid = mesh_volume_centroid(env_nodes, env_faces)
+        env_volume = abs(env_volume)
+        env_moments, env_axes = closed_surface_inertia_tensor(env_nodes, env_faces, env_centroid)[1:]
+    filled = "cavities are filled (cavities='fill')"
+    if solid.n_cavities is None:
+        cavity_rows = [(None, filled)] * 3
+    elif volume is None:
+        cavity_rows = [(solid.n_cavities, None), (None, volume_error), (None, volume_error)]
+    else:
+        void = env_volume - volume
+        cavity_rows = [(solid.n_cavities, None), (void, None), (void / env_volume, None)]
+    for (key, label), (value, error) in zip((
+        ("n_cavities", "Number of cavities"),
+        ("cavity_volume", "Cavity volume"),
+        ("porosity", "Porosity (cavity volume / envelope volume)"),
+    ), cavity_rows):
+        add(key, label, value, GROUP_SIZE, False, error)
+
     add("sphericity_wadell", "Sphericity (Wadell)",
-        sphericity_wadell(volume, area) if volume is not None else None,
+        sphericity_wadell(env_volume, outer_area) if env_volume is not None else None,
         GROUP_SURFACE_FORM, error=volume_error)
     convexity = None
     hull_error = volume_error
     if volume is not None:
         try:
-            hull_volume = convex_hull_volume(nodes)
+            hull_volume = convex_hull_volume(env_nodes)
             if hull_volume <= 0:
                 raise ValueError("convex hull volume is zero")
-            convexity = volume / hull_volume
+            convexity = env_volume / hull_volume
         except ModuleNotFoundError as exc:
             if exc.name not in {"scipy", "scipy.spatial"}:
                 raise
@@ -340,7 +385,7 @@ def compute_metrics(nodes: ArrayLike, faces: ArrayLike, *, axes: str = "pca") ->
             hull_error = str(exc)
     add("convexity", "Convexity (V / V_convex_hull)", convexity,
         GROUP_SURFACE_FORM, error=hull_error)
-    compactness, flakiness, elongation, eigenvalues, _ = surface_orientation_tensor(nodes, faces)
+    compactness, flakiness, elongation, eigenvalues, _ = surface_orientation_tensor(env_nodes, env_faces)
     for key, label, value in (
         ("C", "Compactness", compactness), ("F", "Flakiness", flakiness),
         ("E", "Elongation", elongation),
@@ -357,17 +402,17 @@ def compute_metrics(nodes: ArrayLike, faces: ArrayLike, *, axes: str = "pca") ->
             dims_error = f"inertia-equivalent ellipsoid unavailable: {volume_error}"
         else:
             try:
-                dims = inertia_ellipsoid_from_moments(volume, moments, principal_axes, centroid)
+                dims = inertia_ellipsoid_from_moments(env_volume, env_moments, env_axes, env_centroid)
             except ValueError as exc:
                 dims_error = f"inertia-equivalent ellipsoid unavailable: {exc}"
     elif axes == "fitted_ellipsoid":
         try:
-            dims = fitted_ellipsoid(nodes, faces)
+            dims = fitted_ellipsoid(env_nodes, env_faces)
         except ValueError as exc:
             dims_error = f"ellipsoid fit failed: {exc}"
     else:
         try:
-            dims = oriented_box(nodes, axes)
+            dims = oriented_box(env_nodes, axes)
         except ModuleNotFoundError as exc:
             if exc.name not in {"scipy", "scipy.spatial"}:
                 raise
@@ -409,11 +454,13 @@ def compute_metrics(nodes: ArrayLike, faces: ArrayLike, *, axes: str = "pca") ->
 
 def analyze_mesh(
     nodes: ArrayLike, faces: ArrayLike, *, units: str = "as-is", axes: str = "pca",
-    output_units: str = "m",
+    output_units: str = "m", cavities: str = "fill",
 ) -> AnalysisResult:
     """Analyze arrays; explicit physical units convert lengths to metres.
 
-    ``axes`` is ``"pca"`` (default) or ``"min_volume"``; see :func:`compute_metrics`.
+    ``axes`` selects the principal dimensions and ``cavities`` (``"fill"``,
+    default, or ``"keep"``) how nested shells are treated; see
+    :func:`compute_metrics`.
     ``output_units`` (``"m"`` by default, or ``"mm"``, ``"um"``, ``"cm"``,
     ``"inch"``, ``"same"``) sets the length unit of the dimensional results;
     it is ignored for ``units="as-is"``, whose results stay in input units.
@@ -421,17 +468,17 @@ def analyze_mesh(
     resolve_output_units(units if units == "as-is" else "m", output_units)  # validate early
     vertices, indices = validate_mesh(nodes, faces)
     vertices, scale = scale_nodes(vertices, units)
-    metrics = compute_metrics(vertices, indices, axes=axes)
+    metrics = compute_metrics(vertices, indices, axes=axes, cavities=cavities)
     effective, factor = apply_output_units(metrics, units, output_units)
     return AnalysisResult(
         metrics, input_units=units, scale_factor=scale, axes_method=axes,
-        output_units=effective, output_scale=factor,
+        output_units=effective, output_scale=factor, cavities=cavities,
     )
 
 
 def analyze_file(
     path: str | Path, *, units: str = "as-is", axes: str = "pca", output_units: str = "m",
-    strict_stl: bool = False,
+    strict_stl: bool = False, cavities: str = "fill",
 ) -> AnalysisResult:
     """Load and analyze a supported mesh file; no GUI or server is needed.
 
@@ -444,6 +491,7 @@ def analyze_file(
     geometry = load_geometry(path, strict_stl=strict_stl)
     result = analyze_mesh(
         geometry.nodes, geometry.faces, units=units, axes=axes, output_units=output_units,
+        cavities=cavities,
     )
     return attach_source(result, geometry)
 

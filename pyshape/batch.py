@@ -13,7 +13,7 @@ from io import StringIO
 from pathlib import Path
 from typing import Callable, Iterable, Optional
 
-from .analysis import AXES_LABELS, OUTPUT_UNITS, UNIT_SCALES, AnalysisResult, analyze_file, unit_label
+from .analysis import AXES_LABELS, CAVITY_MODES, OUTPUT_UNITS, UNIT_SCALES, AnalysisResult, analyze_file, unit_label
 from .export import make_export_path
 from .io import SUPPORTED_EXTENSIONS
 
@@ -121,10 +121,11 @@ def analyze_folder(
     summary: bool = False,
     progress: Optional[Callable[[int, int, BatchItem], None]] = None,
     strict_stl: bool = False,
+    cavities: str = "fill",
 ) -> BatchResult:
     """Analyse every supported particle file in ``folder``.
 
-    ``units``, ``axes``, ``output_units`` and ``strict_stl`` are as in
+    ``units``, ``axes``, ``output_units``, ``strict_stl`` and ``cavities`` are as in
     :func:`pyshape.analyze_file` and apply to every file; warnings (e.g. an STL
     file read by the trimesh fallback) are in each item's ``result.warnings``. With ``write_csv`` (default) each result is
     written next to its input as ``<stem><suffix>.csv`` (``keys`` selects the
@@ -139,6 +140,8 @@ def analyze_folder(
         raise ValueError(f"Unknown units '{units}'. Choose one of: {', '.join(UNIT_SCALES)}")
     if axes not in AXES_LABELS:
         raise ValueError(f"Unknown axes method '{axes}'. Choose one of: {', '.join(AXES_LABELS)}")
+    if cavities not in CAVITY_MODES:
+        raise ValueError(f"Unknown cavities mode '{cavities}'. Choose one of: {', '.join(CAVITY_MODES)}")
     if output_units != "same" and output_units not in OUTPUT_UNITS:
         raise ValueError(
             f"Unknown output units '{output_units}'. Choose same or {', '.join(OUTPUT_UNITS)}"
@@ -153,6 +156,7 @@ def analyze_folder(
         try:
             item.result = analyze_file(
                 path, units=units, axes=axes, output_units=output_units, strict_stl=strict_stl,
+                cavities=cavities,
             )
             if write_csv:
                 text = item.result.to_csv(keys)
@@ -200,6 +204,9 @@ def main(argv: Optional[list[str]] = None) -> int:
     parser.add_argument("--recursive", action="store_true", help="include subfolders")
     parser.add_argument("--summary", action="store_true",
                         help=f"also write {SUMMARY_NAME} with one row per particle")
+    parser.add_argument("--cavities", default="fill", choices=list(CAVITY_MODES),
+                        help="nested closed shells: fill (all solid; default) or keep "
+                             "(even-odd rule: a shell inside another is a cavity)")
     parser.add_argument("--strict-stl", action="store_true",
                         help="read STL files only with the built-in parser: a file it "
                              "rejects fails instead of being retried with trimesh")
@@ -218,6 +225,7 @@ def main(argv: Optional[list[str]] = None) -> int:
             keys=None if args.keys is None else args.keys.split(","), suffix=args.suffix,
             avoid_overwrite=args.no_overwrite, recursive=args.recursive,
             summary=args.summary, progress=report, strict_stl=args.strict_stl,
+            cavities=args.cavities,
         )
     except (ValueError, NotADirectoryError) as exc:
         parser.error(str(exc))

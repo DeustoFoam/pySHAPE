@@ -38,7 +38,10 @@ The Python package provides tools for 3D particle geometry and form analysis. It
   independent of the interfaces
 - `pyshape/descriptors.py` — help texts of the results and controls, used by both viewers
 - `pyshape/web.py` and `pyshape/static/` — optional API and browser viewer
-- `examples/` — runnable demos and a bundled ASCII STL asset
+- `examples/` — runnable demos and bundled STL assets;
+  `examples/assets/synthetic/` is a fixed collection of synthetic test particles
+  (sphere, ellipsoid, cuboid, torus, rough particle, overlapping spheres, open
+  surface, and solids with cavities), made by `examples/make_synthetic_assets.py`
 - `tests/` — unit tests
 - `tools/audit.py` and `tools/baseline/` — audit of functions and results
   against a recorded baseline ([docs/audit.md](docs/audit.md))
@@ -303,8 +306,9 @@ warning.
   meshes are not filled and still report unavailable volume-dependent metrics.
 - Multi-sphere/multi-component particles are interpreted as a **solid union**:
   overlapping material counts once, and internal surfaces are excluded from
-  area and orientation calculations. Nested shells represent additional solid
-  components, not cavities. Install `.[mesh]` for Python-library use; the web
+  area and orientation calculations. By default (`cavities="fill"`) nested
+  shells are additional solid components, not cavities. Install `.[mesh]` for
+  Python-library use; the web
   and desktop extras already include the union backend. Missing union support
   raises an explicit dependency error, never a sum-of-volumes fallback.
   Single-shell winding correction remains NumPy-only.
@@ -312,7 +316,27 @@ warning.
   spheres. Coordinates are normalized during the union to preserve precision
   for micron-scale inputs. Returned mesh counts, PCA estimates, and previews
   describe the union mesh. Self-intersections within a shell are unsupported;
-  this is not a general mesh-repair or cavity-detection tool.
+  this is not a general mesh-repair tool.
+- **Internal cavities** (`cavities="keep"` in `analyze_mesh`, `analyze_file`,
+  `analyze_folder`, `pyshape-batch --cavities keep`, the HTTP API and both
+  interfaces): nested closed shells follow the even-odd rule, so a shell
+  inside one other shell is a cavity and a shell inside a cavity a solid
+  island, whatever their winding in the file. Then:
+  - volume, centroid, principal inertia and `surface_area` refer to the
+    material (cavity walls included);
+  - the form descriptors (Wadell sphericity, convexity, surface orientation
+    tensor, principal dimensions and the indices from them) refer to the outer
+    envelope, so internal voids do not change the particle's form; Wadell
+    sphericity uses the envelope volume and `surface_area_outer`;
+  - `n_cavities`, `cavity_volume` (envelope minus material volume) and
+    `porosity` (cavity volume / envelope volume) are reported. With the
+    default `cavities="fill"` they are unavailable, with the reason.
+
+  Shells of the same depth that may overlap (e.g. two overlapping voids) are
+  merged with Manifold; a solid with separate cavities needs no extra package.
+  `pyshape.prepare_solid` returns the material surface, the envelope and the
+  cavity-wall flags. In the previews, cavity walls are orange (lower the
+  opacity to see them).
 - Each metric has `key`, `label`, `value`, `group`, `default_selected`,
   and `error`. Unavailable values are `None` (`null` in JSON), with an
   explanatory error. Missing SciPy affects only convexity. Other unexpected

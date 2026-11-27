@@ -90,7 +90,8 @@ def test_user_mesh_regression(name, volume, area, builtin_loader, monkeypatch):
     result = analyze_file(path)
     assert result.values["volume"] == pytest.approx(volume, rel=2e-6, abs=0)
     assert result.values["surface_area"] == pytest.approx(area, rel=2e-6, abs=0)
-    assert not any(m.error for m in result.metrics if m.key != "convexity")
+    assert not any(m.error for m in result.metrics
+                   if m.key not in {"convexity", "n_cavities", "cavity_volume", "porosity"})
     if name == "case-000005.stl":
         assert result.values["volume"] < 2.501883827587843e-14  # sum of all three shells
         assert result.values["surface_area"] < surface_area(geometry.nodes, geometry.faces)

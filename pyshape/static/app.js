@@ -5,8 +5,10 @@ let analysisFile = null;
 let analysisUnits = "as-is";
 let analysisAxes = "pca";
 let analysisOutput = "same";
+let analysisCavities = "fill";
 let busy = false;
 let triangles = [];
+let cavityTriangles = [];
 let yaw = -0.6, pitch = 0.4, zoom = 1;
 let pointer = null, lastFrame = 0;
 const canvas = $("preview");
@@ -96,6 +98,7 @@ $("analyze-form").addEventListener("submit", async (event) => {
   }
   analysisFile = null;
   triangles = [];
+  cavityTriangles = [];
   $("results").replaceChildren();
   $("metadata").textContent = "";
   $("preview-info").textContent = "Drag to rotate. Scroll to zoom.";
@@ -109,6 +112,8 @@ $("analyze-form").addEventListener("submit", async (event) => {
   const outputUnits = $("output-units").value;
   data.append("units", units);
   data.append("axes", axes);
+  const cavities = $("cavities").value;
+  data.append("cavities", cavities);
   data.append("output_units", outputUnits);
   data.append("include_preview", "true");
   try {
@@ -119,6 +124,10 @@ $("analyze-form").addEventListener("submit", async (event) => {
     analysisAxes = axes;
     analysisOutput = outputUnits;
     triangles = result.preview.triangles;
+    cavityTriangles = result.preview.cavity_triangles || [];
+    analysisCavities = cavities;
+    // Cavities are inside the material: make the surface see-through to show them.
+    if (cavityTriangles.length && Number($("opacity").value) > 0.6) $("opacity").value = "0.45";
     zoom = 1;
     const unitNames = { m: "m", mm: "mm", um: "µm", cm: "cm", inch: "in" };
     const out = unitNames[result.output_units];
@@ -161,6 +170,7 @@ $("export").addEventListener("click", async () => {
   data.append("file", analysisFile);
   data.append("units", analysisUnits);
   data.append("axes", analysisAxes);
+  data.append("cavities", analysisCavities);
   data.append("output_units", analysisOutput);
   data.append("keys", keys.join(","));
   setBusy(true);
@@ -203,7 +213,9 @@ function draw() {
     canvas.height = height;
   }
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  const projected = triangles.map((triangle) => triangle.map(project));
+  // Each entry: projected corners, plus a flag for cavity walls.
+  const projected = triangles.map((triangle) => triangle.map(project))
+    .concat(cavityTriangles.map((triangle) => Object.assign(triangle.map(project), { cavity: true })));
   projected.sort((a, b) => a.reduce((s, p) => s + p[2], 0) - b.reduce((s, p) => s + p[2], 0));
   ctx.lineWidth = 0.4 * ratio;
   const opacity = Number($("opacity").value);
@@ -216,8 +228,14 @@ function draw() {
     const [p0, p1, p2] = points;
     const outside = (p1[0] - p0[0]) * (p2[1] - p0[1]) - (p1[1] - p0[1]) * (p2[0] - p0[0]) >= 0;
     // Inner side: a darker shade of the same blue (orange is kept for nested shells).
-    ctx.fillStyle = outside ? `hsl(209, 40%, ${light}%)` : `hsl(212, 28%, ${light * 0.6}%)`;
-    ctx.strokeStyle = outside ? "#516b86" : "#2f3e50";
+    if (points.cavity) {
+      // Cavity walls (nested shells) are orange; darker when seen from behind.
+      ctx.fillStyle = outside ? `hsl(28, 75%, ${light}%)` : `hsl(25, 50%, ${light * 0.6}%)`;
+      ctx.strokeStyle = "#8a5a2b";
+    } else {
+      ctx.fillStyle = outside ? `hsl(209, 40%, ${light}%)` : `hsl(212, 28%, ${light * 0.6}%)`;
+      ctx.strokeStyle = outside ? "#516b86" : "#2f3e50";
+    }
     ctx.beginPath();
     points.forEach((point, index) => index ? ctx.lineTo(point[0], point[1]) : ctx.moveTo(point[0], point[1]));
     ctx.closePath();

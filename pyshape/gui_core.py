@@ -1,6 +1,8 @@
 """Backward-compatible imports for the original desktop viewer helpers."""
 from __future__ import annotations
 
+from typing import Optional
+
 import numpy as np
 
 from .analysis import (
@@ -77,6 +79,8 @@ def axis_triad(nodes: np.ndarray) -> tuple[np.ndarray, float]:
 # nested shells (cavities). The browser preview uses the same colours.
 OUTSIDE_RGB = (0.69, 0.77, 0.87)   # light steel blue
 INSIDE_RGB = (0.36, 0.43, 0.53)    # darker shade of the same blue
+CAVITY_RGB = (0.93, 0.62, 0.32)    # orange: cavity walls (nested shells)
+CAVITY_INSIDE_RGB = (0.55, 0.36, 0.18)  # darker orange: back of a cavity wall
 PREVIEW_LIGHT = (0.15, -1.1, 0.95)
 
 
@@ -98,11 +102,13 @@ def face_normals(nodes: np.ndarray, faces: np.ndarray) -> np.ndarray:
 
 def preview_face_colors(
     normals: np.ndarray, view: np.ndarray, opacity: float = 1.0,
+    cavity: Optional[np.ndarray] = None,
 ) -> np.ndarray:
     """RGBA face colours for the desktop preview.
 
     Triangles whose normal points towards the camera show the outer side
-    (light blue); the others show the inner side (darker blue). Both are shaded by a fixed
+    (light blue); the others show the inner side (darker blue). Faces flagged
+    in ``cavity`` (cavity walls) are orange, darker from behind. Both are shaded by a fixed
     light (Lambert, two-sided), and ``opacity`` (0 to 1) sets their alpha.
     """
     light = np.asarray(PREVIEW_LIGHT) / np.linalg.norm(PREVIEW_LIGHT)
@@ -110,6 +116,11 @@ def preview_face_colors(
     side = np.where(front, 1.0, -1.0)
     intensity = 0.3 + 0.7 * np.clip(side * (normals @ light), 0.0, 1.0)
     base = np.where(front[:, None], np.asarray(OUTSIDE_RGB)[None, :], np.asarray(INSIDE_RGB)[None, :])
+    if cavity is not None and np.any(cavity):
+        # Cavity walls (``cavity`` flags, oriented towards the cavity) are orange.
+        cavity_base = np.where(front[:, None], np.asarray(CAVITY_RGB)[None, :],
+                               np.asarray(CAVITY_INSIDE_RGB)[None, :])
+        base = np.where(np.asarray(cavity, bool)[:, None], cavity_base, base)
     rgb = np.clip(base * intensity[:, None], 0.0, 1.0)
     alpha = np.full((len(normals), 1), float(np.clip(opacity, 0.0, 1.0)))
     return np.hstack([rgb, alpha])

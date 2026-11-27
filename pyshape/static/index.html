@@ -54,6 +54,11 @@
           <option value="inertia_ellipsoid">Inertia-equivalent ellipsoid</option>
           <option value="fitted_ellipsoid">Fitted ellipsoid (least squares)</option>
         </select>
+        <label for="cavities" data-help="cavities">Nested shells</label>
+        <select id="cavities" name="cavities">
+          <option value="fill">All solid (fill)</option>
+          <option value="keep">Inner shells are cavities (keep)</option>
+        </select>
         <p class="hint">PCA directions are not unique for highly symmetric shapes
           (e.g. cubes); the minimum-volume box is orientation-independent but slower.</p>
         <button id="analyze" type="submit" data-help="calculate">Calculate results</button>
@@ -78,7 +83,8 @@
           </div>
         </div>
         <p class="hint legend" data-help="surface_sides"><span class="swatch outside"></span> outside
-          <span class="swatch inside"></span> inside of the surface</p>
+          <span class="swatch inside"></span> inside of the surface
+          <span class="swatch cavity"></span> cavity walls</p>
         <canvas id="preview" width="800" height="360"
           aria-label="3D mesh preview. Drag to rotate, scroll to zoom."></canvas>
         <p id="preview-info" class="hint">Drag to rotate. Scroll to zoom.</p>

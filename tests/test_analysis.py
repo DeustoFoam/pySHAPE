@@ -28,9 +28,10 @@ def test_public_api_and_result_shape(tetra_mesh):
     assert result.values["surface_area"] == pytest.approx((3 + np.sqrt(3)) / 2)
     assert result.values["volume"] == pytest.approx(1 / 6)
     assert result.values["centroid_x"] == pytest.approx(0.25)
-    assert len(result.metrics) == len(result.values) == 30
+    assert len(result.metrics) == len(result.values) == 34
     assert set(result.values) == {
-        "n_vertices", "n_faces", "surface_area", "volume",
+        "n_vertices", "n_faces", "surface_area", "surface_area_outer", "volume",
+        "n_cavities", "cavity_volume", "porosity",
         "centroid_x", "centroid_y", "centroid_z",
         "inertia_I1", "inertia_I2", "inertia_I3", "sphericity_wadell",
         "orientation_C", "orientation_F", "orientation_E",
@@ -41,11 +42,16 @@ def test_public_api_and_result_shape(tetra_mesh):
         "angelidakis_flatness", "angelidakis_elongation",
         "zingg_SI", "zingg_IL", "convexity",
     }
-    assert not any(metric.error for metric in result.metrics if metric.key != "convexity")
+    # The cavity results are unavailable with the default cavities="fill".
+    cavity_keys = {"n_cavities", "cavity_volume", "porosity"}
+    assert all(metric.error == "cavities are filled (cavities='fill')"
+               for metric in result.metrics if metric.key in cavity_keys)
+    assert not any(metric.error for metric in result.metrics
+                   if metric.key != "convexity" and metric.key not in cavity_keys)
     payload = json.loads(json.dumps(result.to_dict(), allow_nan=False))
     assert set(payload) == {
         "source_name", "input_units", "scale_factor", "axes_method", "metrics",
-        "output_units", "output_scale", "reader", "reader_version", "warnings",
+        "output_units", "output_scale", "reader", "reader_version", "warnings", "cavities",
     }
     assert payload["axes_method"] == "pca"
     assert set(payload["metrics"][0]) == {
@@ -104,7 +110,7 @@ def test_open_mesh_volume_is_explicit(tetra_mesh):
     faces = faces[:-1]
     result = analyze_mesh(nodes, faces)
     assert result.values["surface_area"] > 0
-    assert len(result.metrics) == 30
+    assert len(result.metrics) == 34
     for key in ["volume", "centroid_x", "centroid_y", "centroid_z", "inertia_I1",
                 "sphericity_wadell", "convexity"]:
         metric = next(m for m in result.metrics if m.key == key)
@@ -336,8 +342,9 @@ def test_orientation_indices_cuboid_exact():
 GROUP_MEMBERS = {
     "Mesh": {"n_vertices", "n_faces"},
     "Size and mass properties": {
-        "surface_area", "volume", "centroid_x", "centroid_y", "centroid_z",
-        "inertia_I1", "inertia_I2", "inertia_I3"},
+        "surface_area", "surface_area_outer", "volume", "centroid_x", "centroid_y",
+        "centroid_z", "inertia_I1", "inertia_I2", "inertia_I3",
+        "n_cavities", "cavity_volume", "porosity"},
     "Form, surface-based (independent of the box)": {
         "sphericity_wadell", "convexity", "orientation_C", "orientation_F", "orientation_E",
         "orientation_eig1", "orientation_eig2", "orientation_eig3"},

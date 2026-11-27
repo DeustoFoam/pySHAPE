@@ -86,10 +86,37 @@ METRICS: dict[str, dict[str, object]] = {
     "surface_area": _entry(
         "Total area of the triangles of the surface.",
         "Sum of the areas of all triangles of the analysed surface. For several overlapping "
-        "shells, internal surfaces of the solid union are excluded. Available for open "
-        "meshes too.",
+        "shells, internal surfaces of the solid union are excluded. With cavities kept, the "
+        "cavity walls are included (the surface of the material). Available for open meshes "
+        "too.",
         "A = Σ ½ |(b − a) × (c − a)| over the triangles (a, b, c)",
         _NO_BOX, ("shape2021",)),
+    "surface_area_outer": _entry(
+        "Area of the outer surface (envelope), without cavity walls.",
+        "Area of the envelope: the outer surface with cavities filled. It equals the surface "
+        "area unless cavities are kept (cavities = keep). Wadell sphericity uses it.",
+        "A_outer = Σ ½ |(b − a) × (c − a)| over the triangles of the envelope",
+        _NO_BOX),
+    "n_cavities": _entry(
+        "Number of internal cavities (cavities = keep).",
+        "Closed shells that lie inside an odd number of other shells (even-odd rule): a shell "
+        "inside the outer surface is a cavity, a shell inside a cavity a solid island. "
+        "Unavailable with cavities = fill, where every shell is treated as solid (as for the "
+        "spheres of a clump).",
+        depends_on="Closed shells; cavities = keep. " + _NO_BOX),
+    "cavity_volume": _entry(
+        "Volume of the cavities (envelope volume minus material volume).",
+        "Volume enclosed by the outer surface but not occupied by material: the cavities, "
+        "minus any solid islands inside them. Unavailable with cavities = fill.",
+        "V_cavity = V_envelope − V",
+        "A closed mesh; cavities = keep. " + _NO_BOX),
+    "porosity": _entry(
+        "Cavity volume divided by the envelope volume.",
+        "Fraction of the particle's envelope occupied by internal cavities (closed porosity "
+        "only; open pores and surface roughness are part of the outer surface). Unavailable "
+        "with cavities = fill.",
+        "φ = V_cavity / V_envelope",
+        "A closed mesh; cavities = keep. " + _NO_BOX),
     "volume": _entry(
         "Volume enclosed by the closed surface.",
         "Volume of the solid bounded by the surface, as the sum of signed tetrahedra joining "
@@ -304,6 +331,16 @@ CONTROLS: dict[str, dict[str, object]] = {
         "principal dimensions and the indices computed from them (Krumbein sphericity, Zingg "
         "ratios, flatness and elongation); the other results do not depend on it.",
         references=("shape2021",)),
+    "cavities": _entry(
+        "How nested closed shells are treated: all solid (fill) or as cavities (keep).",
+        "fill (default): every closed shell is solid and overlapping shells are merged, as for "
+        "the spheres of a clump; a shell inside another adds nothing. keep: the even-odd rule "
+        "applies, so a shell inside one other shell is a cavity and a shell inside a cavity a "
+        "solid island, whatever the winding in the file. With keep, volume, centroid, inertia "
+        "and surface area refer to the material, while Wadell sphericity, convexity, the "
+        "surface orientation tensor and the principal dimensions refer to the outer surface; "
+        "the number of cavities, their volume and the porosity are reported. In the preview, "
+        "cavity walls are orange."),
     "strict_stl": _entry(
         "Read STL files only with the built-in parser.",
         "Without it, an STL file that the built-in parser rejects is read by trimesh when it "
