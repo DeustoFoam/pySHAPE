@@ -57,8 +57,8 @@ REFERENCES: dict[str, dict[str, str]] = {
     "tonon2005": {"citation": "Tonon (2005).", "url": ""},
 }
 
-_BOX = ("The principal dimensions S, I, L, and so the method chosen under Principal axes "
-        "(bounding box).")
+_BOX = ("The principal dimensions S, I, L, and so the method chosen under Principal "
+        "dimensions (S, I, L): a bounding box or an equivalent ellipsoid.")
 _NO_BOX = "Not on any bounding box."
 _ORIENTATION_NOTE = (
     " These indices come from the surface normals only; they are not the box-based "
@@ -171,11 +171,13 @@ METRICS: dict[str, dict[str, object]] = {
     **{
         f"axis_{axis}": _entry(
             f"{name} principal dimension {axis} (S ≤ I ≤ L).",
-            f"{name} edge of the oriented bounding box chosen under Principal axes; the box "
-            "edges sorted by length are S ≤ I ≤ L. Every index computed from S, I, L "
+            f"{name} principal dimension, measured with the method chosen under Principal "
+            "dimensions (S, I, L): an edge of the PCA or minimum-volume box, or a full axis "
+            "of the inertia-equivalent or fitted ellipsoid, sorted so that S ≤ I ≤ L. "
+            "Every index computed from S, I, L "
             "(Krumbein sphericity, Zingg ratios, flatness and elongation) inherits the "
             "method.",
-            "S ≤ I ≤ L: edge lengths of the oriented box",
+            "S ≤ I ≤ L: box edges, or full ellipsoid axes 2c ≤ 2b ≤ 2a",
             _BOX, ("shape2021",))
         for axis, name in (("S", "Short"), ("I", "Intermediate"), ("L", "Long"))
     },

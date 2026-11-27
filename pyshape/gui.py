@@ -208,7 +208,7 @@ class ShapeGUI(tk.Tk):
         )
         row += 1
 
-        self._help_label(parent, "Principal axes", "axes").grid(
+        self._help_label(parent, "Principal dimensions (S, I, L)", "axes").grid(
             row=row, column=0, sticky="w", pady=(6, 0))
         self.axes_var = tk.StringVar(value="pca")
         axes_combo = ttk.Combobox(
