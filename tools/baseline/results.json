@@ -1,0 +1,5960 @@
+{
+ "batch_summary_header": "source_file,surface_area [input_units^2],volume [input_units^3],sphericity_wadell,orientation_C,orientation_F,orientation_E,sphericity_krumbein,potticary_flatness,potticary_elongation,kongfonseca_flatness,kongfonseca_elongation,angelidakis_flatness,angelidakis_elongation,zingg_SI,zingg_IL,convexity,reader,warnings",
+ "cases": {
+  "cube|axes=min_volume": {
+   "excluded": [],
+   "meta": {
+    "axes_method": "min_volume",
+    "input_units": "as-is",
+    "output_scale": 1.0,
+    "output_units": "as-is",
+    "reader": null,
+    "scale_factor": 1.0,
+    "source_name": null,
+    "warnings": []
+   },
+   "metrics": {
+    "angelidakis_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Elongation (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.0
+    },
+    "angelidakis_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Flatness (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.0
+    },
+    "axis_I": {
+     "default_selected": false,
+     "error": null,
+     "group": "Axes (minimum-volume box)",
+     "label": "Intermediate axis I (min. volume box)",
+     "unit": "input_units",
+     "value": 1.0
+    },
+    "axis_L": {
+     "default_selected": false,
+     "error": null,
+     "group": "Axes (minimum-volume box)",
+     "label": "Long axis L (min. volume box)",
+     "unit": "input_units",
+     "value": 1.0
+    },
+    "axis_S": {
+     "default_selected": false,
+     "error": null,
+     "group": "Axes (minimum-volume box)",
+     "label": "Short axis S (min. volume box)",
+     "unit": "input_units",
+     "value": 1.0
+    },
+    "centroid_x": {
+     "default_selected": false,
+     "error": null,
+     "group": "Geometry",
+     "label": "Centroid X",
+     "unit": "input_units",
+     "value": 0.5
+    },
+    "centroid_y": {
+     "default_selected": false,
+     "error": null,
+     "group": "Geometry",
+     "label": "Centroid Y",
+     "unit": "input_units",
+     "value": 0.5
+    },
+    "centroid_z": {
+     "default_selected": false,
+     "error": null,
+     "group": "Geometry",
+     "label": "Centroid Z",
+     "unit": "input_units",
+     "value": 0.5
+    },
+    "convexity": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Convexity (V / V_convex_hull)",
+     "unit": "",
+     "value": 1.0
+    },
+    "inertia_I1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Inertia (unit density)",
+     "label": "Principal inertia I1 (unit density)",
+     "unit": "input_units⁵",
+     "value": 0.16666666666666669
+    },
+    "inertia_I2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Inertia (unit density)",
+     "label": "Principal inertia I2 (unit density)",
+     "unit": "input_units⁵",
+     "value": 0.1666666666666667
+    },
+    "inertia_I3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Inertia (unit density)",
+     "label": "Principal inertia I3 (unit density)",
+     "unit": "input_units⁵",
+     "value": 0.1666666666666667
+    },
+    "kongfonseca_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Elongation (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.0
+    },
+    "kongfonseca_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Flatness (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.0
+    },
+    "n_faces": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Face count",
+     "unit": "",
+     "value": 12.0
+    },
+    "n_vertices": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Vertex count",
+     "unit": "",
+     "value": 8.0
+    },
+    "orientation_C": {
+     "default_selected": true,
+     "error": null,
+     "group": "Orientation",
+     "label": "Compactness C (surface orientation tensor)",
+     "unit": "",
+     "value": 1.0
+    },
+    "orientation_E": {
+     "default_selected": true,
+     "error": null,
+     "group": "Orientation",
+     "label": "Elongation E (surface orientation tensor)",
+     "unit": "",
+     "value": 0.0
+    },
+    "orientation_F": {
+     "default_selected": true,
+     "error": null,
+     "group": "Orientation",
+     "label": "Flakiness F (surface orientation tensor)",
+     "unit": "",
+     "value": 0.0
+    },
+    "orientation_eig1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Orientation",
+     "label": "Orientation eigenvalue 1",
+     "unit": "",
+     "value": 0.3333333333333333
+    },
+    "orientation_eig2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Orientation",
+     "label": "Orientation eigenvalue 2",
+     "unit": "",
+     "value": 0.3333333333333333
+    },
+    "orientation_eig3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Orientation",
+     "label": "Orientation eigenvalue 3",
+     "unit": "",
+     "value": 0.3333333333333333
+    },
+    "potticary_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Elongation (Potticary et al.)",
+     "unit": "",
+     "value": 0.0
+    },
+    "potticary_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Flatness (Potticary et al.)",
+     "unit": "",
+     "value": 0.0
+    },
+    "sphericity_krumbein": {
+     "default_selected": true,
+     "error": null,
+     "group": "Sphericity",
+     "label": "Sphericity (Krumbein)",
+     "unit": "",
+     "value": 1.0
+    },
+    "sphericity_wadell": {
+     "default_selected": true,
+     "error": null,
+     "group": "Sphericity",
+     "label": "Sphericity (Wadell)",
+     "unit": "",
+     "value": 0.8059959770082349
+    },
+    "surface_area": {
+     "default_selected": true,
+     "error": null,
+     "group": "Geometry",
+     "label": "Surface area",
+     "unit": "input_units²",
+     "value": 6.0
+    },
+    "volume": {
+     "default_selected": true,
+     "error": null,
+     "group": "Geometry",
+     "label": "Volume (mesh)",
+     "unit": "input_units³",
+     "value": 1.0
+    },
+    "zingg_IL": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Zingg ratio I/L",
+     "unit": "",
+     "value": 1.0
+    },
+    "zingg_SI": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Zingg ratio S/I",
+     "unit": "",
+     "value": 1.0
+    }
+   },
+   "requires": [
+    "scipy"
+   ]
+  },
+  "cube|axes=pca": {
+   "excluded": [
+    "angelidakis_elongation",
+    "angelidakis_flatness",
+    "axis_I",
+    "axis_L",
+    "axis_S",
+    "kongfonseca_elongation",
+    "kongfonseca_flatness",
+    "potticary_elongation",
+    "potticary_flatness",
+    "sphericity_krumbein",
+    "zingg_IL",
+    "zingg_SI"
+   ],
+   "meta": {
+    "axes_method": "pca",
+    "input_units": "as-is",
+    "output_scale": 1.0,
+    "output_units": "as-is",
+    "reader": null,
+    "scale_factor": 1.0,
+    "source_name": null,
+    "warnings": []
+   },
+   "metrics": {
+    "angelidakis_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Elongation (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.0
+    },
+    "angelidakis_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Flatness (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.0
+    },
+    "axis_I": {
+     "default_selected": false,
+     "error": null,
+     "group": "Axes (PCA estimate)",
+     "label": "Intermediate axis I (PCA)",
+     "unit": "input_units",
+     "value": 1.0
+    },
+    "axis_L": {
+     "default_selected": false,
+     "error": null,
+     "group": "Axes (PCA estimate)",
+     "label": "Long axis L (PCA)",
+     "unit": "input_units",
+     "value": 1.0
+    },
+    "axis_S": {
+     "default_selected": false,
+     "error": null,
+     "group": "Axes (PCA estimate)",
+     "label": "Short axis S (PCA)",
+     "unit": "input_units",
+     "value": 1.0
+    },
+    "centroid_x": {
+     "default_selected": false,
+     "error": null,
+     "group": "Geometry",
+     "label": "Centroid X",
+     "unit": "input_units",
+     "value": 0.5
+    },
+    "centroid_y": {
+     "default_selected": false,
+     "error": null,
+     "group": "Geometry",
+     "label": "Centroid Y",
+     "unit": "input_units",
+     "value": 0.5
+    },
+    "centroid_z": {
+     "default_selected": false,
+     "error": null,
+     "group": "Geometry",
+     "label": "Centroid Z",
+     "unit": "input_units",
+     "value": 0.5
+    },
+    "convexity": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Convexity (V / V_convex_hull)",
+     "unit": "",
+     "value": 1.0
+    },
+    "inertia_I1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Inertia (unit density)",
+     "label": "Principal inertia I1 (unit density)",
+     "unit": "input_units⁵",
+     "value": 0.16666666666666669
+    },
+    "inertia_I2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Inertia (unit density)",
+     "label": "Principal inertia I2 (unit density)",
+     "unit": "input_units⁵",
+     "value": 0.1666666666666667
+    },
+    "inertia_I3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Inertia (unit density)",
+     "label": "Principal inertia I3 (unit density)",
+     "unit": "input_units⁵",
+     "value": 0.1666666666666667
+    },
+    "kongfonseca_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Elongation (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.0
+    },
+    "kongfonseca_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Flatness (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.0
+    },
+    "n_faces": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Face count",
+     "unit": "",
+     "value": 12.0
+    },
+    "n_vertices": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Vertex count",
+     "unit": "",
+     "value": 8.0
+    },
+    "orientation_C": {
+     "default_selected": true,
+     "error": null,
+     "group": "Orientation",
+     "label": "Compactness C (surface orientation tensor)",
+     "unit": "",
+     "value": 1.0
+    },
+    "orientation_E": {
+     "default_selected": true,
+     "error": null,
+     "group": "Orientation",
+     "label": "Elongation E (surface orientation tensor)",
+     "unit": "",
+     "value": 0.0
+    },
+    "orientation_F": {
+     "default_selected": true,
+     "error": null,
+     "group": "Orientation",
+     "label": "Flakiness F (surface orientation tensor)",
+     "unit": "",
+     "value": 0.0
+    },
+    "orientation_eig1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Orientation",
+     "label": "Orientation eigenvalue 1",
+     "unit": "",
+     "value": 0.3333333333333333
+    },
+    "orientation_eig2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Orientation",
+     "label": "Orientation eigenvalue 2",
+     "unit": "",
+     "value": 0.3333333333333333
+    },
+    "orientation_eig3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Orientation",
+     "label": "Orientation eigenvalue 3",
+     "unit": "",
+     "value": 0.3333333333333333
+    },
+    "potticary_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Elongation (Potticary et al.)",
+     "unit": "",
+     "value": 0.0
+    },
+    "potticary_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Flatness (Potticary et al.)",
+     "unit": "",
+     "value": 0.0
+    },
+    "sphericity_krumbein": {
+     "default_selected": true,
+     "error": null,
+     "group": "Sphericity",
+     "label": "Sphericity (Krumbein)",
+     "unit": "",
+     "value": 1.0
+    },
+    "sphericity_wadell": {
+     "default_selected": true,
+     "error": null,
+     "group": "Sphericity",
+     "label": "Sphericity (Wadell)",
+     "unit": "",
+     "value": 0.8059959770082349
+    },
+    "surface_area": {
+     "default_selected": true,
+     "error": null,
+     "group": "Geometry",
+     "label": "Surface area",
+     "unit": "input_units²",
+     "value": 6.0
+    },
+    "volume": {
+     "default_selected": true,
+     "error": null,
+     "group": "Geometry",
+     "label": "Volume (mesh)",
+     "unit": "input_units³",
+     "value": 1.0
+    },
+    "zingg_IL": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Zingg ratio I/L",
+     "unit": "",
+     "value": 1.0
+    },
+    "zingg_SI": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Zingg ratio S/I",
+     "unit": "",
+     "value": 1.0
+    }
+   },
+   "requires": [
+    "scipy"
+   ]
+  },
+  "cuboid_4x2x1_rotated|axes=min_volume": {
+   "excluded": [],
+   "meta": {
+    "axes_method": "min_volume",
+    "input_units": "as-is",
+    "output_scale": 1.0,
+    "output_units": "as-is",
+    "reader": null,
+    "scale_factor": 1.0,
+    "source_name": null,
+    "warnings": []
+   },
+   "metrics": {
+    "angelidakis_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Elongation (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.30000000000000004
+    },
+    "angelidakis_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Flatness (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.2999999999999998
+    },
+    "axis_I": {
+     "default_selected": false,
+     "error": null,
+     "group": "Axes (minimum-volume box)",
+     "label": "Intermediate axis I (min. volume box)",
+     "unit": "input_units",
+     "value": 2.0
+    },
+    "axis_L": {
+     "default_selected": false,
+     "error": null,
+     "group": "Axes (minimum-volume box)",
+     "label": "Long axis L (min. volume box)",
+     "unit": "input_units",
+     "value": 4.0
+    },
+    "axis_S": {
+     "default_selected": false,
+     "error": null,
+     "group": "Axes (minimum-volume box)",
+     "label": "Short axis S (min. volume box)",
+     "unit": "input_units",
+     "value": 1.0000000000000004
+    },
+    "centroid_x": {
+     "default_selected": false,
+     "error": null,
+     "group": "Geometry",
+     "label": "Centroid X",
+     "unit": "input_units",
+     "value": 4.748203892237981
+    },
+    "centroid_y": {
+     "default_selected": false,
+     "error": null,
+     "group": "Geometry",
+     "label": "Centroid Y",
+     "unit": "input_units",
+     "value": -0.7143323900350299
+    },
+    "centroid_z": {
+     "default_selected": false,
+     "error": null,
+     "group": "Geometry",
+     "label": "Centroid Z",
+     "unit": "input_units",
+     "value": 2.879802520692761
+    },
+    "convexity": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Convexity (V / V_convex_hull)",
+     "unit": "",
+     "value": 0.9999999999999998
+    },
+    "inertia_I1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Inertia (unit density)",
+     "label": "Principal inertia I1 (unit density)",
+     "unit": "input_units⁵",
+     "value": 3.3333333333333313
+    },
+    "inertia_I2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Inertia (unit density)",
+     "label": "Principal inertia I2 (unit density)",
+     "unit": "input_units⁵",
+     "value": 11.333333333333334
+    },
+    "inertia_I3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Inertia (unit density)",
+     "label": "Principal inertia I3 (unit density)",
+     "unit": "input_units⁵",
+     "value": 13.333333333333332
+    },
+    "kongfonseca_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Elongation (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.5
+    },
+    "kongfonseca_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Flatness (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.4999999999999998
+    },
+    "n_faces": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Face count",
+     "unit": "",
+     "value": 12.0
+    },
+    "n_vertices": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Vertex count",
+     "unit": "",
+     "value": 8.0
+    },
+    "orientation_C": {
+     "default_selected": true,
+     "error": null,
+     "group": "Orientation",
+     "label": "Compactness C (surface orientation tensor)",
+     "unit": "",
+     "value": 0.25000000000000017
+    },
+    "orientation_E": {
+     "default_selected": true,
+     "error": null,
+     "group": "Orientation",
+     "label": "Elongation E (surface orientation tensor)",
+     "unit": "",
+     "value": 0.25000000000000006
+    },
+    "orientation_F": {
+     "default_selected": true,
+     "error": null,
+     "group": "Orientation",
+     "label": "Flakiness F (surface orientation tensor)",
+     "unit": "",
+     "value": 0.49999999999999983
+    },
+    "orientation_eig1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Orientation",
+     "label": "Orientation eigenvalue 1",
+     "unit": "",
+     "value": 0.5714285714285715
+    },
+    "orientation_eig2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Orientation",
+     "label": "Orientation eigenvalue 2",
+     "unit": "",
+     "value": 0.28571428571428586
+    },
+    "orientation_eig3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Orientation",
+     "label": "Orientation eigenvalue 3",
+     "unit": "",
+     "value": 0.14285714285714296
+    },
+    "potticary_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Elongation (Potticary et al.)",
+     "unit": "",
+     "value": 0.2857142857142857
+    },
+    "potticary_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Flatness (Potticary et al.)",
+     "unit": "",
+     "value": 0.2857142857142856
+    },
+    "sphericity_krumbein": {
+     "default_selected": true,
+     "error": null,
+     "group": "Sphericity",
+     "label": "Sphericity (Krumbein)",
+     "unit": "",
+     "value": 0.5000000000000001
+    },
+    "sphericity_wadell": {
+     "default_selected": true,
+     "error": null,
+     "group": "Sphericity",
+     "label": "Sphericity (Wadell)",
+     "unit": "",
+     "value": 0.690853694578487
+    },
+    "surface_area": {
+     "default_selected": true,
+     "error": null,
+     "group": "Geometry",
+     "label": "Surface area",
+     "unit": "input_units²",
+     "value": 28.0
+    },
+    "volume": {
+     "default_selected": true,
+     "error": null,
+     "group": "Geometry",
+     "label": "Volume (mesh)",
+     "unit": "input_units³",
+     "value": 8.0
+    },
+    "zingg_IL": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Zingg ratio I/L",
+     "unit": "",
+     "value": 0.5
+    },
+    "zingg_SI": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Zingg ratio S/I",
+     "unit": "",
+     "value": 0.5000000000000002
+    }
+   },
+   "requires": [
+    "scipy"
+   ]
+  },
+  "cuboid_4x2x1_rotated|axes=pca": {
+   "excluded": [],
+   "meta": {
+    "axes_method": "pca",
+    "input_units": "as-is",
+    "output_scale": 1.0,
+    "output_units": "as-is",
+    "reader": null,
+    "scale_factor": 1.0,
+    "source_name": null,
+    "warnings": []
+   },
+   "metrics": {
+    "angelidakis_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Elongation (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.2999999999999998
+    },
+    "angelidakis_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Flatness (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.2999999999999998
+    },
+    "axis_I": {
+     "default_selected": false,
+     "error": null,
+     "group": "Axes (PCA estimate)",
+     "label": "Intermediate axis I (PCA)",
+     "unit": "input_units",
+     "value": 2.000000000000001
+    },
+    "axis_L": {
+     "default_selected": false,
+     "error": null,
+     "group": "Axes (PCA estimate)",
+     "label": "Long axis L (PCA)",
+     "unit": "input_units",
+     "value": 4.0
+    },
+    "axis_S": {
+     "default_selected": false,
+     "error": null,
+     "group": "Axes (PCA estimate)",
+     "label": "Short axis S (PCA)",
+     "unit": "input_units",
+     "value": 1.0000000000000009
+    },
+    "centroid_x": {
+     "default_selected": false,
+     "error": null,
+     "group": "Geometry",
+     "label": "Centroid X",
+     "unit": "input_units",
+     "value": 4.748203892237981
+    },
+    "centroid_y": {
+     "default_selected": false,
+     "error": null,
+     "group": "Geometry",
+     "label": "Centroid Y",
+     "unit": "input_units",
+     "value": -0.7143323900350299
+    },
+    "centroid_z": {
+     "default_selected": false,
+     "error": null,
+     "group": "Geometry",
+     "label": "Centroid Z",
+     "unit": "input_units",
+     "value": 2.879802520692761
+    },
+    "convexity": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Convexity (V / V_convex_hull)",
+     "unit": "",
+     "value": 0.9999999999999998
+    },
+    "inertia_I1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Inertia (unit density)",
+     "label": "Principal inertia I1 (unit density)",
+     "unit": "input_units⁵",
+     "value": 3.3333333333333313
+    },
+    "inertia_I2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Inertia (unit density)",
+     "label": "Principal inertia I2 (unit density)",
+     "unit": "input_units⁵",
+     "value": 11.333333333333334
+    },
+    "inertia_I3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Inertia (unit density)",
+     "label": "Principal inertia I3 (unit density)",
+     "unit": "input_units⁵",
+     "value": 13.333333333333332
+    },
+    "kongfonseca_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Elongation (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.4999999999999998
+    },
+    "kongfonseca_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Flatness (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.4999999999999998
+    },
+    "n_faces": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Face count",
+     "unit": "",
+     "value": 12.0
+    },
+    "n_vertices": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Vertex count",
+     "unit": "",
+     "value": 8.0
+    },
+    "orientation_C": {
+     "default_selected": true,
+     "error": null,
+     "group": "Orientation",
+     "label": "Compactness C (surface orientation tensor)",
+     "unit": "",
+     "value": 0.25000000000000017
+    },
+    "orientation_E": {
+     "default_selected": true,
+     "error": null,
+     "group": "Orientation",
+     "label": "Elongation E (surface orientation tensor)",
+     "unit": "",
+     "value": 0.25000000000000006
+    },
+    "orientation_F": {
+     "default_selected": true,
+     "error": null,
+     "group": "Orientation",
+     "label": "Flakiness F (surface orientation tensor)",
+     "unit": "",
+     "value": 0.49999999999999983
+    },
+    "orientation_eig1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Orientation",
+     "label": "Orientation eigenvalue 1",
+     "unit": "",
+     "value": 0.5714285714285715
+    },
+    "orientation_eig2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Orientation",
+     "label": "Orientation eigenvalue 2",
+     "unit": "",
+     "value": 0.28571428571428586
+    },
+    "orientation_eig3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Orientation",
+     "label": "Orientation eigenvalue 3",
+     "unit": "",
+     "value": 0.14285714285714296
+    },
+    "potticary_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Elongation (Potticary et al.)",
+     "unit": "",
+     "value": 0.28571428571428553
+    },
+    "potticary_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Flatness (Potticary et al.)",
+     "unit": "",
+     "value": 0.28571428571428564
+    },
+    "sphericity_krumbein": {
+     "default_selected": true,
+     "error": null,
+     "group": "Sphericity",
+     "label": "Sphericity (Krumbein)",
+     "unit": "",
+     "value": 0.5000000000000002
+    },
+    "sphericity_wadell": {
+     "default_selected": true,
+     "error": null,
+     "group": "Sphericity",
+     "label": "Sphericity (Wadell)",
+     "unit": "",
+     "value": 0.690853694578487
+    },
+    "surface_area": {
+     "default_selected": true,
+     "error": null,
+     "group": "Geometry",
+     "label": "Surface area",
+     "unit": "input_units²",
+     "value": 28.0
+    },
+    "volume": {
+     "default_selected": true,
+     "error": null,
+     "group": "Geometry",
+     "label": "Volume (mesh)",
+     "unit": "input_units³",
+     "value": 8.0
+    },
+    "zingg_IL": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Zingg ratio I/L",
+     "unit": "",
+     "value": 0.5000000000000002
+    },
+    "zingg_SI": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Zingg ratio S/I",
+     "unit": "",
+     "value": 0.5000000000000002
+    }
+   },
+   "requires": [
+    "scipy"
+   ]
+  },
+  "cuboid_4x2x1_rotated|units=mm->um": {
+   "excluded": [],
+   "meta": {
+    "axes_method": "min_volume",
+    "input_units": "mm",
+    "output_scale": 1000000.0,
+    "output_units": "um",
+    "reader": null,
+    "scale_factor": 0.001,
+    "source_name": null,
+    "warnings": []
+   },
+   "metrics": {
+    "angelidakis_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Elongation (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.30000000000000004
+    },
+    "angelidakis_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Flatness (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.29999999999999993
+    },
+    "axis_I": {
+     "default_selected": false,
+     "error": null,
+     "group": "Axes (minimum-volume box)",
+     "label": "Intermediate axis I (min. volume box)",
+     "unit": "µm",
+     "value": 2000.000000000001
+    },
+    "axis_L": {
+     "default_selected": false,
+     "error": null,
+     "group": "Axes (minimum-volume box)",
+     "label": "Long axis L (min. volume box)",
+     "unit": "µm",
+     "value": 4000.000000000001
+    },
+    "axis_S": {
+     "default_selected": false,
+     "error": null,
+     "group": "Axes (minimum-volume box)",
+     "label": "Short axis S (min. volume box)",
+     "unit": "µm",
+     "value": 1000.0000000000009
+    },
+    "centroid_x": {
+     "default_selected": false,
+     "error": null,
+     "group": "Geometry",
+     "label": "Centroid X",
+     "unit": "µm",
+     "value": 4748.203892237981
+    },
+    "centroid_y": {
+     "default_selected": false,
+     "error": null,
+     "group": "Geometry",
+     "label": "Centroid Y",
+     "unit": "µm",
+     "value": -714.3323900350299
+    },
+    "centroid_z": {
+     "default_selected": false,
+     "error": null,
+     "group": "Geometry",
+     "label": "Centroid Z",
+     "unit": "µm",
+     "value": 2879.8025206927614
+    },
+    "convexity": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Convexity (V / V_convex_hull)",
+     "unit": "",
+     "value": 1.0000000000000002
+    },
+    "inertia_I1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Inertia (unit density)",
+     "label": "Principal inertia I1 (unit density)",
+     "unit": "µm⁵",
+     "value": 3333333333333336.0
+    },
+    "inertia_I2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Inertia (unit density)",
+     "label": "Principal inertia I2 (unit density)",
+     "unit": "µm⁵",
+     "value": 1.1333333333333338e+16
+    },
+    "inertia_I3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Inertia (unit density)",
+     "label": "Principal inertia I3 (unit density)",
+     "unit": "µm⁵",
+     "value": 1.333333333333334e+16
+    },
+    "kongfonseca_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Elongation (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.4999999999999999
+    },
+    "kongfonseca_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Flatness (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.4999999999999998
+    },
+    "n_faces": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Face count",
+     "unit": "",
+     "value": 12.0
+    },
+    "n_vertices": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Vertex count",
+     "unit": "",
+     "value": 8.0
+    },
+    "orientation_C": {
+     "default_selected": true,
+     "error": null,
+     "group": "Orientation",
+     "label": "Compactness C (surface orientation tensor)",
+     "unit": "",
+     "value": 0.25000000000000017
+    },
+    "orientation_E": {
+     "default_selected": true,
+     "error": null,
+     "group": "Orientation",
+     "label": "Elongation E (surface orientation tensor)",
+     "unit": "",
+     "value": 0.24999999999999986
+    },
+    "orientation_F": {
+     "default_selected": true,
+     "error": null,
+     "group": "Orientation",
+     "label": "Flakiness F (surface orientation tensor)",
+     "unit": "",
+     "value": 0.5
+    },
+    "orientation_eig1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Orientation",
+     "label": "Orientation eigenvalue 1",
+     "unit": "",
+     "value": 0.5714285714285714
+    },
+    "orientation_eig2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Orientation",
+     "label": "Orientation eigenvalue 2",
+     "unit": "",
+     "value": 0.2857142857142857
+    },
+    "orientation_eig3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Orientation",
+     "label": "Orientation eigenvalue 3",
+     "unit": "",
+     "value": 0.14285714285714293
+    },
+    "potticary_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Elongation (Potticary et al.)",
+     "unit": "",
+     "value": 0.2857142857142856
+    },
+    "potticary_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Flatness (Potticary et al.)",
+     "unit": "",
+     "value": 0.2857142857142856
+    },
+    "sphericity_krumbein": {
+     "default_selected": true,
+     "error": null,
+     "group": "Sphericity",
+     "label": "Sphericity (Krumbein)",
+     "unit": "",
+     "value": 0.5000000000000002
+    },
+    "sphericity_wadell": {
+     "default_selected": true,
+     "error": null,
+     "group": "Sphericity",
+     "label": "Sphericity (Wadell)",
+     "unit": "",
+     "value": 0.6908536945784867
+    },
+    "surface_area": {
+     "default_selected": true,
+     "error": null,
+     "group": "Geometry",
+     "label": "Surface area",
+     "unit": "µm²",
+     "value": 28000000.000000007
+    },
+    "volume": {
+     "default_selected": true,
+     "error": null,
+     "group": "Geometry",
+     "label": "Volume (mesh)",
+     "unit": "µm³",
+     "value": 8000000000.000002
+    },
+    "zingg_IL": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Zingg ratio I/L",
+     "unit": "",
+     "value": 0.5000000000000001
+    },
+    "zingg_SI": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Zingg ratio S/I",
+     "unit": "",
+     "value": 0.5000000000000002
+    }
+   },
+   "requires": [
+    "scipy"
+   ]
+  },
+  "ellipsoid_3_2_1_rotated|axes=min_volume": {
+   "excluded": [],
+   "meta": {
+    "axes_method": "min_volume",
+    "input_units": "as-is",
+    "output_scale": 1.0,
+    "output_units": "as-is",
+    "reader": null,
+    "scale_factor": 1.0,
+    "source_name": null,
+    "warnings": []
+   },
+   "metrics": {
+    "angelidakis_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Elongation (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.17883796213020026
+    },
+    "angelidakis_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Flatness (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.3209875716978777
+    },
+    "axis_I": {
+     "default_selected": false,
+     "error": null,
+     "group": "Axes (minimum-volume box)",
+     "label": "Intermediate axis I (min. volume box)",
+     "unit": "input_units",
+     "value": 3.9932383807350442
+    },
+    "axis_L": {
+     "default_selected": false,
+     "error": null,
+     "group": "Axes (minimum-volume box)",
+     "label": "Long axis L (min. volume box)",
+     "unit": "input_units",
+     "value": 5.992790951324725
+    },
+    "axis_S": {
+     "default_selected": false,
+     "error": null,
+     "group": "Axes (minimum-volume box)",
+     "label": "Short axis S (min. volume box)",
+     "unit": "input_units",
+     "value": 1.998526460146504
+    },
+    "centroid_x": {
+     "default_selected": false,
+     "error": null,
+     "group": "Geometry",
+     "label": "Centroid X",
+     "unit": "input_units",
+     "value": 2.0410112749155572e-17
+    },
+    "centroid_y": {
+     "default_selected": false,
+     "error": null,
+     "group": "Geometry",
+     "label": "Centroid Y",
+     "unit": "input_units",
+     "value": -2.443807304929991e-16
+    },
+    "centroid_z": {
+     "default_selected": false,
+     "error": null,
+     "group": "Geometry",
+     "label": "Centroid Z",
+     "unit": "input_units",
+     "value": 5.582570488899059e-16
+    },
+    "convexity": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Convexity (V / V_convex_hull)",
+     "unit": "",
+     "value": 1.0000000000000009
+    },
+    "inertia_I1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Inertia (unit density)",
+     "label": "Principal inertia I1 (unit density)",
+     "unit": "input_units⁵",
+     "value": 24.77336142231321
+    },
+    "inertia_I2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Inertia (unit density)",
+     "label": "Principal inertia I2 (unit density)",
+     "unit": "input_units⁵",
+     "value": 49.546722844626366
+    },
+    "inertia_I3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Inertia (unit density)",
+     "label": "Principal inertia I3 (unit density)",
+     "unit": "input_units⁵",
+     "value": 64.41073969801427
+    },
+    "kongfonseca_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Elongation (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.33365965654911983
+    },
+    "kongfonseca_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Flatness (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.4995223751759516
+    },
+    "n_faces": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Face count",
+     "unit": "",
+     "value": 1280.0
+    },
+    "n_vertices": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Vertex count",
+     "unit": "",
+     "value": 642.0
+    },
+    "orientation_C": {
+     "default_selected": true,
+     "error": null,
+     "group": "Orientation",
+     "label": "Compactness C (surface orientation tensor)",
+     "unit": "",
+     "value": 0.17190134230021042
+    },
+    "orientation_E": {
+     "default_selected": true,
+     "error": null,
+     "group": "Orientation",
+     "label": "Elongation E (surface orientation tensor)",
+     "unit": "",
+     "value": 0.1692565650362299
+    },
+    "orientation_F": {
+     "default_selected": true,
+     "error": null,
+     "group": "Orientation",
+     "label": "Flakiness F (surface orientation tensor)",
+     "unit": "",
+     "value": 0.6588420926635596
+    },
+    "orientation_eig1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Orientation",
+     "label": "Orientation eigenvalue 1",
+     "unit": "",
+     "value": 0.6609126511338812
+    },
+    "orientation_eig2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Orientation",
+     "label": "Orientation eigenvalue 2",
+     "unit": "",
+     "value": 0.22547557699301377
+    },
+    "orientation_eig3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Orientation",
+     "label": "Orientation eigenvalue 3",
+     "unit": "",
+     "value": 0.11361177187310487
+    },
+    "potticary_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Elongation (Potticary et al.)",
+     "unit": "",
+     "value": 0.16684411214389927
+    },
+    "potticary_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Flatness (Potticary et al.)",
+     "unit": "",
+     "value": 0.33288040961613774
+    },
+    "sphericity_krumbein": {
+     "default_selected": true,
+     "error": null,
+     "group": "Sphericity",
+     "label": "Sphericity (Krumbein)",
+     "unit": "",
+     "value": 0.6057019347251774
+    },
+    "sphericity_wadell": {
+     "default_selected": true,
+     "error": null,
+     "group": "Sphericity",
+     "label": "Sphericity (Wadell)",
+     "unit": "",
+     "value": 0.8480130973473048
+    },
+    "surface_area": {
+     "default_selected": true,
+     "error": null,
+     "group": "Geometry",
+     "label": "Surface area",
+     "unit": "input_units²",
+     "value": 48.64881684712526
+    },
+    "volume": {
+     "default_selected": true,
+     "error": null,
+     "group": "Geometry",
+     "label": "Volume (mesh)",
+     "unit": "input_units³",
+     "value": 24.916444902558347
+    },
+    "zingg_IL": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Zingg ratio I/L",
+     "unit": "",
+     "value": 0.6663403434508802
+    },
+    "zingg_SI": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Zingg ratio S/I",
+     "unit": "",
+     "value": 0.5004776248240485
+    }
+   },
+   "requires": [
+    "scipy"
+   ]
+  },
+  "ellipsoid_3_2_1_rotated|axes=pca": {
+   "excluded": [],
+   "meta": {
+    "axes_method": "pca",
+    "input_units": "as-is",
+    "output_scale": 1.0,
+    "output_units": "as-is",
+    "reader": null,
+    "scale_factor": 1.0,
+    "source_name": null,
+    "warnings": []
+   },
+   "metrics": {
+    "angelidakis_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Elongation (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.17857142857142852
+    },
+    "angelidakis_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Flatness (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.3214285714285714
+    },
+    "axis_I": {
+     "default_selected": false,
+     "error": null,
+     "group": "Axes (PCA estimate)",
+     "label": "Intermediate axis I (PCA)",
+     "unit": "input_units",
+     "value": 4.0
+    },
+    "axis_L": {
+     "default_selected": false,
+     "error": null,
+     "group": "Axes (PCA estimate)",
+     "label": "Long axis L (PCA)",
+     "unit": "input_units",
+     "value": 6.0
+    },
+    "axis_S": {
+     "default_selected": false,
+     "error": null,
+     "group": "Axes (PCA estimate)",
+     "label": "Short axis S (PCA)",
+     "unit": "input_units",
+     "value": 1.9999999999999998
+    },
+    "centroid_x": {
+     "default_selected": false,
+     "error": null,
+     "group": "Geometry",
+     "label": "Centroid X",
+     "unit": "input_units",
+     "value": 2.0410112749155572e-17
+    },
+    "centroid_y": {
+     "default_selected": false,
+     "error": null,
+     "group": "Geometry",
+     "label": "Centroid Y",
+     "unit": "input_units",
+     "value": -2.443807304929991e-16
+    },
+    "centroid_z": {
+     "default_selected": false,
+     "error": null,
+     "group": "Geometry",
+     "label": "Centroid Z",
+     "unit": "input_units",
+     "value": 5.582570488899059e-16
+    },
+    "convexity": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Convexity (V / V_convex_hull)",
+     "unit": "",
+     "value": 1.0000000000000009
+    },
+    "inertia_I1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Inertia (unit density)",
+     "label": "Principal inertia I1 (unit density)",
+     "unit": "input_units⁵",
+     "value": 24.77336142231321
+    },
+    "inertia_I2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Inertia (unit density)",
+     "label": "Principal inertia I2 (unit density)",
+     "unit": "input_units⁵",
+     "value": 49.546722844626366
+    },
+    "inertia_I3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Inertia (unit density)",
+     "label": "Principal inertia I3 (unit density)",
+     "unit": "input_units⁵",
+     "value": 64.41073969801427
+    },
+    "kongfonseca_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Elongation (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.3333333333333333
+    },
+    "kongfonseca_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Flatness (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.5
+    },
+    "n_faces": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Face count",
+     "unit": "",
+     "value": 1280.0
+    },
+    "n_vertices": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Vertex count",
+     "unit": "",
+     "value": 642.0
+    },
+    "orientation_C": {
+     "default_selected": true,
+     "error": null,
+     "group": "Orientation",
+     "label": "Compactness C (surface orientation tensor)",
+     "unit": "",
+     "value": 0.17190134230021042
+    },
+    "orientation_E": {
+     "default_selected": true,
+     "error": null,
+     "group": "Orientation",
+     "label": "Elongation E (surface orientation tensor)",
+     "unit": "",
+     "value": 0.1692565650362299
+    },
+    "orientation_F": {
+     "default_selected": true,
+     "error": null,
+     "group": "Orientation",
+     "label": "Flakiness F (surface orientation tensor)",
+     "unit": "",
+     "value": 0.6588420926635596
+    },
+    "orientation_eig1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Orientation",
+     "label": "Orientation eigenvalue 1",
+     "unit": "",
+     "value": 0.6609126511338812
+    },
+    "orientation_eig2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Orientation",
+     "label": "Orientation eigenvalue 2",
+     "unit": "",
+     "value": 0.22547557699301377
+    },
+    "orientation_eig3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Orientation",
+     "label": "Orientation eigenvalue 3",
+     "unit": "",
+     "value": 0.11361177187310487
+    },
+    "potticary_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Elongation (Potticary et al.)",
+     "unit": "",
+     "value": 0.16666666666666666
+    },
+    "potticary_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Flatness (Potticary et al.)",
+     "unit": "",
+     "value": 0.3333333333333333
+    },
+    "sphericity_krumbein": {
+     "default_selected": true,
+     "error": null,
+     "group": "Sphericity",
+     "label": "Sphericity (Krumbein)",
+     "unit": "",
+     "value": 0.6057068642773799
+    },
+    "sphericity_wadell": {
+     "default_selected": true,
+     "error": null,
+     "group": "Sphericity",
+     "label": "Sphericity (Wadell)",
+     "unit": "",
+     "value": 0.8480130973473048
+    },
+    "surface_area": {
+     "default_selected": true,
+     "error": null,
+     "group": "Geometry",
+     "label": "Surface area",
+     "unit": "input_units²",
+     "value": 48.64881684712526
+    },
+    "volume": {
+     "default_selected": true,
+     "error": null,
+     "group": "Geometry",
+     "label": "Volume (mesh)",
+     "unit": "input_units³",
+     "value": 24.916444902558347
+    },
+    "zingg_IL": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Zingg ratio I/L",
+     "unit": "",
+     "value": 0.6666666666666666
+    },
+    "zingg_SI": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Zingg ratio S/I",
+     "unit": "",
+     "value": 0.49999999999999994
+    }
+   },
+   "requires": [
+    "scipy"
+   ]
+  },
+  "file:Tetrahedron_ascii.stl|axes=min_volume": {
+   "csv": [
+    [
+     "parameter",
+     "unit"
+    ],
+    [
+     "source_file",
+     ""
+    ],
+    [
+     "reader",
+     ""
+    ],
+    [
+     "surface_area",
+     "input_units^2"
+    ],
+    [
+     "volume",
+     "input_units^3"
+    ],
+    [
+     "sphericity_wadell",
+     ""
+    ],
+    [
+     "orientation_C",
+     ""
+    ],
+    [
+     "orientation_F",
+     ""
+    ],
+    [
+     "orientation_E",
+     ""
+    ],
+    [
+     "sphericity_krumbein",
+     ""
+    ],
+    [
+     "potticary_flatness",
+     ""
+    ],
+    [
+     "potticary_elongation",
+     ""
+    ],
+    [
+     "kongfonseca_flatness",
+     ""
+    ],
+    [
+     "kongfonseca_elongation",
+     ""
+    ],
+    [
+     "angelidakis_flatness",
+     ""
+    ],
+    [
+     "angelidakis_elongation",
+     ""
+    ],
+    [
+     "zingg_SI",
+     ""
+    ],
+    [
+     "zingg_IL",
+     ""
+    ],
+    [
+     "convexity",
+     ""
+    ]
+   ],
+   "excluded": [],
+   "meta": {
+    "axes_method": "min_volume",
+    "input_units": "as-is",
+    "output_scale": 1.0,
+    "output_units": "as-is",
+    "reader": "builtin-stl",
+    "scale_factor": 1.0,
+    "source_name": "Tetrahedron_ascii.stl",
+    "warnings": []
+   },
+   "metrics": {
+    "angelidakis_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Elongation (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.0
+    },
+    "angelidakis_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Flatness (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.0
+    },
+    "axis_I": {
+     "default_selected": false,
+     "error": null,
+     "group": "Axes (minimum-volume box)",
+     "label": "Intermediate axis I (min. volume box)",
+     "unit": "input_units",
+     "value": 1.0
+    },
+    "axis_L": {
+     "default_selected": false,
+     "error": null,
+     "group": "Axes (minimum-volume box)",
+     "label": "Long axis L (min. volume box)",
+     "unit": "input_units",
+     "value": 1.0
+    },
+    "axis_S": {
+     "default_selected": false,
+     "error": null,
+     "group": "Axes (minimum-volume box)",
+     "label": "Short axis S (min. volume box)",
+     "unit": "input_units",
+     "value": 1.0
+    },
+    "centroid_x": {
+     "default_selected": false,
+     "error": null,
+     "group": "Geometry",
+     "label": "Centroid X",
+     "unit": "input_units",
+     "value": 0.25
+    },
+    "centroid_y": {
+     "default_selected": false,
+     "error": null,
+     "group": "Geometry",
+     "label": "Centroid Y",
+     "unit": "input_units",
+     "value": 0.25
+    },
+    "centroid_z": {
+     "default_selected": false,
+     "error": null,
+     "group": "Geometry",
+     "label": "Centroid Z",
+     "unit": "input_units",
+     "value": 0.25
+    },
+    "convexity": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Convexity (V / V_convex_hull)",
+     "unit": "",
+     "value": 0.9999999999999999
+    },
+    "inertia_I1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Inertia (unit density)",
+     "label": "Principal inertia I1 (unit density)",
+     "unit": "input_units⁵",
+     "value": 0.010416666666666668
+    },
+    "inertia_I2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Inertia (unit density)",
+     "label": "Principal inertia I2 (unit density)",
+     "unit": "input_units⁵",
+     "value": 0.01041666666666667
+    },
+    "inertia_I3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Inertia (unit density)",
+     "label": "Principal inertia I3 (unit density)",
+     "unit": "input_units⁵",
+     "value": 0.016666666666666663
+    },
+    "kongfonseca_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Elongation (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.0
+    },
+    "kongfonseca_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Flatness (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.0
+    },
+    "n_faces": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Face count",
+     "unit": "",
+     "value": 4.0
+    },
+    "n_vertices": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Vertex count",
+     "unit": "",
+     "value": 4.0
+    },
+    "orientation_C": {
+     "default_selected": true,
+     "error": null,
+     "group": "Orientation",
+     "label": "Compactness C (surface orientation tensor)",
+     "unit": "",
+     "value": 0.36602540378443854
+    },
+    "orientation_E": {
+     "default_selected": true,
+     "error": null,
+     "group": "Orientation",
+     "label": "Elongation E (surface orientation tensor)",
+     "unit": "",
+     "value": 4.8074067159589083e-17
+    },
+    "orientation_F": {
+     "default_selected": true,
+     "error": null,
+     "group": "Orientation",
+     "label": "Flakiness F (surface orientation tensor)",
+     "unit": "",
+     "value": 0.6339745962155614
+    },
+    "orientation_eig1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Orientation",
+     "label": "Orientation eigenvalue 1",
+     "unit": "",
+     "value": 0.577350269189626
+    },
+    "orientation_eig2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Orientation",
+     "label": "Orientation eigenvalue 2",
+     "unit": "",
+     "value": 0.21132486540518716
+    },
+    "orientation_eig3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Orientation",
+     "label": "Orientation eigenvalue 3",
+     "unit": "",
+     "value": 0.21132486540518713
+    },
+    "potticary_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Elongation (Potticary et al.)",
+     "unit": "",
+     "value": 0.0
+    },
+    "potticary_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Flatness (Potticary et al.)",
+     "unit": "",
+     "value": 0.0
+    },
+    "sphericity_krumbein": {
+     "default_selected": true,
+     "error": null,
+     "group": "Sphericity",
+     "label": "Sphericity (Krumbein)",
+     "unit": "",
+     "value": 1.0
+    },
+    "sphericity_wadell": {
+     "default_selected": true,
+     "error": null,
+     "group": "Sphericity",
+     "label": "Sphericity (Wadell)",
+     "unit": "",
+     "value": 0.6190093670249357
+    },
+    "surface_area": {
+     "default_selected": true,
+     "error": null,
+     "group": "Geometry",
+     "label": "Surface area",
+     "unit": "input_units²",
+     "value": 2.3660254037844384
+    },
+    "volume": {
+     "default_selected": true,
+     "error": null,
+     "group": "Geometry",
+     "label": "Volume (mesh)",
+     "unit": "input_units³",
+     "value": 0.16666666666666666
+    },
+    "zingg_IL": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Zingg ratio I/L",
+     "unit": "",
+     "value": 1.0
+    },
+    "zingg_SI": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Zingg ratio S/I",
+     "unit": "",
+     "value": 1.0
+    }
+   },
+   "requires": [
+    "scipy"
+   ]
+  },
+  "file:Tetrahedron_ascii.stl|axes=pca": {
+   "csv": [
+    [
+     "parameter",
+     "unit"
+    ],
+    [
+     "source_file",
+     ""
+    ],
+    [
+     "reader",
+     ""
+    ],
+    [
+     "surface_area",
+     "input_units^2"
+    ],
+    [
+     "volume",
+     "input_units^3"
+    ],
+    [
+     "sphericity_wadell",
+     ""
+    ],
+    [
+     "orientation_C",
+     ""
+    ],
+    [
+     "orientation_F",
+     ""
+    ],
+    [
+     "orientation_E",
+     ""
+    ],
+    [
+     "sphericity_krumbein",
+     ""
+    ],
+    [
+     "potticary_flatness",
+     ""
+    ],
+    [
+     "potticary_elongation",
+     ""
+    ],
+    [
+     "kongfonseca_flatness",
+     ""
+    ],
+    [
+     "kongfonseca_elongation",
+     ""
+    ],
+    [
+     "angelidakis_flatness",
+     ""
+    ],
+    [
+     "angelidakis_elongation",
+     ""
+    ],
+    [
+     "zingg_SI",
+     ""
+    ],
+    [
+     "zingg_IL",
+     ""
+    ],
+    [
+     "convexity",
+     ""
+    ]
+   ],
+   "excluded": [
+    "angelidakis_elongation",
+    "angelidakis_flatness",
+    "axis_I",
+    "axis_L",
+    "axis_S",
+    "kongfonseca_elongation",
+    "kongfonseca_flatness",
+    "potticary_elongation",
+    "potticary_flatness",
+    "sphericity_krumbein",
+    "zingg_IL",
+    "zingg_SI"
+   ],
+   "meta": {
+    "axes_method": "pca",
+    "input_units": "as-is",
+    "output_scale": 1.0,
+    "output_units": "as-is",
+    "reader": "builtin-stl",
+    "scale_factor": 1.0,
+    "source_name": "Tetrahedron_ascii.stl",
+    "warnings": []
+   },
+   "metrics": {
+    "angelidakis_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Elongation (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.06257249653278901
+    },
+    "angelidakis_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Flatness (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.3576316063539397
+    },
+    "axis_I": {
+     "default_selected": false,
+     "error": null,
+     "group": "Axes (PCA estimate)",
+     "label": "Intermediate axis I (PCA)",
+     "unit": "input_units",
+     "value": 1.2247448713915892
+    },
+    "axis_L": {
+     "default_selected": false,
+     "error": null,
+     "group": "Axes (PCA estimate)",
+     "label": "Long axis L (PCA)",
+     "unit": "input_units",
+     "value": 1.414213562373095
+    },
+    "axis_S": {
+     "default_selected": false,
+     "error": null,
+     "group": "Axes (PCA estimate)",
+     "label": "Short axis S (PCA)",
+     "unit": "input_units",
+     "value": 0.577350269189626
+    },
+    "centroid_x": {
+     "default_selected": false,
+     "error": null,
+     "group": "Geometry",
+     "label": "Centroid X",
+     "unit": "input_units",
+     "value": 0.25
+    },
+    "centroid_y": {
+     "default_selected": false,
+     "error": null,
+     "group": "Geometry",
+     "label": "Centroid Y",
+     "unit": "input_units",
+     "value": 0.25
+    },
+    "centroid_z": {
+     "default_selected": false,
+     "error": null,
+     "group": "Geometry",
+     "label": "Centroid Z",
+     "unit": "input_units",
+     "value": 0.25
+    },
+    "convexity": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Convexity (V / V_convex_hull)",
+     "unit": "",
+     "value": 0.9999999999999999
+    },
+    "inertia_I1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Inertia (unit density)",
+     "label": "Principal inertia I1 (unit density)",
+     "unit": "input_units⁵",
+     "value": 0.010416666666666668
+    },
+    "inertia_I2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Inertia (unit density)",
+     "label": "Principal inertia I2 (unit density)",
+     "unit": "input_units⁵",
+     "value": 0.01041666666666667
+    },
+    "inertia_I3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Inertia (unit density)",
+     "label": "Principal inertia I3 (unit density)",
+     "unit": "input_units⁵",
+     "value": 0.016666666666666663
+    },
+    "kongfonseca_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Elongation (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.1339745962155612
+    },
+    "kongfonseca_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Flatness (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.5285954792089682
+    },
+    "n_faces": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Face count",
+     "unit": "",
+     "value": 4.0
+    },
+    "n_vertices": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Vertex count",
+     "unit": "",
+     "value": 4.0
+    },
+    "orientation_C": {
+     "default_selected": true,
+     "error": null,
+     "group": "Orientation",
+     "label": "Compactness C (surface orientation tensor)",
+     "unit": "",
+     "value": 0.36602540378443854
+    },
+    "orientation_E": {
+     "default_selected": true,
+     "error": null,
+     "group": "Orientation",
+     "label": "Elongation E (surface orientation tensor)",
+     "unit": "",
+     "value": 4.8074067159589083e-17
+    },
+    "orientation_F": {
+     "default_selected": true,
+     "error": null,
+     "group": "Orientation",
+     "label": "Flakiness F (surface orientation tensor)",
+     "unit": "",
+     "value": 0.6339745962155614
+    },
+    "orientation_eig1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Orientation",
+     "label": "Orientation eigenvalue 1",
+     "unit": "",
+     "value": 0.577350269189626
+    },
+    "orientation_eig2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Orientation",
+     "label": "Orientation eigenvalue 2",
+     "unit": "",
+     "value": 0.21132486540518716
+    },
+    "orientation_eig3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Orientation",
+     "label": "Orientation eigenvalue 3",
+     "unit": "",
+     "value": 0.21132486540518713
+    },
+    "potticary_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Elongation (Potticary et al.)",
+     "unit": "",
+     "value": 0.058908739328246404
+    },
+    "potticary_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Flatness (Potticary et al.)",
+     "unit": "",
+     "value": 0.4025699408811753
+    },
+    "sphericity_krumbein": {
+     "default_selected": true,
+     "error": null,
+     "group": "Sphericity",
+     "label": "Sphericity (Krumbein)",
+     "unit": "",
+     "value": 0.7071067811865477
+    },
+    "sphericity_wadell": {
+     "default_selected": true,
+     "error": null,
+     "group": "Sphericity",
+     "label": "Sphericity (Wadell)",
+     "unit": "",
+     "value": 0.6190093670249357
+    },
+    "surface_area": {
+     "default_selected": true,
+     "error": null,
+     "group": "Geometry",
+     "label": "Surface area",
+     "unit": "input_units²",
+     "value": 2.3660254037844384
+    },
+    "volume": {
+     "default_selected": true,
+     "error": null,
+     "group": "Geometry",
+     "label": "Volume (mesh)",
+     "unit": "input_units³",
+     "value": 0.16666666666666666
+    },
+    "zingg_IL": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Zingg ratio I/L",
+     "unit": "",
+     "value": 0.8660254037844388
+    },
+    "zingg_SI": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Zingg ratio S/I",
+     "unit": "",
+     "value": 0.4714045207910318
+    }
+   },
+   "requires": [
+    "scipy"
+   ]
+  },
+  "file:case-000001.stl|axes=min_volume": {
+   "csv": [
+    [
+     "parameter",
+     "unit"
+    ],
+    [
+     "source_file",
+     ""
+    ],
+    [
+     "reader",
+     ""
+    ],
+    [
+     "surface_area",
+     "input_units^2"
+    ],
+    [
+     "volume",
+     "input_units^3"
+    ],
+    [
+     "sphericity_wadell",
+     ""
+    ],
+    [
+     "orientation_C",
+     ""
+    ],
+    [
+     "orientation_F",
+     ""
+    ],
+    [
+     "orientation_E",
+     ""
+    ],
+    [
+     "sphericity_krumbein",
+     ""
+    ],
+    [
+     "potticary_flatness",
+     ""
+    ],
+    [
+     "potticary_elongation",
+     ""
+    ],
+    [
+     "kongfonseca_flatness",
+     ""
+    ],
+    [
+     "kongfonseca_elongation",
+     ""
+    ],
+    [
+     "angelidakis_flatness",
+     ""
+    ],
+    [
+     "angelidakis_elongation",
+     ""
+    ],
+    [
+     "zingg_SI",
+     ""
+    ],
+    [
+     "zingg_IL",
+     ""
+    ],
+    [
+     "convexity",
+     ""
+    ]
+   ],
+   "excluded": [],
+   "meta": {
+    "axes_method": "min_volume",
+    "input_units": "as-is",
+    "output_scale": 1.0,
+    "output_units": "as-is",
+    "reader": "builtin-stl",
+    "scale_factor": 1.0,
+    "source_name": "case-000001.stl",
+    "warnings": []
+   },
+   "metrics": {
+    "angelidakis_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Elongation (Angelidakis et al.)",
+     "unit": "",
+     "value": 3.104946329385294e-05
+    },
+    "angelidakis_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Flatness (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.000271341411020698
+    },
+    "axis_I": {
+     "default_selected": false,
+     "error": null,
+     "group": "Axes (minimum-volume box)",
+     "label": "Intermediate axis I (min. volume box)",
+     "unit": "input_units",
+     "value": 7.396635369925133e-05
+    },
+    "axis_L": {
+     "default_selected": false,
+     "error": null,
+     "group": "Axes (minimum-volume box)",
+     "label": "Long axis L (min. volume box)",
+     "unit": "input_units",
+     "value": 7.397094707337965e-05
+    },
+    "axis_S": {
+     "default_selected": false,
+     "error": null,
+     "group": "Axes (minimum-volume box)",
+     "label": "Short axis S (min. volume box)",
+     "unit": "input_units",
+     "value": 7.392622431841383e-05
+    },
+    "centroid_x": {
+     "default_selected": false,
+     "error": null,
+     "group": "Geometry",
+     "label": "Centroid X",
+     "unit": "input_units",
+     "value": 1.028474709371845e-08
+    },
+    "centroid_y": {
+     "default_selected": false,
+     "error": null,
+     "group": "Geometry",
+     "label": "Centroid Y",
+     "unit": "input_units",
+     "value": 4.31577518770372e-09
+    },
+    "centroid_z": {
+     "default_selected": false,
+     "error": null,
+     "group": "Geometry",
+     "label": "Centroid Z",
+     "unit": "input_units",
+     "value": -3.7135244471851383e-09
+    },
+    "convexity": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Convexity (V / V_convex_hull)",
+     "unit": "",
+     "value": 0.9999983534485141
+    },
+    "inertia_I1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Inertia (unit density)",
+     "label": "Principal inertia I1 (unit density)",
+     "unit": "input_units⁵",
+     "value": 1.168261284235746e-22
+    },
+    "inertia_I2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Inertia (unit density)",
+     "label": "Principal inertia I2 (unit density)",
+     "unit": "input_units⁵",
+     "value": 1.168769513552795e-22
+    },
+    "inertia_I3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Inertia (unit density)",
+     "label": "Principal inertia I3 (unit density)",
+     "unit": "input_units⁵",
+     "value": 1.1716176968458087e-22
+    },
+    "kongfonseca_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Elongation (Kong & Fonseca)",
+     "unit": "",
+     "value": 6.209700308105834e-05
+    },
+    "kongfonseca_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Flatness (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.0005425356101865569
+    },
+    "n_faces": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Face count",
+     "unit": "",
+     "value": 770.0
+    },
+    "n_vertices": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Vertex count",
+     "unit": "",
+     "value": 387.0
+    },
+    "orientation_C": {
+     "default_selected": true,
+     "error": null,
+     "group": "Orientation",
+     "label": "Compactness C (surface orientation tensor)",
+     "unit": "",
+     "value": 0.9951163933653947
+    },
+    "orientation_E": {
+     "default_selected": true,
+     "error": null,
+     "group": "Orientation",
+     "label": "Elongation E (surface orientation tensor)",
+     "unit": "",
+     "value": 0.0006544232917674632
+    },
+    "orientation_F": {
+     "default_selected": true,
+     "error": null,
+     "group": "Orientation",
+     "label": "Flakiness F (surface orientation tensor)",
+     "unit": "",
+     "value": 0.004229183342837828
+    },
+    "orientation_eig1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Orientation",
+     "label": "Orientation eigenvalue 1",
+     "unit": "",
+     "value": 0.33434895058863084
+    },
+    "orientation_eig2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Orientation",
+     "label": "Orientation eigenvalue 2",
+     "unit": "",
+     "value": 0.3329349275761061
+    },
+    "orientation_eig3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Orientation",
+     "label": "Orientation eigenvalue 3",
+     "unit": "",
+     "value": 0.3327161218352629
+    },
+    "potticary_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Elongation (Potticary et al.)",
+     "unit": "",
+     "value": 2.0703602029398496e-05
+    },
+    "potticary_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Flatness (Potticary et al.)",
+     "unit": "",
+     "value": 0.0003617483389487331
+    },
+    "sphericity_krumbein": {
+     "default_selected": true,
+     "error": null,
+     "group": "Sphericity",
+     "label": "Sphericity (Krumbein)",
+     "unit": "",
+     "value": 0.9997777311393032
+    },
+    "sphericity_wadell": {
+     "default_selected": true,
+     "error": null,
+     "group": "Sphericity",
+     "label": "Sphericity (Wadell)",
+     "unit": "",
+     "value": 0.9981882660867715
+    },
+    "surface_area": {
+     "default_selected": true,
+     "error": null,
+     "group": "Geometry",
+     "label": "Surface area",
+     "unit": "input_units²",
+     "value": 1.7279899272760144e-08
+    },
+    "volume": {
+     "default_selected": true,
+     "error": null,
+     "group": "Geometry",
+     "label": "Volume (mesh)",
+     "unit": "input_units³",
+     "value": 2.1301211948057196e-13
+    },
+    "zingg_IL": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Zingg ratio I/L",
+     "unit": "",
+     "value": 0.999937902996919
+    },
+    "zingg_SI": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Zingg ratio S/I",
+     "unit": "",
+     "value": 0.9994574643898134
+    }
+   },
+   "requires": [
+    "scipy"
+   ]
+  },
+  "file:case-000001.stl|axes=pca": {
+   "csv": [
+    [
+     "parameter",
+     "unit"
+    ],
+    [
+     "source_file",
+     ""
+    ],
+    [
+     "reader",
+     ""
+    ],
+    [
+     "surface_area",
+     "input_units^2"
+    ],
+    [
+     "volume",
+     "input_units^3"
+    ],
+    [
+     "sphericity_wadell",
+     ""
+    ],
+    [
+     "orientation_C",
+     ""
+    ],
+    [
+     "orientation_F",
+     ""
+    ],
+    [
+     "orientation_E",
+     ""
+    ],
+    [
+     "sphericity_krumbein",
+     ""
+    ],
+    [
+     "potticary_flatness",
+     ""
+    ],
+    [
+     "potticary_elongation",
+     ""
+    ],
+    [
+     "kongfonseca_flatness",
+     ""
+    ],
+    [
+     "kongfonseca_elongation",
+     ""
+    ],
+    [
+     "angelidakis_flatness",
+     ""
+    ],
+    [
+     "angelidakis_elongation",
+     ""
+    ],
+    [
+     "zingg_SI",
+     ""
+    ],
+    [
+     "zingg_IL",
+     ""
+    ],
+    [
+     "convexity",
+     ""
+    ]
+   ],
+   "excluded": [],
+   "meta": {
+    "axes_method": "pca",
+    "input_units": "as-is",
+    "output_scale": 1.0,
+    "output_units": "as-is",
+    "reader": "builtin-stl",
+    "scale_factor": 1.0,
+    "source_name": "case-000001.stl",
+    "warnings": []
+   },
+   "metrics": {
+    "angelidakis_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Elongation (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.00032462430971841316
+    },
+    "angelidakis_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Flatness (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.0003816102063378124
+    },
+    "axis_I": {
+     "default_selected": false,
+     "error": null,
+     "group": "Axes (PCA estimate)",
+     "label": "Intermediate axis I (PCA)",
+     "unit": "input_units",
+     "value": 7.428261344845968e-05
+    },
+    "axis_L": {
+     "default_selected": false,
+     "error": null,
+     "group": "Axes (PCA estimate)",
+     "label": "Long axis L (PCA)",
+     "unit": "input_units",
+     "value": 7.433085700074465e-05
+    },
+    "axis_S": {
+     "default_selected": false,
+     "error": null,
+     "group": "Axes (PCA estimate)",
+     "label": "Short axis S (PCA)",
+     "unit": "input_units",
+     "value": 7.422594106235768e-05
+    },
+    "centroid_x": {
+     "default_selected": false,
+     "error": null,
+     "group": "Geometry",
+     "label": "Centroid X",
+     "unit": "input_units",
+     "value": 1.028474709371845e-08
+    },
+    "centroid_y": {
+     "default_selected": false,
+     "error": null,
+     "group": "Geometry",
+     "label": "Centroid Y",
+     "unit": "input_units",
+     "value": 4.31577518770372e-09
+    },
+    "centroid_z": {
+     "default_selected": false,
+     "error": null,
+     "group": "Geometry",
+     "label": "Centroid Z",
+     "unit": "input_units",
+     "value": -3.7135244471851383e-09
+    },
+    "convexity": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Convexity (V / V_convex_hull)",
+     "unit": "",
+     "value": 0.9999983534485141
+    },
+    "inertia_I1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Inertia (unit density)",
+     "label": "Principal inertia I1 (unit density)",
+     "unit": "input_units⁵",
+     "value": 1.168261284235746e-22
+    },
+    "inertia_I2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Inertia (unit density)",
+     "label": "Principal inertia I2 (unit density)",
+     "unit": "input_units⁵",
+     "value": 1.168769513552795e-22
+    },
+    "inertia_I3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Inertia (unit density)",
+     "label": "Principal inertia I3 (unit density)",
+     "unit": "input_units⁵",
+     "value": 1.1716176968458087e-22
+    },
+    "kongfonseca_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Elongation (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.0006490380204346154
+    },
+    "kongfonseca_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Flatness (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.0007629293514466749
+    },
+    "n_faces": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Face count",
+     "unit": "",
+     "value": 770.0
+    },
+    "n_vertices": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Vertex count",
+     "unit": "",
+     "value": 387.0
+    },
+    "orientation_C": {
+     "default_selected": true,
+     "error": null,
+     "group": "Orientation",
+     "label": "Compactness C (surface orientation tensor)",
+     "unit": "",
+     "value": 0.9951163933653947
+    },
+    "orientation_E": {
+     "default_selected": true,
+     "error": null,
+     "group": "Orientation",
+     "label": "Elongation E (surface orientation tensor)",
+     "unit": "",
+     "value": 0.0006544232917674632
+    },
+    "orientation_F": {
+     "default_selected": true,
+     "error": null,
+     "group": "Orientation",
+     "label": "Flakiness F (surface orientation tensor)",
+     "unit": "",
+     "value": 0.004229183342837828
+    },
+    "orientation_eig1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Orientation",
+     "label": "Orientation eigenvalue 1",
+     "unit": "",
+     "value": 0.33434895058863084
+    },
+    "orientation_eig2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Orientation",
+     "label": "Orientation eigenvalue 2",
+     "unit": "",
+     "value": 0.3329349275761061
+    },
+    "orientation_eig3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Orientation",
+     "label": "Orientation eigenvalue 3",
+     "unit": "",
+     "value": 0.3327161218352629
+    },
+    "potticary_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Elongation (Potticary et al.)",
+     "unit": "",
+     "value": 0.00021649470332795536
+    },
+    "potticary_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Flatness (Potticary et al.)",
+     "unit": "",
+     "value": 0.000508638806013513
+    },
+    "sphericity_krumbein": {
+     "default_selected": true,
+     "error": null,
+     "group": "Sphericity",
+     "label": "Sphericity (Krumbein)",
+     "unit": "",
+     "value": 0.9993129967602856
+    },
+    "sphericity_wadell": {
+     "default_selected": true,
+     "error": null,
+     "group": "Sphericity",
+     "label": "Sphericity (Wadell)",
+     "unit": "",
+     "value": 0.9981882660867715
+    },
+    "surface_area": {
+     "default_selected": true,
+     "error": null,
+     "group": "Geometry",
+     "label": "Surface area",
+     "unit": "input_units²",
+     "value": 1.7279899272760144e-08
+    },
+    "volume": {
+     "default_selected": true,
+     "error": null,
+     "group": "Geometry",
+     "label": "Volume (mesh)",
+     "unit": "input_units³",
+     "value": 2.1301211948057196e-13
+    },
+    "zingg_IL": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Zingg ratio I/L",
+     "unit": "",
+     "value": 0.9993509619795654
+    },
+    "zingg_SI": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Zingg ratio S/I",
+     "unit": "",
+     "value": 0.9992370706485533
+    }
+   },
+   "requires": [
+    "scipy"
+   ]
+  },
+  "file:case-000005.stl|axes=min_volume": {
+   "csv": [
+    [
+     "parameter",
+     "unit"
+    ],
+    [
+     "source_file",
+     ""
+    ],
+    [
+     "reader",
+     ""
+    ],
+    [
+     "surface_area",
+     "input_units^2"
+    ],
+    [
+     "volume",
+     "input_units^3"
+    ],
+    [
+     "sphericity_wadell",
+     ""
+    ],
+    [
+     "orientation_C",
+     ""
+    ],
+    [
+     "orientation_F",
+     ""
+    ],
+    [
+     "orientation_E",
+     ""
+    ],
+    [
+     "sphericity_krumbein",
+     ""
+    ],
+    [
+     "potticary_flatness",
+     ""
+    ],
+    [
+     "potticary_elongation",
+     ""
+    ],
+    [
+     "kongfonseca_flatness",
+     ""
+    ],
+    [
+     "kongfonseca_elongation",
+     ""
+    ],
+    [
+     "angelidakis_flatness",
+     ""
+    ],
+    [
+     "angelidakis_elongation",
+     ""
+    ],
+    [
+     "zingg_SI",
+     ""
+    ],
+    [
+     "zingg_IL",
+     ""
+    ],
+    [
+     "convexity",
+     ""
+    ]
+   ],
+   "excluded": [],
+   "meta": {
+    "axes_method": "min_volume",
+    "input_units": "as-is",
+    "output_scale": 1.0,
+    "output_units": "as-is",
+    "reader": "builtin-stl",
+    "scale_factor": 1.0,
+    "source_name": "case-000005.stl",
+    "warnings": []
+   },
+   "metrics": {
+    "angelidakis_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Elongation (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.2562273090383973
+    },
+    "angelidakis_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Flatness (Angelidakis et al.)",
+     "unit": "",
+     "value": 1.64451219947237e-06
+    },
+    "axis_I": {
+     "default_selected": false,
+     "error": null,
+     "group": "Axes (minimum-volume box)",
+     "label": "Intermediate axis I (min. volume box)",
+     "unit": "input_units",
+     "value": 3.2430237308666085e-05
+    },
+    "axis_L": {
+     "default_selected": false,
+     "error": null,
+     "group": "Axes (minimum-volume box)",
+     "label": "Long axis L (min. volume box)",
+     "unit": "input_units",
+     "value": 5.4774463005808445e-05
+    },
+    "axis_S": {
+     "default_selected": false,
+     "error": null,
+     "group": "Axes (minimum-volume box)",
+     "label": "Short axis S (min. volume box)",
+     "unit": "input_units",
+     "value": 3.2430123150233066e-05
+    },
+    "centroid_x": {
+     "default_selected": false,
+     "error": null,
+     "group": "Geometry",
+     "label": "Centroid X",
+     "unit": "input_units",
+     "value": 4.923808686158813e-06
+    },
+    "centroid_y": {
+     "default_selected": false,
+     "error": null,
+     "group": "Geometry",
+     "label": "Centroid Y",
+     "unit": "input_units",
+     "value": -5.794376736455085e-06
+    },
+    "centroid_z": {
+     "default_selected": false,
+     "error": null,
+     "group": "Geometry",
+     "label": "Centroid Z",
+     "unit": "input_units",
+     "value": 3.54768349259374e-07
+    },
+    "convexity": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Convexity (V / V_convex_hull)",
+     "unit": "",
+     "value": 0.8106608592903691
+    },
+    "inertia_I1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Inertia (unit density)",
+     "label": "Principal inertia I1 (unit density)",
+     "unit": "input_units⁵",
+     "value": 2.320766369102453e-24
+    },
+    "inertia_I2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Inertia (unit density)",
+     "label": "Principal inertia I2 (unit density)",
+     "unit": "input_units⁵",
+     "value": 5.9705600177876265e-24
+    },
+    "inertia_I3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Inertia (unit density)",
+     "label": "Principal inertia I3 (unit density)",
+     "unit": "input_units⁵",
+     "value": 6.028171678522224e-24
+    },
+    "kongfonseca_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Elongation (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.4079314423360556
+    },
+    "kongfonseca_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Flatness (Kong & Fonseca)",
+     "unit": "",
+     "value": 3.520123270516544e-06
+    },
+    "n_faces": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Face count",
+     "unit": "",
+     "value": 2284.0
+    },
+    "n_vertices": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Vertex count",
+     "unit": "",
+     "value": 1144.0
+    },
+    "orientation_C": {
+     "default_selected": true,
+     "error": null,
+     "group": "Orientation",
+     "label": "Compactness C (surface orientation tensor)",
+     "unit": "",
+     "value": 0.9561505367365919
+    },
+    "orientation_E": {
+     "default_selected": true,
+     "error": null,
+     "group": "Orientation",
+     "label": "Elongation E (surface orientation tensor)",
+     "unit": "",
+     "value": 0.022665618954473537
+    },
+    "orientation_F": {
+     "default_selected": true,
+     "error": null,
+     "group": "Orientation",
+     "label": "Flakiness F (surface orientation tensor)",
+     "unit": "",
+     "value": 0.021183844308934593
+    },
+    "orientation_eig1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Orientation",
+     "label": "Orientation eigenvalue 1",
+     "unit": "",
+     "value": 0.3407193691771848
+    },
+    "orientation_eig2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Orientation",
+     "label": "Orientation eigenvalue 2",
+     "unit": "",
+     "value": 0.3335016231074969
+    },
+    "orientation_eig3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Orientation",
+     "label": "Orientation eigenvalue 3",
+     "unit": "",
+     "value": 0.32577900771531826
+    },
+    "potticary_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Elongation (Potticary et al.)",
+     "unit": "",
+     "value": 0.1867702484112741
+    },
+    "potticary_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Flatness (Potticary et al.)",
+     "unit": "",
+     "value": 1.9084482212202397e-06
+    },
+    "sphericity_krumbein": {
+     "default_selected": true,
+     "error": null,
+     "group": "Sphericity",
+     "label": "Sphericity (Krumbein)",
+     "unit": "",
+     "value": 0.7050947631865249
+    },
+    "sphericity_wadell": {
+     "default_selected": true,
+     "error": null,
+     "group": "Sphericity",
+     "label": "Sphericity (Wadell)",
+     "unit": "",
+     "value": 0.8098568564502062
+    },
+    "surface_area": {
+     "default_selected": true,
+     "error": null,
+     "group": "Geometry",
+     "label": "Surface area",
+     "unit": "input_units²",
+     "value": 5.095525210797647e-09
+    },
+    "volume": {
+     "default_selected": true,
+     "error": null,
+     "group": "Geometry",
+     "label": "Volume (mesh)",
+     "unit": "input_units³",
+     "value": 2.492697857129396e-14
+    },
+    "zingg_IL": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Zingg ratio I/L",
+     "unit": "",
+     "value": 0.5920685576639444
+    },
+    "zingg_SI": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Zingg ratio S/I",
+     "unit": "",
+     "value": 0.9999964798767295
+    }
+   },
+   "requires": [
+    "scipy",
+    "manifold3d"
+   ]
+  },
+  "file:case-000005.stl|axes=pca": {
+   "csv": [
+    [
+     "parameter",
+     "unit"
+    ],
+    [
+     "source_file",
+     ""
+    ],
+    [
+     "reader",
+     ""
+    ],
+    [
+     "surface_area",
+     "input_units^2"
+    ],
+    [
+     "volume",
+     "input_units^3"
+    ],
+    [
+     "sphericity_wadell",
+     ""
+    ],
+    [
+     "orientation_C",
+     ""
+    ],
+    [
+     "orientation_F",
+     ""
+    ],
+    [
+     "orientation_E",
+     ""
+    ],
+    [
+     "sphericity_krumbein",
+     ""
+    ],
+    [
+     "potticary_flatness",
+     ""
+    ],
+    [
+     "potticary_elongation",
+     ""
+    ],
+    [
+     "kongfonseca_flatness",
+     ""
+    ],
+    [
+     "kongfonseca_elongation",
+     ""
+    ],
+    [
+     "angelidakis_flatness",
+     ""
+    ],
+    [
+     "angelidakis_elongation",
+     ""
+    ],
+    [
+     "zingg_SI",
+     ""
+    ],
+    [
+     "zingg_IL",
+     ""
+    ],
+    [
+     "convexity",
+     ""
+    ]
+   ],
+   "excluded": [],
+   "meta": {
+    "axes_method": "pca",
+    "input_units": "as-is",
+    "output_scale": 1.0,
+    "output_units": "as-is",
+    "reader": "builtin-stl",
+    "scale_factor": 1.0,
+    "source_name": "case-000005.stl",
+    "warnings": []
+   },
+   "metrics": {
+    "angelidakis_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Elongation (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.17997769418077308
+    },
+    "angelidakis_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Flatness (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.069523145058355
+    },
+    "axis_I": {
+     "default_selected": false,
+     "error": null,
+     "group": "Axes (PCA estimate)",
+     "label": "Intermediate axis I (PCA)",
+     "unit": "input_units",
+     "value": 3.749533020929807e-05
+    },
+    "axis_L": {
+     "default_selected": false,
+     "error": null,
+     "group": "Axes (PCA estimate)",
+     "label": "Long axis L (PCA)",
+     "unit": "input_units",
+     "value": 5.405510005158912e-05
+    },
+    "axis_S": {
+     "default_selected": false,
+     "error": null,
+     "group": "Axes (PCA estimate)",
+     "label": "Short axis S (PCA)",
+     "unit": "input_units",
+     "value": 3.2467611024788335e-05
+    },
+    "centroid_x": {
+     "default_selected": false,
+     "error": null,
+     "group": "Geometry",
+     "label": "Centroid X",
+     "unit": "input_units",
+     "value": 4.923808686158813e-06
+    },
+    "centroid_y": {
+     "default_selected": false,
+     "error": null,
+     "group": "Geometry",
+     "label": "Centroid Y",
+     "unit": "input_units",
+     "value": -5.794376736455085e-06
+    },
+    "centroid_z": {
+     "default_selected": false,
+     "error": null,
+     "group": "Geometry",
+     "label": "Centroid Z",
+     "unit": "input_units",
+     "value": 3.54768349259374e-07
+    },
+    "convexity": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Convexity (V / V_convex_hull)",
+     "unit": "",
+     "value": 0.8106608592903691
+    },
+    "inertia_I1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Inertia (unit density)",
+     "label": "Principal inertia I1 (unit density)",
+     "unit": "input_units⁵",
+     "value": 2.320766369102453e-24
+    },
+    "inertia_I2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Inertia (unit density)",
+     "label": "Principal inertia I2 (unit density)",
+     "unit": "input_units⁵",
+     "value": 5.9705600177876265e-24
+    },
+    "inertia_I3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Inertia (unit density)",
+     "label": "Principal inertia I3 (unit density)",
+     "unit": "input_units⁵",
+     "value": 6.028171678522224e-24
+    },
+    "kongfonseca_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Elongation (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.3063498139211052
+    },
+    "kongfonseca_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Flatness (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.134089209414749
+    },
+    "n_faces": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Face count",
+     "unit": "",
+     "value": 2284.0
+    },
+    "n_vertices": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Vertex count",
+     "unit": "",
+     "value": 1144.0
+    },
+    "orientation_C": {
+     "default_selected": true,
+     "error": null,
+     "group": "Orientation",
+     "label": "Compactness C (surface orientation tensor)",
+     "unit": "",
+     "value": 0.9561505367365919
+    },
+    "orientation_E": {
+     "default_selected": true,
+     "error": null,
+     "group": "Orientation",
+     "label": "Elongation E (surface orientation tensor)",
+     "unit": "",
+     "value": 0.022665618954473537
+    },
+    "orientation_F": {
+     "default_selected": true,
+     "error": null,
+     "group": "Orientation",
+     "label": "Flakiness F (surface orientation tensor)",
+     "unit": "",
+     "value": 0.021183844308934593
+    },
+    "orientation_eig1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Orientation",
+     "label": "Orientation eigenvalue 1",
+     "unit": "",
+     "value": 0.3407193691771848
+    },
+    "orientation_eig2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Orientation",
+     "label": "Orientation eigenvalue 2",
+     "unit": "",
+     "value": 0.3335016231074969
+    },
+    "orientation_eig3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Orientation",
+     "label": "Orientation eigenvalue 3",
+     "unit": "",
+     "value": 0.32577900771531826
+    },
+    "potticary_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Elongation (Potticary et al.)",
+     "unit": "",
+     "value": 0.13352710356185699
+    },
+    "potticary_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Flatness (Potticary et al.)",
+     "unit": "",
+     "value": 0.08108044817331672
+    },
+    "sphericity_krumbein": {
+     "default_selected": true,
+     "error": null,
+     "group": "Sphericity",
+     "label": "Sphericity (Krumbein)",
+     "unit": "",
+     "value": 0.7468809606563942
+    },
+    "sphericity_wadell": {
+     "default_selected": true,
+     "error": null,
+     "group": "Sphericity",
+     "label": "Sphericity (Wadell)",
+     "unit": "",
+     "value": 0.8098568564502062
+    },
+    "surface_area": {
+     "default_selected": true,
+     "error": null,
+     "group": "Geometry",
+     "label": "Surface area",
+     "unit": "input_units²",
+     "value": 5.095525210797647e-09
+    },
+    "volume": {
+     "default_selected": true,
+     "error": null,
+     "group": "Geometry",
+     "label": "Volume (mesh)",
+     "unit": "input_units³",
+     "value": 2.492697857129396e-14
+    },
+    "zingg_IL": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Zingg ratio I/L",
+     "unit": "",
+     "value": 0.6936501860788948
+    },
+    "zingg_SI": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Zingg ratio S/I",
+     "unit": "",
+     "value": 0.865910790585251
+    }
+   },
+   "requires": [
+    "scipy",
+    "manifold3d"
+   ]
+  },
+  "regular_tetrahedron|axes=min_volume": {
+   "excluded": [],
+   "meta": {
+    "axes_method": "min_volume",
+    "input_units": "as-is",
+    "output_scale": 1.0,
+    "output_units": "as-is",
+    "reader": null,
+    "scale_factor": 1.0,
+    "source_name": null,
+    "warnings": []
+   },
+   "metrics": {
+    "angelidakis_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Elongation (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.0
+    },
+    "angelidakis_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Flatness (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.0
+    },
+    "axis_I": {
+     "default_selected": false,
+     "error": null,
+     "group": "Axes (minimum-volume box)",
+     "label": "Intermediate axis I (min. volume box)",
+     "unit": "input_units",
+     "value": 2.0
+    },
+    "axis_L": {
+     "default_selected": false,
+     "error": null,
+     "group": "Axes (minimum-volume box)",
+     "label": "Long axis L (min. volume box)",
+     "unit": "input_units",
+     "value": 2.0
+    },
+    "axis_S": {
+     "default_selected": false,
+     "error": null,
+     "group": "Axes (minimum-volume box)",
+     "label": "Short axis S (min. volume box)",
+     "unit": "input_units",
+     "value": 2.0
+    },
+    "centroid_x": {
+     "default_selected": false,
+     "error": null,
+     "group": "Geometry",
+     "label": "Centroid X",
+     "unit": "input_units",
+     "value": 0.0
+    },
+    "centroid_y": {
+     "default_selected": false,
+     "error": null,
+     "group": "Geometry",
+     "label": "Centroid Y",
+     "unit": "input_units",
+     "value": 0.0
+    },
+    "centroid_z": {
+     "default_selected": false,
+     "error": null,
+     "group": "Geometry",
+     "label": "Centroid Z",
+     "unit": "input_units",
+     "value": 0.0
+    },
+    "convexity": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Convexity (V / V_convex_hull)",
+     "unit": "",
+     "value": 0.9999999999999997
+    },
+    "inertia_I1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Inertia (unit density)",
+     "label": "Principal inertia I1 (unit density)",
+     "unit": "input_units⁵",
+     "value": 1.0666666666666669
+    },
+    "inertia_I2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Inertia (unit density)",
+     "label": "Principal inertia I2 (unit density)",
+     "unit": "input_units⁵",
+     "value": 1.0666666666666669
+    },
+    "inertia_I3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Inertia (unit density)",
+     "label": "Principal inertia I3 (unit density)",
+     "unit": "input_units⁵",
+     "value": 1.0666666666666669
+    },
+    "kongfonseca_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Elongation (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.0
+    },
+    "kongfonseca_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Flatness (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.0
+    },
+    "n_faces": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Face count",
+     "unit": "",
+     "value": 4.0
+    },
+    "n_vertices": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Vertex count",
+     "unit": "",
+     "value": 4.0
+    },
+    "orientation_C": {
+     "default_selected": true,
+     "error": null,
+     "group": "Orientation",
+     "label": "Compactness C (surface orientation tensor)",
+     "unit": "",
+     "value": 1.0
+    },
+    "orientation_E": {
+     "default_selected": true,
+     "error": null,
+     "group": "Orientation",
+     "label": "Elongation E (surface orientation tensor)",
+     "unit": "",
+     "value": 0.0
+    },
+    "orientation_F": {
+     "default_selected": true,
+     "error": null,
+     "group": "Orientation",
+     "label": "Flakiness F (surface orientation tensor)",
+     "unit": "",
+     "value": 0.0
+    },
+    "orientation_eig1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Orientation",
+     "label": "Orientation eigenvalue 1",
+     "unit": "",
+     "value": 0.33333333333333337
+    },
+    "orientation_eig2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Orientation",
+     "label": "Orientation eigenvalue 2",
+     "unit": "",
+     "value": 0.33333333333333337
+    },
+    "orientation_eig3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Orientation",
+     "label": "Orientation eigenvalue 3",
+     "unit": "",
+     "value": 0.33333333333333337
+    },
+    "potticary_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Elongation (Potticary et al.)",
+     "unit": "",
+     "value": 0.0
+    },
+    "potticary_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Flatness (Potticary et al.)",
+     "unit": "",
+     "value": 0.0
+    },
+    "sphericity_krumbein": {
+     "default_selected": true,
+     "error": null,
+     "group": "Sphericity",
+     "label": "Sphericity (Krumbein)",
+     "unit": "",
+     "value": 1.0
+    },
+    "sphericity_wadell": {
+     "default_selected": true,
+     "error": null,
+     "group": "Sphericity",
+     "label": "Sphericity (Wadell)",
+     "unit": "",
+     "value": 0.6711392913128503
+    },
+    "surface_area": {
+     "default_selected": true,
+     "error": null,
+     "group": "Geometry",
+     "label": "Surface area",
+     "unit": "input_units²",
+     "value": 13.856406460551018
+    },
+    "volume": {
+     "default_selected": true,
+     "error": null,
+     "group": "Geometry",
+     "label": "Volume (mesh)",
+     "unit": "input_units³",
+     "value": 2.6666666666666665
+    },
+    "zingg_IL": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Zingg ratio I/L",
+     "unit": "",
+     "value": 1.0
+    },
+    "zingg_SI": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Zingg ratio S/I",
+     "unit": "",
+     "value": 1.0
+    }
+   },
+   "requires": [
+    "scipy"
+   ]
+  },
+  "regular_tetrahedron|axes=pca": {
+   "excluded": [
+    "angelidakis_elongation",
+    "angelidakis_flatness",
+    "axis_I",
+    "axis_L",
+    "axis_S",
+    "kongfonseca_elongation",
+    "kongfonseca_flatness",
+    "potticary_elongation",
+    "potticary_flatness",
+    "sphericity_krumbein",
+    "zingg_IL",
+    "zingg_SI"
+   ],
+   "meta": {
+    "axes_method": "pca",
+    "input_units": "as-is",
+    "output_scale": 1.0,
+    "output_units": "as-is",
+    "reader": null,
+    "scale_factor": 1.0,
+    "source_name": null,
+    "warnings": []
+   },
+   "metrics": {
+    "angelidakis_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Elongation (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.0
+    },
+    "angelidakis_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Flatness (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.0
+    },
+    "axis_I": {
+     "default_selected": false,
+     "error": null,
+     "group": "Axes (PCA estimate)",
+     "label": "Intermediate axis I (PCA)",
+     "unit": "input_units",
+     "value": 2.0
+    },
+    "axis_L": {
+     "default_selected": false,
+     "error": null,
+     "group": "Axes (PCA estimate)",
+     "label": "Long axis L (PCA)",
+     "unit": "input_units",
+     "value": 2.0
+    },
+    "axis_S": {
+     "default_selected": false,
+     "error": null,
+     "group": "Axes (PCA estimate)",
+     "label": "Short axis S (PCA)",
+     "unit": "input_units",
+     "value": 2.0
+    },
+    "centroid_x": {
+     "default_selected": false,
+     "error": null,
+     "group": "Geometry",
+     "label": "Centroid X",
+     "unit": "input_units",
+     "value": 0.0
+    },
+    "centroid_y": {
+     "default_selected": false,
+     "error": null,
+     "group": "Geometry",
+     "label": "Centroid Y",
+     "unit": "input_units",
+     "value": 0.0
+    },
+    "centroid_z": {
+     "default_selected": false,
+     "error": null,
+     "group": "Geometry",
+     "label": "Centroid Z",
+     "unit": "input_units",
+     "value": 0.0
+    },
+    "convexity": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Convexity (V / V_convex_hull)",
+     "unit": "",
+     "value": 0.9999999999999997
+    },
+    "inertia_I1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Inertia (unit density)",
+     "label": "Principal inertia I1 (unit density)",
+     "unit": "input_units⁵",
+     "value": 1.0666666666666669
+    },
+    "inertia_I2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Inertia (unit density)",
+     "label": "Principal inertia I2 (unit density)",
+     "unit": "input_units⁵",
+     "value": 1.0666666666666669
+    },
+    "inertia_I3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Inertia (unit density)",
+     "label": "Principal inertia I3 (unit density)",
+     "unit": "input_units⁵",
+     "value": 1.0666666666666669
+    },
+    "kongfonseca_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Elongation (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.0
+    },
+    "kongfonseca_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Flatness (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.0
+    },
+    "n_faces": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Face count",
+     "unit": "",
+     "value": 4.0
+    },
+    "n_vertices": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Vertex count",
+     "unit": "",
+     "value": 4.0
+    },
+    "orientation_C": {
+     "default_selected": true,
+     "error": null,
+     "group": "Orientation",
+     "label": "Compactness C (surface orientation tensor)",
+     "unit": "",
+     "value": 1.0
+    },
+    "orientation_E": {
+     "default_selected": true,
+     "error": null,
+     "group": "Orientation",
+     "label": "Elongation E (surface orientation tensor)",
+     "unit": "",
+     "value": 0.0
+    },
+    "orientation_F": {
+     "default_selected": true,
+     "error": null,
+     "group": "Orientation",
+     "label": "Flakiness F (surface orientation tensor)",
+     "unit": "",
+     "value": 0.0
+    },
+    "orientation_eig1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Orientation",
+     "label": "Orientation eigenvalue 1",
+     "unit": "",
+     "value": 0.33333333333333337
+    },
+    "orientation_eig2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Orientation",
+     "label": "Orientation eigenvalue 2",
+     "unit": "",
+     "value": 0.33333333333333337
+    },
+    "orientation_eig3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Orientation",
+     "label": "Orientation eigenvalue 3",
+     "unit": "",
+     "value": 0.33333333333333337
+    },
+    "potticary_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Elongation (Potticary et al.)",
+     "unit": "",
+     "value": 0.0
+    },
+    "potticary_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Flatness (Potticary et al.)",
+     "unit": "",
+     "value": 0.0
+    },
+    "sphericity_krumbein": {
+     "default_selected": true,
+     "error": null,
+     "group": "Sphericity",
+     "label": "Sphericity (Krumbein)",
+     "unit": "",
+     "value": 1.0
+    },
+    "sphericity_wadell": {
+     "default_selected": true,
+     "error": null,
+     "group": "Sphericity",
+     "label": "Sphericity (Wadell)",
+     "unit": "",
+     "value": 0.6711392913128503
+    },
+    "surface_area": {
+     "default_selected": true,
+     "error": null,
+     "group": "Geometry",
+     "label": "Surface area",
+     "unit": "input_units²",
+     "value": 13.856406460551018
+    },
+    "volume": {
+     "default_selected": true,
+     "error": null,
+     "group": "Geometry",
+     "label": "Volume (mesh)",
+     "unit": "input_units³",
+     "value": 2.6666666666666665
+    },
+    "zingg_IL": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Zingg ratio I/L",
+     "unit": "",
+     "value": 1.0
+    },
+    "zingg_SI": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Zingg ratio S/I",
+     "unit": "",
+     "value": 1.0
+    }
+   },
+   "requires": [
+    "scipy"
+   ]
+  },
+  "rough_particle|axes=min_volume": {
+   "excluded": [],
+   "meta": {
+    "axes_method": "min_volume",
+    "input_units": "as-is",
+    "output_scale": 1.0,
+    "output_units": "as-is",
+    "reader": null,
+    "scale_factor": 1.0,
+    "source_name": null,
+    "warnings": []
+   },
+   "metrics": {
+    "angelidakis_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Elongation (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.25012057522108677
+    },
+    "angelidakis_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Flatness (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.14299716498233056
+    },
+    "axis_I": {
+     "default_selected": false,
+     "error": null,
+     "group": "Axes (minimum-volume box)",
+     "label": "Intermediate axis I (min. volume box)",
+     "unit": "input_units",
+     "value": 1.976471224622352
+    },
+    "axis_L": {
+     "default_selected": false,
+     "error": null,
+     "group": "Axes (minimum-volume box)",
+     "label": "Long axis L (min. volume box)",
+     "unit": "input_units",
+     "value": 3.3345288922896397
+    },
+    "axis_S": {
+     "default_selected": false,
+     "error": null,
+     "group": "Axes (minimum-volume box)",
+     "label": "Short axis S (min. volume box)",
+     "unit": "input_units",
+     "value": 1.4526169404850477
+    },
+    "centroid_x": {
+     "default_selected": false,
+     "error": null,
+     "group": "Geometry",
+     "label": "Centroid X",
+     "unit": "input_units",
+     "value": -0.06381706439288219
+    },
+    "centroid_y": {
+     "default_selected": false,
+     "error": null,
+     "group": "Geometry",
+     "label": "Centroid Y",
+     "unit": "input_units",
+     "value": -0.018983809568491588
+    },
+    "centroid_z": {
+     "default_selected": false,
+     "error": null,
+     "group": "Geometry",
+     "label": "Centroid Z",
+     "unit": "input_units",
+     "value": -0.00048110431014117483
+    },
+    "convexity": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Convexity (V / V_convex_hull)",
+     "unit": "",
+     "value": 0.994308086354384
+    },
+    "inertia_I1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Inertia (unit density)",
+     "label": "Principal inertia I1 (unit density)",
+     "unit": "input_units⁵",
+     "value": 1.4345306847874078
+    },
+    "inertia_I2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Inertia (unit density)",
+     "label": "Principal inertia I2 (unit density)",
+     "unit": "input_units⁵",
+     "value": 3.0116425961784734
+    },
+    "inertia_I3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Inertia (unit density)",
+     "label": "Principal inertia I3 (unit density)",
+     "unit": "input_units⁵",
+     "value": 3.4959510890254575
+    },
+    "kongfonseca_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Elongation (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.4072712252718804
+    },
+    "kongfonseca_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Flatness (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.2650452369916987
+    },
+    "n_faces": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Face count",
+     "unit": "",
+     "value": 1280.0
+    },
+    "n_vertices": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Vertex count",
+     "unit": "",
+     "value": 642.0
+    },
+    "orientation_C": {
+     "default_selected": true,
+     "error": null,
+     "group": "Orientation",
+     "label": "Compactness C (surface orientation tensor)",
+     "unit": "",
+     "value": 0.2631361929737778
+    },
+    "orientation_E": {
+     "default_selected": true,
+     "error": null,
+     "group": "Orientation",
+     "label": "Elongation E (surface orientation tensor)",
+     "unit": "",
+     "value": 0.37579850412857163
+    },
+    "orientation_F": {
+     "default_selected": true,
+     "error": null,
+     "group": "Orientation",
+     "label": "Flakiness F (surface orientation tensor)",
+     "unit": "",
+     "value": 0.36106530289765054
+    },
+    "orientation_eig1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Orientation",
+     "label": "Orientation eigenvalue 1",
+     "unit": "",
+     "value": 0.525742760281651
+    },
+    "orientation_eig2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Orientation",
+     "label": "Orientation eigenvalue 2",
+     "unit": "",
+     "value": 0.3359152912943098
+    },
+    "orientation_eig3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Orientation",
+     "label": "Orientation eigenvalue 3",
+     "unit": "",
+     "value": 0.13834194842403913
+    },
+    "potticary_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Elongation (Potticary et al.)",
+     "unit": "",
+     "value": 0.20078866916068913
+    },
+    "potticary_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Flatness (Potticary et al.)",
+     "unit": "",
+     "value": 0.15490359069468318
+    },
+    "sphericity_krumbein": {
+     "default_selected": true,
+     "error": null,
+     "group": "Sphericity",
+     "label": "Sphericity (Krumbein)",
+     "unit": "",
+     "value": 0.6367821441957923
+    },
+    "sphericity_wadell": {
+     "default_selected": true,
+     "error": null,
+     "group": "Sphericity",
+     "label": "Sphericity (Wadell)",
+     "unit": "",
+     "value": 0.8990947961381117
+    },
+    "surface_area": {
+     "default_selected": true,
+     "error": null,
+     "group": "Geometry",
+     "label": "Surface area",
+     "unit": "input_units²",
+     "value": 15.210825117433528
+    },
+    "volume": {
+     "default_selected": true,
+     "error": null,
+     "group": "Geometry",
+     "label": "Volume (mesh)",
+     "unit": "input_units³",
+     "value": 4.755664394947953
+    },
+    "zingg_IL": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Zingg ratio I/L",
+     "unit": "",
+     "value": 0.5927287747281196
+    },
+    "zingg_SI": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Zingg ratio S/I",
+     "unit": "",
+     "value": 0.7349547630083013
+    }
+   },
+   "requires": [
+    "scipy"
+   ]
+  },
+  "rough_particle|axes=pca": {
+   "excluded": [],
+   "meta": {
+    "axes_method": "pca",
+    "input_units": "as-is",
+    "output_scale": 1.0,
+    "output_units": "as-is",
+    "reader": null,
+    "scale_factor": 1.0,
+    "source_name": null,
+    "warnings": []
+   },
+   "metrics": {
+    "angelidakis_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Elongation (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.24391587186591085
+    },
+    "angelidakis_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Flatness (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.14892283560950392
+    },
+    "axis_I": {
+     "default_selected": false,
+     "error": null,
+     "group": "Axes (PCA estimate)",
+     "label": "Intermediate axis I (PCA)",
+     "unit": "input_units",
+     "value": 2.004699134184843
+    },
+    "axis_L": {
+     "default_selected": false,
+     "error": null,
+     "group": "Axes (PCA estimate)",
+     "label": "Long axis L (PCA)",
+     "unit": "input_units",
+     "value": 3.3398525695692847
+    },
+    "axis_S": {
+     "default_selected": false,
+     "error": null,
+     "group": "Axes (PCA estimate)",
+     "label": "Short axis S (PCA)",
+     "unit": "input_units",
+     "value": 1.4558966462504328
+    },
+    "centroid_x": {
+     "default_selected": false,
+     "error": null,
+     "group": "Geometry",
+     "label": "Centroid X",
+     "unit": "input_units",
+     "value": -0.06381706439288219
+    },
+    "centroid_y": {
+     "default_selected": false,
+     "error": null,
+     "group": "Geometry",
+     "label": "Centroid Y",
+     "unit": "input_units",
+     "value": -0.018983809568491588
+    },
+    "centroid_z": {
+     "default_selected": false,
+     "error": null,
+     "group": "Geometry",
+     "label": "Centroid Z",
+     "unit": "input_units",
+     "value": -0.00048110431014117483
+    },
+    "convexity": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Convexity (V / V_convex_hull)",
+     "unit": "",
+     "value": 0.994308086354384
+    },
+    "inertia_I1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Inertia (unit density)",
+     "label": "Principal inertia I1 (unit density)",
+     "unit": "input_units⁵",
+     "value": 1.4345306847874078
+    },
+    "inertia_I2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Inertia (unit density)",
+     "label": "Principal inertia I2 (unit density)",
+     "unit": "input_units⁵",
+     "value": 3.0116425961784734
+    },
+    "inertia_I3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Inertia (unit density)",
+     "label": "Principal inertia I3 (unit density)",
+     "unit": "input_units⁵",
+     "value": 3.4959510890254575
+    },
+    "kongfonseca_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Elongation (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.3997641834701184
+    },
+    "kongfonseca_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Flatness (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.2737580311060322
+    },
+    "n_faces": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Face count",
+     "unit": "",
+     "value": 1280.0
+    },
+    "n_vertices": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Vertex count",
+     "unit": "",
+     "value": 642.0
+    },
+    "orientation_C": {
+     "default_selected": true,
+     "error": null,
+     "group": "Orientation",
+     "label": "Compactness C (surface orientation tensor)",
+     "unit": "",
+     "value": 0.2631361929737778
+    },
+    "orientation_E": {
+     "default_selected": true,
+     "error": null,
+     "group": "Orientation",
+     "label": "Elongation E (surface orientation tensor)",
+     "unit": "",
+     "value": 0.37579850412857163
+    },
+    "orientation_F": {
+     "default_selected": true,
+     "error": null,
+     "group": "Orientation",
+     "label": "Flakiness F (surface orientation tensor)",
+     "unit": "",
+     "value": 0.36106530289765054
+    },
+    "orientation_eig1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Orientation",
+     "label": "Orientation eigenvalue 1",
+     "unit": "",
+     "value": 0.525742760281651
+    },
+    "orientation_eig2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Orientation",
+     "label": "Orientation eigenvalue 2",
+     "unit": "",
+     "value": 0.3359152912943098
+    },
+    "orientation_eig3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Orientation",
+     "label": "Orientation eigenvalue 3",
+     "unit": "",
+     "value": 0.13834194842403913
+    },
+    "potticary_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Elongation (Potticary et al.)",
+     "unit": "",
+     "value": 0.19633314844359437
+    },
+    "potticary_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Flatness (Potticary et al.)",
+     "unit": "",
+     "value": 0.16140185460978965
+    },
+    "sphericity_krumbein": {
+     "default_selected": true,
+     "error": null,
+     "group": "Sphericity",
+     "label": "Sphericity (Krumbein)",
+     "unit": "",
+     "value": 0.6395998972388292
+    },
+    "sphericity_wadell": {
+     "default_selected": true,
+     "error": null,
+     "group": "Sphericity",
+     "label": "Sphericity (Wadell)",
+     "unit": "",
+     "value": 0.8990947961381117
+    },
+    "surface_area": {
+     "default_selected": true,
+     "error": null,
+     "group": "Geometry",
+     "label": "Surface area",
+     "unit": "input_units²",
+     "value": 15.210825117433528
+    },
+    "volume": {
+     "default_selected": true,
+     "error": null,
+     "group": "Geometry",
+     "label": "Volume (mesh)",
+     "unit": "input_units³",
+     "value": 4.755664394947953
+    },
+    "zingg_IL": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Zingg ratio I/L",
+     "unit": "",
+     "value": 0.6002358165298816
+    },
+    "zingg_SI": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Zingg ratio S/I",
+     "unit": "",
+     "value": 0.7262419688939679
+    }
+   },
+   "requires": [
+    "scipy"
+   ]
+  },
+  "torus_3_1|axes=min_volume": {
+   "excluded": [],
+   "meta": {
+    "axes_method": "min_volume",
+    "input_units": "as-is",
+    "output_scale": 1.0,
+    "output_units": "as-is",
+    "reader": null,
+    "scale_factor": 1.0,
+    "source_name": null,
+    "warnings": []
+   },
+   "metrics": {
+    "angelidakis_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Elongation (Angelidakis et al.)",
+     "unit": "",
+     "value": 2.7755575615628914e-17
+    },
+    "angelidakis_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Flatness (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.5993136798650798
+    },
+    "axis_I": {
+     "default_selected": false,
+     "error": null,
+     "group": "Axes (minimum-volume box)",
+     "label": "Intermediate axis I (min. volume box)",
+     "unit": "input_units",
+     "value": 7.982871385908828
+    },
+    "axis_L": {
+     "default_selected": false,
+     "error": null,
+     "group": "Axes (minimum-volume box)",
+     "label": "Long axis L (min. volume box)",
+     "unit": "input_units",
+     "value": 7.982871385908828
+    },
+    "axis_S": {
+     "default_selected": false,
+     "error": null,
+     "group": "Axes (minimum-volume box)",
+     "label": "Short axis S (min. volume box)",
+     "unit": "input_units",
+     "value": 2.0
+    },
+    "centroid_x": {
+     "default_selected": false,
+     "error": null,
+     "group": "Geometry",
+     "label": "Centroid X",
+     "unit": "input_units",
+     "value": 2.0950773847446895e-16
+    },
+    "centroid_y": {
+     "default_selected": false,
+     "error": null,
+     "group": "Geometry",
+     "label": "Centroid Y",
+     "unit": "input_units",
+     "value": 5.282780928357694e-16
+    },
+    "centroid_z": {
+     "default_selected": false,
+     "error": null,
+     "group": "Geometry",
+     "label": "Centroid Z",
+     "unit": "input_units",
+     "value": -6.140274895104701e-17
+    },
+    "convexity": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Convexity (V / V_convex_hull)",
+     "unit": "",
+     "value": 0.6452668712734065
+    },
+    "inertia_I1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Inertia (unit density)",
+     "label": "Principal inertia I1 (unit density)",
+     "unit": "input_units⁵",
+     "value": 293.1951089868102
+    },
+    "inertia_I2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Inertia (unit density)",
+     "label": "Principal inertia I2 (unit density)",
+     "unit": "input_units⁵",
+     "value": 293.1951089868105
+    },
+    "inertia_I3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Inertia (unit density)",
+     "label": "Principal inertia I3 (unit density)",
+     "unit": "input_units⁵",
+     "value": 558.3489251111716
+    },
+    "kongfonseca_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Elongation (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.0
+    },
+    "kongfonseca_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Flatness (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.7494635822981751
+    },
+    "n_faces": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Face count",
+     "unit": "",
+     "value": 1536.0
+    },
+    "n_vertices": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Vertex count",
+     "unit": "",
+     "value": 768.0
+    },
+    "orientation_C": {
+     "default_selected": true,
+     "error": null,
+     "group": "Orientation",
+     "label": "Compactness C (surface orientation tensor)",
+     "unit": "",
+     "value": 0.5016101161060453
+    },
+    "orientation_E": {
+     "default_selected": true,
+     "error": null,
+     "group": "Orientation",
+     "label": "Elongation E (surface orientation tensor)",
+     "unit": "",
+     "value": 1.0008095513385647e-15
+    },
+    "orientation_F": {
+     "default_selected": true,
+     "error": null,
+     "group": "Orientation",
+     "label": "Flakiness F (surface orientation tensor)",
+     "unit": "",
+     "value": 0.4983898838939537
+    },
+    "orientation_eig1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Orientation",
+     "label": "Orientation eigenvalue 1",
+     "unit": "",
+     "value": 0.4991962361001791
+    },
+    "orientation_eig2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Orientation",
+     "label": "Orientation eigenvalue 2",
+     "unit": "",
+     "value": 0.25040188194991214
+    },
+    "orientation_eig3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Orientation",
+     "label": "Orientation eigenvalue 3",
+     "unit": "",
+     "value": 0.25040188194991164
+    },
+    "potticary_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Elongation (Potticary et al.)",
+     "unit": "",
+     "value": 0.0
+    },
+    "potticary_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Flatness (Potticary et al.)",
+     "unit": "",
+     "value": 0.6660310638860962
+    },
+    "sphericity_krumbein": {
+     "default_selected": true,
+     "error": null,
+     "group": "Sphericity",
+     "label": "Sphericity (Krumbein)",
+     "unit": "",
+     "value": 0.6304107657140382
+    },
+    "sphericity_wadell": {
+     "default_selected": true,
+     "error": null,
+     "group": "Sphericity",
+     "label": "Sphericity (Wadell)",
+     "unit": "",
+     "value": 0.6136192807274895
+    },
+    "surface_area": {
+     "default_selected": true,
+     "error": null,
+     "group": "Geometry",
+     "label": "Surface area",
+     "unit": "input_units²",
+     "value": 117.46586095543171
+    },
+    "volume": {
+     "default_selected": true,
+     "error": null,
+     "group": "Geometry",
+     "label": "Volume (mesh)",
+     "unit": "input_units³",
+     "value": 57.54264336266668
+    },
+    "zingg_IL": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Zingg ratio I/L",
+     "unit": "",
+     "value": 1.0
+    },
+    "zingg_SI": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Zingg ratio S/I",
+     "unit": "",
+     "value": 0.2505364177018249
+    }
+   },
+   "requires": [
+    "scipy"
+   ]
+  },
+  "torus_3_1|axes=pca": {
+   "excluded": [
+    "angelidakis_elongation",
+    "angelidakis_flatness",
+    "axis_I",
+    "axis_L",
+    "axis_S",
+    "kongfonseca_elongation",
+    "kongfonseca_flatness",
+    "potticary_elongation",
+    "potticary_flatness",
+    "sphericity_krumbein",
+    "zingg_IL",
+    "zingg_SI"
+   ],
+   "meta": {
+    "axes_method": "pca",
+    "input_units": "as-is",
+    "output_scale": 1.0,
+    "output_units": "as-is",
+    "reader": null,
+    "scale_factor": 1.0,
+    "source_name": null,
+    "warnings": []
+   },
+   "metrics": {
+    "angelidakis_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Elongation (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.0
+    },
+    "angelidakis_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Flatness (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.6000000000000001
+    },
+    "axis_I": {
+     "default_selected": false,
+     "error": null,
+     "group": "Axes (PCA estimate)",
+     "label": "Intermediate axis I (PCA)",
+     "unit": "input_units",
+     "value": 8.0
+    },
+    "axis_L": {
+     "default_selected": false,
+     "error": null,
+     "group": "Axes (PCA estimate)",
+     "label": "Long axis L (PCA)",
+     "unit": "input_units",
+     "value": 8.0
+    },
+    "axis_S": {
+     "default_selected": false,
+     "error": null,
+     "group": "Axes (PCA estimate)",
+     "label": "Short axis S (PCA)",
+     "unit": "input_units",
+     "value": 2.0
+    },
+    "centroid_x": {
+     "default_selected": false,
+     "error": null,
+     "group": "Geometry",
+     "label": "Centroid X",
+     "unit": "input_units",
+     "value": 2.0950773847446895e-16
+    },
+    "centroid_y": {
+     "default_selected": false,
+     "error": null,
+     "group": "Geometry",
+     "label": "Centroid Y",
+     "unit": "input_units",
+     "value": 5.282780928357694e-16
+    },
+    "centroid_z": {
+     "default_selected": false,
+     "error": null,
+     "group": "Geometry",
+     "label": "Centroid Z",
+     "unit": "input_units",
+     "value": -6.140274895104701e-17
+    },
+    "convexity": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Convexity (V / V_convex_hull)",
+     "unit": "",
+     "value": 0.6452668712734065
+    },
+    "inertia_I1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Inertia (unit density)",
+     "label": "Principal inertia I1 (unit density)",
+     "unit": "input_units⁵",
+     "value": 293.1951089868102
+    },
+    "inertia_I2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Inertia (unit density)",
+     "label": "Principal inertia I2 (unit density)",
+     "unit": "input_units⁵",
+     "value": 293.1951089868105
+    },
+    "inertia_I3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Inertia (unit density)",
+     "label": "Principal inertia I3 (unit density)",
+     "unit": "input_units⁵",
+     "value": 558.3489251111716
+    },
+    "kongfonseca_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Elongation (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.0
+    },
+    "kongfonseca_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Flatness (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.75
+    },
+    "n_faces": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Face count",
+     "unit": "",
+     "value": 1536.0
+    },
+    "n_vertices": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Vertex count",
+     "unit": "",
+     "value": 768.0
+    },
+    "orientation_C": {
+     "default_selected": true,
+     "error": null,
+     "group": "Orientation",
+     "label": "Compactness C (surface orientation tensor)",
+     "unit": "",
+     "value": 0.5016101161060453
+    },
+    "orientation_E": {
+     "default_selected": true,
+     "error": null,
+     "group": "Orientation",
+     "label": "Elongation E (surface orientation tensor)",
+     "unit": "",
+     "value": 1.0008095513385647e-15
+    },
+    "orientation_F": {
+     "default_selected": true,
+     "error": null,
+     "group": "Orientation",
+     "label": "Flakiness F (surface orientation tensor)",
+     "unit": "",
+     "value": 0.4983898838939537
+    },
+    "orientation_eig1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Orientation",
+     "label": "Orientation eigenvalue 1",
+     "unit": "",
+     "value": 0.4991962361001791
+    },
+    "orientation_eig2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Orientation",
+     "label": "Orientation eigenvalue 2",
+     "unit": "",
+     "value": 0.25040188194991214
+    },
+    "orientation_eig3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Orientation",
+     "label": "Orientation eigenvalue 3",
+     "unit": "",
+     "value": 0.25040188194991164
+    },
+    "potticary_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Elongation (Potticary et al.)",
+     "unit": "",
+     "value": 0.0
+    },
+    "potticary_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Flatness (Potticary et al.)",
+     "unit": "",
+     "value": 0.6666666666666666
+    },
+    "sphericity_krumbein": {
+     "default_selected": true,
+     "error": null,
+     "group": "Sphericity",
+     "label": "Sphericity (Krumbein)",
+     "unit": "",
+     "value": 0.6299605249474366
+    },
+    "sphericity_wadell": {
+     "default_selected": true,
+     "error": null,
+     "group": "Sphericity",
+     "label": "Sphericity (Wadell)",
+     "unit": "",
+     "value": 0.6136192807274895
+    },
+    "surface_area": {
+     "default_selected": true,
+     "error": null,
+     "group": "Geometry",
+     "label": "Surface area",
+     "unit": "input_units²",
+     "value": 117.46586095543171
+    },
+    "volume": {
+     "default_selected": true,
+     "error": null,
+     "group": "Geometry",
+     "label": "Volume (mesh)",
+     "unit": "input_units³",
+     "value": 57.54264336266668
+    },
+    "zingg_IL": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Zingg ratio I/L",
+     "unit": "",
+     "value": 1.0
+    },
+    "zingg_SI": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Zingg ratio S/I",
+     "unit": "",
+     "value": 0.25
+    }
+   },
+   "requires": [
+    "scipy"
+   ]
+  },
+  "two_sphere_union|axes=min_volume": {
+   "excluded": [],
+   "meta": {
+    "axes_method": "min_volume",
+    "input_units": "as-is",
+    "output_scale": 1.0,
+    "output_units": "as-is",
+    "reader": null,
+    "scale_factor": 1.0,
+    "source_name": null,
+    "warnings": []
+   },
+   "metrics": {
+    "angelidakis_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Elongation (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.14324101090627284
+    },
+    "angelidakis_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Flatness (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.0010481407597109915
+    },
+    "axis_I": {
+     "default_selected": false,
+     "error": null,
+     "group": "Axes (minimum-volume box)",
+     "label": "Intermediate axis I (min. volume box)",
+     "unit": "input_units",
+     "value": 1.9786747359427386
+    },
+    "axis_L": {
+     "default_selected": false,
+     "error": null,
+     "group": "Axes (minimum-volume box)",
+     "label": "Long axis L (min. volume box)",
+     "unit": "input_units",
+     "value": 2.640302437744464
+    },
+    "axis_S": {
+     "default_selected": false,
+     "error": null,
+     "group": "Axes (minimum-volume box)",
+     "label": "Short axis S (min. volume box)",
+     "unit": "input_units",
+     "value": 1.97444451480755
+    },
+    "centroid_x": {
+     "default_selected": false,
+     "error": null,
+     "group": "Geometry",
+     "label": "Centroid X",
+     "unit": "input_units",
+     "value": 0.19409608589695554
+    },
+    "centroid_y": {
+     "default_selected": false,
+     "error": null,
+     "group": "Geometry",
+     "label": "Centroid Y",
+     "unit": "input_units",
+     "value": 2.415316187746516e-17
+    },
+    "centroid_z": {
+     "default_selected": false,
+     "error": null,
+     "group": "Geometry",
+     "label": "Centroid Z",
+     "unit": "input_units",
+     "value": -2.3239345008509804e-17
+    },
+    "convexity": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Convexity (V / V_convex_hull)",
+     "unit": "",
+     "value": 0.9284241681053117
+    },
+    "inertia_I1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Inertia (unit density)",
+     "label": "Principal inertia I1 (unit density)",
+     "unit": "input_units⁵",
+     "value": 1.692868512351232
+    },
+    "inertia_I2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Inertia (unit density)",
+     "label": "Principal inertia I2 (unit density)",
+     "unit": "input_units⁵",
+     "value": 2.676790509779747
+    },
+    "inertia_I3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Inertia (unit density)",
+     "label": "Principal inertia I3 (unit density)",
+     "unit": "input_units⁵",
+     "value": 2.676863641947082
+    },
+    "kongfonseca_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Elongation (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.2505878464313108
+    },
+    "kongfonseca_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Flatness (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.0021379062755218707
+    },
+    "n_faces": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Face count",
+     "unit": "",
+     "value": 668.0
+    },
+    "n_vertices": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Vertex count",
+     "unit": "",
+     "value": 336.0
+    },
+    "orientation_C": {
+     "default_selected": true,
+     "error": null,
+     "group": "Orientation",
+     "label": "Compactness C (surface orientation tensor)",
+     "unit": "",
+     "value": 0.8012650719499379
+    },
+    "orientation_E": {
+     "default_selected": true,
+     "error": null,
+     "group": "Orientation",
+     "label": "Elongation E (surface orientation tensor)",
+     "unit": "",
+     "value": 0.19852387699308052
+    },
+    "orientation_F": {
+     "default_selected": true,
+     "error": null,
+     "group": "Orientation",
+     "label": "Flakiness F (surface orientation tensor)",
+     "unit": "",
+     "value": 0.00021105105698154947
+    },
+    "orientation_eig1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Orientation",
+     "label": "Orientation eigenvalue 1",
+     "unit": "",
+     "value": 0.3570084662919875
+    },
+    "orientation_eig2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Orientation",
+     "label": "Orientation eigenvalue 2",
+     "unit": "",
+     "value": 0.35693311927782523
+    },
+    "orientation_eig3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Orientation",
+     "label": "Orientation eigenvalue 3",
+     "unit": "",
+     "value": 0.28605841443018637
+    },
+    "potticary_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Elongation (Potticary et al.)",
+     "unit": "",
+     "value": 0.1003466383708232
+    },
+    "potticary_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Flatness (Potticary et al.)",
+     "unit": "",
+     "value": 0.0012831641399700315
+    },
+    "sphericity_krumbein": {
+     "default_selected": true,
+     "error": null,
+     "group": "Sphericity",
+     "label": "Sphericity (Krumbein)",
+     "unit": "",
+     "value": 0.8244620370586031
+    },
+    "sphericity_wadell": {
+     "default_selected": true,
+     "error": null,
+     "group": "Sphericity",
+     "label": "Sphericity (Wadell)",
+     "unit": "",
+     "value": 0.9122767020348023
+    },
+    "surface_area": {
+     "default_selected": true,
+     "error": null,
+     "group": "Geometry",
+     "label": "Surface area",
+     "unit": "input_units²",
+     "value": 15.021135696646098
+    },
+    "volume": {
+     "default_selected": true,
+     "error": null,
+     "group": "Geometry",
+     "label": "Volume (mesh)",
+     "unit": "input_units³",
+     "value": 4.769994115002748
+    },
+    "zingg_IL": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Zingg ratio I/L",
+     "unit": "",
+     "value": 0.7494121535686892
+    },
+    "zingg_SI": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Zingg ratio S/I",
+     "unit": "",
+     "value": 0.9978620937244781
+    }
+   },
+   "requires": [
+    "scipy",
+    "manifold3d"
+   ]
+  },
+  "two_sphere_union|axes=pca": {
+   "excluded": [
+    "angelidakis_elongation",
+    "angelidakis_flatness",
+    "axis_I",
+    "axis_L",
+    "axis_S",
+    "kongfonseca_elongation",
+    "kongfonseca_flatness",
+    "potticary_elongation",
+    "potticary_flatness",
+    "sphericity_krumbein",
+    "zingg_IL",
+    "zingg_SI"
+   ],
+   "meta": {
+    "axes_method": "pca",
+    "input_units": "as-is",
+    "output_scale": 1.0,
+    "output_units": "as-is",
+    "reader": null,
+    "scale_factor": 1.0,
+    "source_name": null,
+    "warnings": []
+   },
+   "metrics": {
+    "angelidakis_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Elongation (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.16666665507687484
+    },
+    "angelidakis_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Flatness (Angelidakis et al.)",
+     "unit": "",
+     "value": 5.551115123125783e-17
+    },
+    "axis_I": {
+     "default_selected": false,
+     "error": null,
+     "group": "Axes (PCA estimate)",
+     "label": "Intermediate axis I (PCA)",
+     "unit": "input_units",
+     "value": 2.000000047683715
+    },
+    "axis_L": {
+     "default_selected": false,
+     "error": null,
+     "group": "Axes (PCA estimate)",
+     "label": "Long axis L (PCA)",
+     "unit": "input_units",
+     "value": 2.8
+    },
+    "axis_S": {
+     "default_selected": false,
+     "error": null,
+     "group": "Axes (PCA estimate)",
+     "label": "Short axis S (PCA)",
+     "unit": "input_units",
+     "value": 2.000000047683715
+    },
+    "centroid_x": {
+     "default_selected": false,
+     "error": null,
+     "group": "Geometry",
+     "label": "Centroid X",
+     "unit": "input_units",
+     "value": 0.19409608589695554
+    },
+    "centroid_y": {
+     "default_selected": false,
+     "error": null,
+     "group": "Geometry",
+     "label": "Centroid Y",
+     "unit": "input_units",
+     "value": 2.415316187746516e-17
+    },
+    "centroid_z": {
+     "default_selected": false,
+     "error": null,
+     "group": "Geometry",
+     "label": "Centroid Z",
+     "unit": "input_units",
+     "value": -2.3239345008509804e-17
+    },
+    "convexity": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Convexity (V / V_convex_hull)",
+     "unit": "",
+     "value": 0.9284241681053117
+    },
+    "inertia_I1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Inertia (unit density)",
+     "label": "Principal inertia I1 (unit density)",
+     "unit": "input_units⁵",
+     "value": 1.692868512351232
+    },
+    "inertia_I2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Inertia (unit density)",
+     "label": "Principal inertia I2 (unit density)",
+     "unit": "input_units⁵",
+     "value": 2.676790509779747
+    },
+    "inertia_I3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Inertia (unit density)",
+     "label": "Principal inertia I3 (unit density)",
+     "unit": "input_units⁵",
+     "value": 2.676863641947082
+    },
+    "kongfonseca_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Elongation (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.2857142686843874
+    },
+    "kongfonseca_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Flatness (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.0
+    },
+    "n_faces": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Face count",
+     "unit": "",
+     "value": 668.0
+    },
+    "n_vertices": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Vertex count",
+     "unit": "",
+     "value": 336.0
+    },
+    "orientation_C": {
+     "default_selected": true,
+     "error": null,
+     "group": "Orientation",
+     "label": "Compactness C (surface orientation tensor)",
+     "unit": "",
+     "value": 0.8012650719499379
+    },
+    "orientation_E": {
+     "default_selected": true,
+     "error": null,
+     "group": "Orientation",
+     "label": "Elongation E (surface orientation tensor)",
+     "unit": "",
+     "value": 0.19852387699308052
+    },
+    "orientation_F": {
+     "default_selected": true,
+     "error": null,
+     "group": "Orientation",
+     "label": "Flakiness F (surface orientation tensor)",
+     "unit": "",
+     "value": 0.00021105105698154947
+    },
+    "orientation_eig1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Orientation",
+     "label": "Orientation eigenvalue 1",
+     "unit": "",
+     "value": 0.3570084662919875
+    },
+    "orientation_eig2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Orientation",
+     "label": "Orientation eigenvalue 2",
+     "unit": "",
+     "value": 0.35693311927782523
+    },
+    "orientation_eig3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Orientation",
+     "label": "Orientation eigenvalue 3",
+     "unit": "",
+     "value": 0.28605841443018637
+    },
+    "potticary_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Elongation (Potticary et al.)",
+     "unit": "",
+     "value": 0.11764705016126291
+    },
+    "potticary_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Flatness (Potticary et al.)",
+     "unit": "",
+     "value": 0.0
+    },
+    "sphericity_krumbein": {
+     "default_selected": true,
+     "error": null,
+     "group": "Sphericity",
+     "label": "Sphericity (Krumbein)",
+     "unit": "",
+     "value": 0.7990635427589131
+    },
+    "sphericity_wadell": {
+     "default_selected": true,
+     "error": null,
+     "group": "Sphericity",
+     "label": "Sphericity (Wadell)",
+     "unit": "",
+     "value": 0.9122767020348023
+    },
+    "surface_area": {
+     "default_selected": true,
+     "error": null,
+     "group": "Geometry",
+     "label": "Surface area",
+     "unit": "input_units²",
+     "value": 15.021135696646098
+    },
+    "volume": {
+     "default_selected": true,
+     "error": null,
+     "group": "Geometry",
+     "label": "Volume (mesh)",
+     "unit": "input_units³",
+     "value": 4.769994115002748
+    },
+    "zingg_IL": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Zingg ratio I/L",
+     "unit": "",
+     "value": 0.7142857313156126
+    },
+    "zingg_SI": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form parameters",
+     "label": "Zingg ratio S/I",
+     "unit": "",
+     "value": 1.0
+    }
+   },
+   "requires": [
+    "scipy",
+    "manifold3d"
+   ]
+  }
+ }
+}
