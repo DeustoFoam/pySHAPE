@@ -269,11 +269,13 @@ def compute_metrics(
 ) -> list[Metric]:
     """Calculate mesh descriptors with a stable set of keys.
 
-    Closed shells are oriented and combined as a solid union. Open meshes retain
-    surface and form descriptors but expose volume-dependent metrics as errors.
-    Missing SciPy makes only convexity unavailable with the default PCA axes.
-    Multiple closed shells need the ``mesh`` extra; overlap is counted once and
-    internal surfaces excluded.
+    The mesh is first prepared by :func:`pyshape.prepare_solid`: closed shells
+    are oriented and, with the default ``cavities="fill"``, combined as a solid
+    union (overlap counted once, internal surfaces excluded; several closed
+    shells to merge need the ``mesh`` extra). Open meshes retain surface and
+    form descriptors but expose volume-dependent metrics as errors. Missing
+    SciPy makes only convexity unavailable with the default PCA axes. The 34
+    metrics are grouped by what they depend on (:func:`result_groups`).
 
     ``axes`` selects how the short/intermediate/long dimensions S, I, L used by
     the axis-based form indices are measured: ``"pca"`` (principal directions

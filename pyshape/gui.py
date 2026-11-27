@@ -7,8 +7,14 @@ Lets a user:
   * export the ticked parameters to CSV next to the input file, with a
     configurable filename suffix and optional progressive numbering to
     avoid overwriting previous exports,
+  * choose how the principal dimensions S, I, L are measured (PCA or
+    minimum-volume box, inertia-equivalent or fitted ellipsoid) and how nested
+    closed shells are treated ("Nested shells": all solid, or cavities),
   * preview the geometry in a slowly auto-rotating 3D view with an XYZ axes
-    triad scaled to the mesh's bounding box,
+    triad scaled to the mesh's bounding box, drawn beneath the translucent
+    surface; each triangle is coloured by the side facing the viewer (light
+    blue outside, darker blue inside), cavity walls are orange, and an opacity
+    slider (5 to 100 %, default 20 %) controls how much shows through,
   * read what each result and control means: hovering shows a one-line
     description and the "?" buttons open the definition, formula and
     references (texts from :mod:`pyshape.descriptors`).

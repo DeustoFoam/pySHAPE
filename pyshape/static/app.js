@@ -101,7 +101,7 @@ $("analyze-form").addEventListener("submit", async (event) => {
   cavityTriangles = [];
   $("results").replaceChildren();
   $("metadata").textContent = "";
-  $("preview-info").textContent = "Drag to rotate. Scroll to zoom.";
+  $("preview-info").textContent = "Drag to turn the particle. Scroll to zoom.";
   draw();
   setBusy(true);
   status("Calculating...");
@@ -136,7 +136,7 @@ $("analyze-form").addEventListener("submit", async (event) => {
              : "Results use the input units of the file.");
     $("preview-info").textContent = `Showing ${result.preview.shown_faces} of ${result.preview.total_faces} faces. `
       + "Large meshes are simplified for display only; calculations always use the full mesh. "
-      + "Drag to rotate, scroll to zoom.";
+      + "Drag to turn the particle, scroll to zoom.";
     $("metadata").textContent += ` Read by: ${readerText(result)}.`;
     const failed = result.metrics.filter((metric) => metric.error).length;
     status((failed ? `Analysis complete. ${failed} parameters unavailable; see results.` : "Analysis complete.")

@@ -47,13 +47,16 @@ class MetricRecord(BaseModel):
 
 class Preview(BaseModel):
     triangles: list[list[list[float]]] = Field(
-        description="Triangles for display, centred and scaled to unit size; "
-        f"simplified when the mesh has more than {MAX_PREVIEW_FACES} faces.")
-    total_faces: int = Field(description="Faces of the analysed mesh (after the solid union).")
+        description="Triangles of the analysed surface for display, without the cavity "
+        "walls, centred and scaled to unit size; simplified when the mesh has more than "
+        f"{MAX_PREVIEW_FACES} faces.")
+    total_faces: int = Field(description="Faces of the analysed mesh (after preparation: solid "
+                             "union and, with `cavities=keep`, the cavity walls).")
     shown_faces: int = Field(description="Faces in `triangles`.")
     cavity_triangles: list[list[list[float]]] = Field(
         default_factory=list, description="With `cavities=keep`: the cavity walls, in the same "
-        "coordinates as `triangles` (and not repeated there), oriented towards the cavity.")
+        "coordinates as `triangles` (and not repeated there), oriented towards the cavity; "
+        "empty otherwise.")
 
 
 class AnalysisResponse(BaseModel):
@@ -72,7 +75,8 @@ class AnalysisResponse(BaseModel):
     warnings: list[str] = Field(description="Notes about the input, e.g. why an STL file was "
                                 "read by the trimesh fallback. Empty for most files.")
     cavities: str = Field(description="How nested closed shells were treated: `fill` (all "
-                          "solid) or `keep` (even-odd rule: a shell inside another is a cavity).")
+                          "solid) or `keep` (even-odd rule: a shell inside one other shell is a "
+                          "cavity, inside two a solid island).")
     preview: Optional[Preview] = Field(None, description="Only with `include_preview=true`.")
     csv: Optional[str] = Field(None, description="Only with `include_csv=true`: the CSV text "
                                "that `/api/export` returns for the same request.")
@@ -117,12 +121,14 @@ UPLOAD_ERRORS = {
     413: _error(f"The file is larger than {MAX_UPLOAD_BYTES // 2**20} MiB."),
     415: _error(f"The file extension is not one of {ACCEPTED}, or a `.glb` file refers "
                 "to external files (its buffers and images must be embedded)."),
-    422: _error("Invalid mesh, or unknown `units`, `axes`, `output_units` or metric key. "
+    422: _error("Invalid mesh, unknown `units`, `axes`, `output_units`, `cavities` or metric "
+                "key, or (with `cavities=keep`) a cavity that crosses the outer surface. "
                 "For a missing `file` or a malformed field, `detail` is instead a list of "
                 "validation errors."),
     503: _error("A package is missing: trimesh, to read formats other than STL, or the "
-                "solid-union packages, for a mesh with several closed shells. Both come "
-                "with `pyshape[mesh]`."),
+                "solid-union packages, for a mesh with several closed shells that must be "
+                "merged (with `cavities=keep`, a solid with separate cavities needs none). "
+                "Both come with `pyshape[mesh]`."),
 }
 
 _POWER_TEXT = {1: "length", 2: "length²", 3: "length³", 5: "length⁵"}
@@ -159,7 +165,7 @@ CAVITIES_DOC = ("How nested closed shells are treated: `fill` (default; every sh
                 "one other shell is a cavity, inside two a solid island). With `keep`, volume, "
                 "centroid, inertia and `surface_area` refer to the material, the form "
                 "descriptors to the outer envelope, and `n_cavities`, `cavity_volume` and "
-                "`porosity` are reported.")
+                "`porosity` are reported (with `fill` they are unavailable, with the reason).")
 OUTPUT_DOC = ("Length unit of the results: areas in its square, volumes in its cube, "
               "inertia per unit density in its fifth power. `same` follows `units`. "
               "Ignored when `units` is `as-is`.")
@@ -193,9 +199,10 @@ with the parser's reason. The other formats are read by trimesh (`reader: "trime
 Each upload must be a
 single self-contained file: the text glTF format (`.gltf`), whose buffers are usually
 separate files, is not accepted (export `.glb`), and references of OBJ or DAE files
-to other files (materials, textures) are not available. Every mesh is then prepared in the same way (orientation of closed
-shells, solid union). Volume-based results need a closed mesh; for open meshes they
-are returned with `value: null` and an `error` instead of failing the request.
+to other files (materials, textures) are not available. Every mesh is then prepared in
+the same way (orientation of closed shells, solid union and, with `cavities=keep`, nested
+shells as cavities). Volume-based results need a closed mesh; for open meshes they are
+returned with `value: null` and an `error` instead of failing the request.
 
 **Security.** The server is meant for local use. It has no authentication; do not expose
 it to untrusted networks. Uploads other than STL are parsed by trimesh (version 5 or
@@ -210,8 +217,10 @@ served as JSON by `GET /api/descriptors`.
 
 {{table}}
 
-The labels and group of `axis_S`, `axis_I` and `axis_L` name the method chosen with
-`axes` (shown here for `pca`). Units follow `units` and `output_units`.
+Results are grouped by what they depend on. The labels and group of `axis_S`, `axis_I`
+and `axis_L`, and the group of the indices computed from them, name the method chosen
+with `axes` (shown here for `pca`). `n_cavities`, `cavity_volume` and `porosity` have
+values only with `cavities=keep`. Units follow `units` and `output_units`.
 """
 
 
@@ -426,7 +435,8 @@ def create_app() -> FastAPI:
         file: UploadFile = File(..., description=FILE_DOC),
         units: str = Form("as-is", description=UNITS_DOC, **_choices(UNIT_SCALES)),
         include_preview: bool = Form(False, description="Add `preview`: simplified "
-                                     "triangles of the analysed surface, for display."),
+                                     "triangles of the analysed surface (and, with "
+                                     "`cavities=keep`, of the cavity walls), for display."),
         axes: str = Form("pca", description=AXES_DOC, **_choices(AXES_LABELS)),
         output_units: str = Form("m", description=OUTPUT_DOC,
                                  **_choices(["same", *OUTPUT_UNITS])),

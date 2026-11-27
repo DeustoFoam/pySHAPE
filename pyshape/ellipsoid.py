@@ -26,6 +26,10 @@ full axis lengths (twice the semi-axes c <= b <= a):
     is checked: if it is not an ellipsoid, a ``ValueError`` is raised instead
     of returning signed radii. ``weighting="none"`` uses unweighted vertices,
     as SHAPE does. The fit is invariant to rotation and translation.
+
+In :func:`pyshape.compute_metrics` (``axes="inertia_ellipsoid"`` or
+``"fitted_ellipsoid"``), both use the outer surface when cavities are kept
+(``cavities="keep"``): the envelope's volume and inertia, or its vertices.
 """
 from __future__ import annotations
 

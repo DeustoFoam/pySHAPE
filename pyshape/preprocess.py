@@ -1,8 +1,13 @@
-"""Mesh preparation: validation, orientation of closed shells and solid union.
+"""Mesh preparation: validation, orientation of closed shells, solid union and cavities.
 
 This module sits between :mod:`pyshape.io`, which reads files, and
-:mod:`pyshape.analysis`, which computes the descriptors. Its functions are also
-available from :mod:`pyshape.analysis` for compatibility.
+:mod:`pyshape.analysis`, which computes the descriptors. :func:`prepare_mesh`
+returns the surface that is analysed; :func:`prepare_solid` also returns the
+outer envelope and the cavity walls. ``cavities="fill"`` (default) treats every
+closed shell as solid and merges overlapping shells; ``cavities="keep"``
+applies the even-odd rule to nested shells, so that a shell inside one other
+shell is a cavity (see :data:`CAVITY_MODES`). The functions are also available
+from :mod:`pyshape.analysis` for compatibility.
 """
 from __future__ import annotations
 

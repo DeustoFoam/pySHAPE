@@ -58,12 +58,17 @@ REFERENCES: dict[str, dict[str, str]] = {
 }
 
 _BOX = ("The principal dimensions S, I, L, and so the method chosen under Principal "
-        "dimensions (S, I, L): a bounding box or an equivalent ellipsoid.")
+        "dimensions (S, I, L): a bounding box or an equivalent ellipsoid (of the outer "
+        "surface when cavities are kept).")
 _NO_BOX = "Not on any bounding box."
 _ORIENTATION_NOTE = (
     " These indices come from the surface normals only; they are not the box-based "
     "flatness and elongation of Potticary et al., Kong & Fonseca or Angelidakis et al."
 )
+_MATERIAL_NOTE = (" With cavities kept (cavities = keep), it refers to the material: the cavities "
+                  "are excluded.")
+_ENVELOPE_NOTE = (" With cavities kept (cavities = keep), only the outer surface is used, so "
+                  "internal cavities do not change it.")
 
 
 def _entry(short: str, description: str, formula: str = "", depends_on: str = "",
@@ -76,33 +81,37 @@ METRICS: dict[str, dict[str, object]] = {
     "n_vertices": _entry(
         "Number of vertices of the analysed mesh.",
         "Vertices of the triangle mesh after preparation (orientation of closed shells and, "
-        "for several shells, their solid union). It describes the mesh, not the particle.",
+        "for several shells, their solid union; with cavities kept, the cavity walls are "
+        "included). It describes the mesh, not the particle.",
         depends_on="The mesh resolution only."),
     "n_faces": _entry(
         "Number of triangles of the analysed mesh.",
         "Triangles of the mesh after preparation (orientation of closed shells and, for "
-        "several shells, their solid union). It describes the mesh, not the particle.",
+        "several shells, their solid union; with cavities kept, the cavity walls are "
+        "included). It describes the mesh, not the particle.",
         depends_on="The mesh resolution only."),
     "surface_area": _entry(
         "Total area of the triangles of the surface.",
         "Sum of the areas of all triangles of the analysed surface. For several overlapping "
-        "shells, internal surfaces of the solid union are excluded. With cavities kept, the "
-        "cavity walls are included (the surface of the material). Available for open meshes "
-        "too.",
+        "shells, internal surfaces of the solid union are excluded. With cavities kept "
+        "(cavities = keep), the cavity walls are included (the surface of the material); "
+        "the outer surface alone is surface_area_outer. Available for open meshes too.",
         "A = Σ ½ |(b − a) × (c − a)| over the triangles (a, b, c)",
         _NO_BOX, ("shape2021",)),
     "surface_area_outer": _entry(
         "Area of the outer surface (envelope), without cavity walls.",
         "Area of the envelope: the outer surface with cavities filled. It equals the surface "
-        "area unless cavities are kept (cavities = keep). Wadell sphericity uses it.",
+        "area unless cavities are kept (cavities = keep) and the particle has cavities. "
+        "Wadell sphericity uses it.",
         "A_outer = Σ ½ |(b − a) × (c − a)| over the triangles of the envelope",
         _NO_BOX),
     "n_cavities": _entry(
         "Number of internal cavities (cavities = keep).",
         "Closed shells that lie inside an odd number of other shells (even-odd rule): a shell "
         "inside the outer surface is a cavity, a shell inside a cavity a solid island. "
-        "Unavailable with cavities = fill, where every shell is treated as solid (as for the "
-        "spheres of a clump).",
+        "Overlapping cavity shells merge and count as one cavity. 0 for a single shell or an "
+        "open mesh. Unavailable with cavities = fill, where every shell is treated as solid "
+        "(as for the spheres of a clump).",
         depends_on="Closed shells; cavities = keep. " + _NO_BOX),
     "cavity_volume": _entry(
         "Volume of the cavities (envelope volume minus material volume).",
@@ -121,7 +130,7 @@ METRICS: dict[str, dict[str, object]] = {
         "Volume enclosed by the closed surface.",
         "Volume of the solid bounded by the surface, as the sum of signed tetrahedra joining "
         "each triangle to a reference point. It needs a closed, consistently oriented mesh; "
-        "for open meshes it is unavailable.",
+        "for open meshes it is unavailable. Overlapping shells count once." + _MATERIAL_NOTE,
         "V = Σ (1/6) (a − o) · ((b − o) × (c − o)), o = reference point",
         "A closed mesh. " + _NO_BOX, ("shape2021",)),
     **{
@@ -129,7 +138,7 @@ METRICS: dict[str, dict[str, object]] = {
             f"{axis.upper()} coordinate of the volume centroid.",
             f"{axis.upper()} coordinate of the centre of volume of the solid, in the "
             "coordinate system of the file (converted to the output units). It needs a "
-            "closed mesh.",
+            "closed mesh." + _MATERIAL_NOTE,
             "centroid = Σ V_t (a + b + c + o)/4 / V over the signed tetrahedra t",
             "A closed mesh and the position of the particle in the file.",
             ("shape2021",))
@@ -141,7 +150,7 @@ METRICS: dict[str, dict[str, object]] = {
             "Eigenvalues of the inertia tensor of the solid about its centroid, for a "
             "density of 1 (multiply by the density for the mass moments), sorted I1 ≤ I2 ≤ I3. "
             "Computed exactly from signed tetrahedra on the closed surface. Units: "
-            "length to the fifth power.",
+            "length to the fifth power." + _MATERIAL_NOTE,
             "I = ∫ (|r|² 1 − r rᵀ) dV about the centroid; I1 ≤ I2 ≤ I3 are its eigenvalues",
             "A closed mesh. " + _NO_BOX, ("tonon2005", "shape2021"))
         for i, order in ((1, "smallest"), (2, "intermediate"), (3, "largest"))
@@ -150,13 +159,17 @@ METRICS: dict[str, dict[str, object]] = {
         "Surface area of the sphere of equal volume divided by the particle's surface area.",
         "True sphericity: 1 for a sphere and smaller for any other shape. It uses only the "
         "volume and surface area, so it needs a closed mesh but no bounding box. It is "
-        "sensitive to surface roughness and to mesh noise, which increase the area.",
+        "sensitive to surface roughness and to mesh noise, which increase the area. With "
+        "cavities kept (cavities = keep), V and A are those of the outer surface (envelope "
+        "volume and surface_area_outer), so internal cavities do not change it.",
         "Ψ = π^(1/3) (6V)^(2/3) / A",
         "A closed mesh. " + _NO_BOX, ("wadell1932", "shape2021")),
     "convexity": _entry(
         "Volume of the particle divided by the volume of its convex hull.",
         "1 for a convex particle, smaller when the particle has concavities. The convex hull "
-        "is the smallest convex solid that contains every vertex.",
+        "is the smallest convex solid that contains every vertex. With cavities kept "
+        "(cavities = keep), V is the volume enclosed by the outer surface (cavities filled), "
+        "so internal cavities do not change it.",
         "Convexity = V / V_convex_hull",
         "A closed mesh and SciPy (pyshape[analysis]). " + _NO_BOX, ("shape2021",)),
     "orientation_C": _entry(
@@ -165,7 +178,7 @@ METRICS: dict[str, dict[str, object]] = {
         "the unit face normals n_t, weighted by triangle area A_t. With its eigenvalues "
         "f1 ≥ f2 ≥ f3, compactness C is near 1 when normals point evenly in all directions "
         "(sphere, cube and any shape with cubic or icosahedral symmetry) and small for flat "
-        "or elongated particles. C + F + E = 1." + _ORIENTATION_NOTE,
+        "or elongated particles. C + F + E = 1." + _ORIENTATION_NOTE + _ENVELOPE_NOTE,
         "C = f3 / f1",
         _NO_BOX + " Only face normals and areas; refining the mesh does not bias it.",
         ("bagiorosz2020", "orosz2021")),
@@ -174,14 +187,15 @@ METRICS: dict[str, dict[str, object]] = {
         "With the eigenvalues f1 ≥ f2 ≥ f3 of the surface orientation tensor "
         "F = (1/A) Σ A_t n_t n_tᵀ, flakiness is large when most of the surface faces one "
         "direction, as for a flat particle. It is 0 for a sphere. C + F + E = 1."
-        + _ORIENTATION_NOTE,
+        + _ORIENTATION_NOTE + _ENVELOPE_NOTE,
         "F = (f1 − f2) / f1",
         _NO_BOX + " Only face normals and areas.", ("bagiorosz2020", "orosz2021")),
     "orientation_E": _entry(
         "Elongation E from the surface orientation tensor (large for rod-like particles).",
         "With the eigenvalues f1 ≥ f2 ≥ f3 of the surface orientation tensor "
         "F = (1/A) Σ A_t n_t n_tᵀ, elongation is large when the normals lie mostly in one "
-        "plane, as for a rod. It is 0 for a sphere. C + F + E = 1." + _ORIENTATION_NOTE,
+        "plane, as for a rod. It is 0 for a sphere. C + F + E = 1." + _ORIENTATION_NOTE
+        + _ENVELOPE_NOTE,
         "E = (f2 − f3) / f1",
         _NO_BOX + " Only face normals and areas.", ("bagiorosz2020", "orosz2021")),
     **{
@@ -190,7 +204,7 @@ METRICS: dict[str, dict[str, object]] = {
             "Eigenvalues f1 ≥ f2 ≥ f3 of the surface orientation tensor "
             "F = (1/A) Σ A_t n_t n_tᵀ (n_t unit normal, A_t area of triangle t). They sum "
             "to 1; for a sphere each is 1/3. Compactness, flakiness and elongation are "
-            "built from them.",
+            "built from them." + _ENVELOPE_NOTE,
             "f1 ≥ f2 ≥ f3, f1 + f2 + f3 = 1",
             _NO_BOX + " Only face normals and areas.", ("bagiorosz2020", "orosz2021"))
         for i, order in ((1, "largest"), (2, "intermediate"), (3, "smallest"))
@@ -203,7 +217,9 @@ METRICS: dict[str, dict[str, object]] = {
             "of the inertia-equivalent or fitted ellipsoid, sorted so that S ≤ I ≤ L. "
             "Every index computed from S, I, L "
             "(Krumbein sphericity, Zingg ratios, flatness and elongation) inherits the "
-            "method.",
+            "method. With cavities kept (cavities = keep), S, I, L are measured on the outer "
+            "surface (for the inertia-equivalent ellipsoid, from its volume and inertia), so "
+            "internal cavities do not change them.",
             "S ≤ I ≤ L: box edges, or full ellipsoid axes 2c ≤ 2b ≤ 2a",
             _BOX, ("shape2021",))
         for axis, name in (("S", "Short"), ("I", "Intermediate"), ("L", "Long"))
@@ -292,7 +308,8 @@ AXES_METHODS: dict[str, dict[str, object]] = {
         "box-based ones. The ellipsoid generally does not have the particle's volume.",
         formula="a² = 5(I2 + I3 − I1)/(2V), b² = 5(I1 + I3 − I2)/(2V), "
                 "c² = 5(I1 + I2 − I3)/(2V), with I1 ≤ I2 ≤ I3; S = 2c, I = 2b, L = 2a",
-        depends_on="A closed mesh (volume and inertia)."),
+        depends_on="A closed mesh (volume and inertia; those of the outer surface when "
+                   "cavities are kept)."),
     "fitted_ellipsoid": _entry(
         "Full axes of the ellipsoid fitted to the surface vertices by least squares.",
         "S, I, L are the full axes 2c, 2b, 2a of the ellipsoid fitted to the surface vertices "
@@ -304,7 +321,8 @@ AXES_METHODS: dict[str, dict[str, object]] = {
         "and form indices from them are not directly comparable with box-based ones.",
         formula="A x² + B y² + C z² + 2D xy + 2E xz + 2F yz + 2G x + 2H y + 2I z + J = 0, "
                 "A + B + C = 3; S = 2c, I = 2b, L = 2a",
-        depends_on="The surface vertices (at least nine).", references=("shape2021",)),
+        depends_on="The surface vertices (at least nine; those of the outer surface when "
+                   "cavities are kept).", references=("shape2021",)),
 }
 
 CONTROLS: dict[str, dict[str, object]] = {
@@ -313,7 +331,7 @@ CONTROLS: dict[str, dict[str, object]] = {
         "STL (ASCII or binary) is read by pySHAPE's built-in parser. OBJ, PLY, OFF, GLB, 3MF "
         "and DAE (and glTF on the desktop) are read by trimesh (pyshape[mesh]). Every mesh "
         "becomes a triangle mesh; closed shells are oriented and several shells are combined "
-        "as a solid union."),
+        "as a solid union, or, with Nested shells = keep, nested shells become cavities."),
     "input_units": _entry(
         "Units of the coordinates in the file.",
         "Declares what one unit of the file's coordinates means (µm, mm, cm, m or inch) so "
@@ -327,9 +345,12 @@ CONTROLS: dict[str, dict[str, object]] = {
         "unaffected."),
     "axes": _entry(
         "How the principal dimensions S, I, L are measured.",
-        "Chooses the oriented bounding box whose edges give S ≤ I ≤ L. It affects only the "
-        "principal dimensions and the indices computed from them (Krumbein sphericity, Zingg "
-        "ratios, flatness and elongation); the other results do not depend on it.",
+        "Chooses how S ≤ I ≤ L are measured: as the edges of an oriented bounding box (PCA "
+        "or minimum volume) or as the full axes of an equivalent ellipsoid "
+        "(inertia-equivalent or fitted). It affects only the principal dimensions and the "
+        "indices computed from them (Krumbein sphericity, Zingg ratios, flatness and "
+        "elongation); the other results do not depend on it. With cavities kept, every "
+        "method uses the outer surface.",
         references=("shape2021",)),
     "cavities": _entry(
         "How nested closed shells are treated: all solid (fill) or as cavities (keep).",
@@ -339,31 +360,38 @@ CONTROLS: dict[str, dict[str, object]] = {
         "solid island, whatever the winding in the file. With keep, volume, centroid, inertia "
         "and surface area refer to the material, while Wadell sphericity, convexity, the "
         "surface orientation tensor and the principal dimensions refer to the outer surface; "
-        "the number of cavities, their volume and the porosity are reported. In the preview, "
-        "cavity walls are orange."),
+        "the number of cavities, their volume and the porosity are reported (they are "
+        "unavailable with fill). A shell that crosses a shell of the other kind (a cavity "
+        "breaking through the outer surface) is an error. In the preview, cavity walls are "
+        "orange."),
     "strict_stl": _entry(
         "Read STL files only with the built-in parser.",
         "Without it, an STL file that the built-in parser rejects is read by trimesh when it "
         "is installed, with a warning. With it, the parser's error is raised instead."),
     "load": _entry(
         "Read the file and show the mesh.",
-        "Reads the file with the chosen input units, prepares the mesh (orientation and "
-        "solid union) and shows the preview. Results are computed separately."),
+        "Reads the file with the chosen input units, prepares the mesh (orientation, solid "
+        "union and, with Nested shells = keep, the cavities) and shows the preview. Results "
+        "are computed separately; changing Nested shells prepares the loaded mesh again."),
     "calculate": _entry(
         "Compute all results for the mesh.",
-        "Computes every result with the chosen principal-axes method and output units. "
+        "Computes every result with the chosen principal-dimensions method, nested-shell "
+        "treatment and output units. "
         "Results that cannot be computed (e.g. volume of an open mesh) are shown as n/a "
         "with the reason."),
     "results": _entry(
         "Results of the particle; tick the ones to export.",
-        "Results are grouped. Hover over a result for a one-line description and click its "
+        "Results are grouped by what they depend on (mesh, size and mass, surface-based "
+        "form, principal dimensions, form from S, I, L). Hover over a result for a one-line "
+        "description and click its "
         "name for the definition, formula and references. Ticked results are exported."),
     "select_all": _entry("Tick every available result for export.",
                          "Ticks all results that have a value."),
     "select_none": _entry("Untick every result.", "Unticks all results."),
     "export": _entry(
         "Save the ticked results as CSV.",
-        "Writes one row per ticked result with its value and unit. The first rows name the "
+        "Writes one row per ticked result with its value and unit (named by metric key in "
+        "the browser, by the result's label in the desktop viewer). The first rows name the "
         "source file and its reader."),
     "suffix": _entry(
         "Text added to the file name of the CSV.",
@@ -373,24 +401,27 @@ CONTROLS: dict[str, dict[str, object]] = {
         "When a CSV with the same name exists, a progressive number is appended to the new "
         "file name."),
     "opacity": _entry(
-        "Opacity of the surface in the preview (default 20 %).",
+        "Opacity of the surface in the preview (5 to 100 %, default 20 %).",
         "The default is low (20 %), so that what lies behind or inside the surface (the "
-        "inner side of the surface, cavity walls) shows through; raise it to see the outer "
-        "surface alone. Display only.",
+        "inner side of the surface, cavity walls, the parts of the X, Y, Z axes inside the "
+        "particle) shows through, veiled by the surface; raise it to see the outer surface "
+        "alone. Display only.",
     ),
     "surface_sides": _entry(
-        "Light blue: outer side of the surface; dark blue: inner side.",
+        "Light blue: outer side of the surface; dark blue: inner side; orange: cavity walls.",
         "Each triangle is coloured by the side that faces the viewer: light blue for the "
         "outer side (its normal points towards the viewer), a darker blue for the inner "
-        "side. The inner "
-        "side shows through openings of open meshes, through a transparent surface, or "
-        "where the preview's depth sorting is imperfect; it is not a separate part of the "
-        "particle. Closed shells are oriented outwards before display. Display only.",
+        "side. The inner side shows through openings of open meshes, through a transparent "
+        "surface, or where the preview's depth sorting is imperfect; it is not a separate "
+        "part of the particle. Closed shells are oriented outwards before display. With "
+        "Nested shells = keep, cavity walls are orange: light on the side that faces the "
+        "cavity, darker from behind (the side of the material). Display only.",
     ),
     "auto_rotate": _entry(
         "Rotate the preview slowly.",
-        "Turns the slow rotation of the 3D preview on or off. Dragging rotates the view by "
-        "hand. The preview is for display only."),
+        "Turns the slow rotation of the 3D preview on or off. Dragging turns the particle "
+        "by hand (in the browser, the surface under the pointer follows it; scroll to "
+        "zoom). The preview is for display only."),
     "folder": _entry(
         "Folder of mesh files to analyse.",
         "Every mesh file in the folder is analysed with the same settings; other files are "
@@ -418,13 +449,18 @@ CONTROLS: dict[str, dict[str, object]] = {
 # " (" is looked up too. A group without an entry simply has no help.
 GROUPS: dict[str, str] = {
     "Mesh": "The triangle mesh that is analysed, after preparation.",
-    "Size and mass properties": "Surface area, volume, centroid and inertia of the solid.",
+    "Size and mass properties":
+        "Surface area, volume, centroid and inertia of the material, and the cavities "
+        "(cavities = keep).",
     "Form, surface-based (independent of the box)":
-        "Form indices from the surface itself; no bounding box is needed.",
+        "Form indices from the surface itself (the outer surface when cavities are kept); "
+        "no bounding box or ellipsoid is needed.",
     "Principal dimensions":
-        "Short, intermediate and long dimensions S ≤ I ≤ L of the chosen bounding box.",
+        "Short, intermediate and long dimensions S ≤ I ≤ L, from the bounding box or "
+        "equivalent ellipsoid named in the group.",
     "Form from S, I, L":
-        "Form indices computed only from the principal dimensions S, I, L.",
+        "Form indices computed only from the principal dimensions S, I, L; they inherit "
+        "their method.",
 }
 
 

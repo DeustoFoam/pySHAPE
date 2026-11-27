@@ -1,4 +1,14 @@
-"""Backward-compatible imports for the original desktop viewer helpers."""
+"""Helpers of the desktop viewer that need neither Tk nor Matplotlib.
+
+Backward-compatible imports of the original viewer helpers (``compute_metrics``,
+``load_geometry``, ``write_csv``, ...), plus the text helpers (``units_summary``,
+``reader_text``, ``geo_metadata_rows``) and the preview colours: each triangle is
+coloured by the side that faces the viewer (``OUTSIDE_RGB`` light blue,
+``INSIDE_RGB`` darker blue), cavity walls are orange (``CAVITY_RGB``, darker from
+behind) and the default opacity is ``PREVIEW_OPACITY`` (20 %). The browser preview
+(``pyshape/static/app.js``) uses the same colours. Kept free of UI imports so that it
+can be tested without the ``gui`` extra.
+"""
 from __future__ import annotations
 
 from typing import Optional

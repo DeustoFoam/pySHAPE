@@ -20,11 +20,17 @@ The Python package provides tools for 3D particle geometry and form analysis. It
 - Surface-based form (independent of any box): Wadell sphericity, convexity, and
   the surface orientation tensor (compactness C, flakiness F, elongation E)
 - Form from S, I, L: Krumbein sphericity, Zingg ratios, and Potticary, Kong-Fonseca and Angelidakis et al. (2022) flatness/elongation parameters
+- Multi-component particles (e.g. clumps of spheres) as a solid union, and
+  internal cavities (`cavities="keep"`): nested closed shells by the even-odd
+  rule, with cavity count, cavity volume and porosity
 - Surface roughness statistics
 - STL loading with a built-in ASCII/binary parser (no extra package), trimesh
   as a recorded fallback, and other formats through trimesh
 - An installable, headless Python library with JSON-compatible analysis results
-- Optional local HTTP API and HTML viewer, plus the existing desktop viewer
+- Batch analysis of a folder (`analyze_folder`, `pyshape-batch`)
+- Optional local HTTP API and HTML viewer, plus the existing desktop viewer; both
+  previews colour the outer and inner side of the surface and the cavity walls
+  differently and have an opacity control (default 20 %)
 - In-app help in both viewers: a short description on hover and, on click, the definition,
   formula and references of each result and control
 
@@ -33,10 +39,16 @@ The Python package provides tools for 3D particle geometry and form analysis. It
 - `pyshape/` — Python package
 - `pyshape/io.py` — file loading (built-in STL parser; other formats through trimesh)
 - `pyshape/preprocess.py` — mesh preparation: validation, orientation of closed
-  shells and solid union (`prepare_mesh`)
+  shells, solid union and cavities (`prepare_mesh`, `prepare_solid`)
 - `pyshape/analysis.py` — shared analysis service (descriptors and results),
   independent of the interfaces
+- `pyshape/geometry.py`, `pyshape/form.py`, `pyshape/roughness.py` — the
+  low-level geometry, form and roughness functions
+- `pyshape/bounding.py` and `pyshape/ellipsoid.py` — principal dimensions from
+  an oriented bounding box or an equivalent ellipsoid
+- `pyshape/batch.py` — batch analysis of a folder (`pyshape-batch`)
 - `pyshape/descriptors.py` — help texts of the results and controls, used by both viewers
+- `pyshape/gui.py` (with the Tk-free helpers in `pyshape/gui_core.py`) — desktop viewer
 - `pyshape/web.py` and `pyshape/static/` — optional API and browser viewer
 - `examples/` — runnable demos and bundled STL assets;
   `examples/assets/synthetic/` is a fixed collection of synthetic test particles
@@ -45,6 +57,7 @@ The Python package provides tools for 3D particle geometry and form analysis. It
 - `tests/` — unit tests
 - `tools/audit.py` and `tools/baseline/` — audit of functions and results
   against a recorded baseline ([docs/audit.md](docs/audit.md))
+- `validation/` — verification against exact solutions and the original SHAPE
 - `pyproject.toml` — package metadata and optional dependency groups
 - `requirements.txt` — convenience installation of all development/viewer extras
 
@@ -131,8 +144,10 @@ json_text = json.dumps(result.to_dict(), allow_nan=False)
 ```
 
 `analyze_file` loads geometry and delegates to `analyze_mesh(nodes, faces)`.
-Both return an `AnalysisResult` containing 30 metric records. No window or
-server is started. `load_geometry(path)` is also public when you need the
+Both return an `AnalysisResult` containing 34 metric records, always with the
+same keys (unavailable values are `None`, with the reason). No window or
+server is started. Both take `axes=` (how S, I, L are measured) and
+`cavities=` (`"fill"` or `"keep"`, see the contract below). `load_geometry(path)` is also public when you need the
 mesh arrays and source metadata.
 
 ### Batch analysis of a folder
@@ -160,7 +175,8 @@ Options: `suffix` (added to each CSV name), `avoid_overwrite` (number new
 CSVs instead of overwriting, `--no-overwrite`), `recursive` (include
 subfolders), `summary` (also write `pyshape_summary.csv` with one row per
 particle, with `reader` and `warnings` columns), `keys` (choose the metrics),
-`write_csv=False` (results only) and `strict_stl` (`--strict-stl`, see
+`write_csv=False` (results only), `axes` (`--axes`), `cavities`
+(`--cavities keep`, see the contract below) and `strict_stl` (`--strict-stl`, see
 [Reading STL files](#reading-stl-files)). Warnings are in
 `item.result.warnings` and printed by the command.
 Every format `analyze_file` reads is included. Inputs with the same name
@@ -188,10 +204,11 @@ does not derive surface roughness or tetrahedral inertia automatically.
 
 ### Get the surface that is analysed
 
-Before computing any descriptor, `analyze_file` and `analyze_mesh` call
-`prepare_mesh` (module `pyshape.preprocess`), which orients every closed shell consistently and outwards and
-merges several shells into one solid (see the contract below). Call it directly
-to inspect or save the corrected surface:
+Before computing any descriptor, `analyze_file` and `analyze_mesh` prepare the
+mesh (module `pyshape.preprocess`): every closed shell is oriented consistently
+and outwards, and several shells are merged into one solid or, with
+`cavities="keep"`, nested shells become cavities (see the contract below).
+`prepare_mesh` returns that surface; call it directly to inspect or save it:
 
 ```python
 import numpy as np
@@ -205,6 +222,9 @@ np.savez("particle_prepared.npz", nodes=nodes, faces=faces)
 An open mesh is returned unchanged; a closed surface that cannot be oriented
 (e.g. a Klein bottle) raises `ValueError`. Its docstring (`help(prepare_mesh)`)
 lists the steps and the cases accepted without a warning.
+`prepare_solid(nodes, faces, cavities="keep")` returns a `PreparedSolid` with
+the material surface, the outer envelope, the cavity-wall flags and the number
+of cavities.
 
 ### Reading STL files
 
@@ -252,20 +272,25 @@ warning.
 - Results are grouped, in this order, by what they depend on (the `group` of
   each metric record; the interfaces show the same groups):
   1. **Mesh**: vertex and face counts.
-  2. **Size and mass properties**: surface area, volume, centroid, principal
-     moments of inertia I1–I3 (unit density).
+  2. **Size and mass properties**: surface area, area of the outer surface
+     (`surface_area_outer`), volume, centroid, principal moments of inertia
+     I1–I3 (unit density), and `n_cavities`, `cavity_volume` and `porosity`
+     (values only with `cavities="keep"`).
   3. **Form, surface-based (independent of the box)**: Wadell sphericity,
      convexity, and the surface orientation tensor indices compactness C,
      flakiness F and elongation E (Orosz et al., 2021) with its eigenvalues
      f1 ≥ f2 ≥ f3.
-  4. **Principal dimensions (PCA box / minimum-volume box)**: S, I, L; the
-     group name states the `axes` method.
-  5. **Form from S, I, L (PCA box / minimum-volume box)**: Krumbein
-     sphericity, Zingg ratios S/I and I/L, and the Potticary et al., Kong &
-     Fonseca and Angelidakis et al. flatness/elongation. They depend on the
-     `axes` method; the surface-based group does not.
+  4. **Principal dimensions (<method>)**: S, I, L; the group name states the
+     `axes` method (PCA box, minimum-volume box, inertia-equivalent ellipsoid
+     or fitted ellipsoid).
+  5. **Form from S, I, L (<method>)**: Krumbein sphericity, Zingg ratios S/I
+     and I/L, and the Potticary et al. (2015), Kong & Fonseca (2018) and
+     Angelidakis et al. (2022) flatness/elongation. They depend on the `axes`
+     method; the surface-based group does not.
 
   `pyshape.analysis.result_groups(axes)` returns the group names in order.
+  The 16 results marked `default_selected` (surface area, volume and the form
+  indices) are exported when no keys are given.
 - `axes="pca"` (default) measures S, I, L on the box aligned with the principal
   directions of the vertices, as SHAPE's `PCA_points` option. These directions
   are not unique for shapes with isotropic vertex covariance (cubes, regular
@@ -335,15 +360,21 @@ warning.
   Shells of the same depth that may overlap (e.g. two overlapping voids) are
   merged with Manifold; a solid with separate cavities needs no extra package.
   `pyshape.prepare_solid` returns the material surface, the envelope and the
-  cavity-wall flags. In the previews, cavity walls are orange; they show
-  through the outer surface at the default opacity (20 %).
+  cavity-wall flags. A cavity that crosses the outer surface (a shell that
+  crosses a shell of the other kind) raises `ValueError`. In the previews,
+  cavity walls are orange; they show through the outer surface at the default
+  opacity (20 %). `examples/assets/synthetic/` has test particles with
+  cavities (`hollow_sphere.stl`, `cube_with_spherical_void.stl`,
+  `sphere_with_two_cavities.stl`, `nested_island.stl`).
 - Each metric has `key`, `label`, `value`, `group`, `default_selected`,
-  and `error`. Unavailable values are `None` (`null` in JSON), with an
+  `error` and `unit`. Unavailable values are `None` (`null` in JSON), with an
   explanatory error. Missing SciPy affects only convexity. Other unexpected
   computation or loader errors propagate rather than becoming valid results.
 - `result.values` maps stable metric keys to numeric values or `None`.
   `result.to_dict()` includes the full metric records, `source_name`,
-  `input_units`, and `scale_factor`. `source_name` is `None` for array input.
+  `input_units`, `scale_factor`, `axes_method`, `output_units`,
+  `output_scale`, `reader`, `reader_version`, `warnings` and `cavities`.
+  `source_name` and the reader fields are `None` for array input.
 - `result.to_csv()` exports default-selected available results using stable
   metric keys. Pass `keys=[...]` for an explicit selection; unknown,
   unavailable, or empty selections raise `ValueError`.
@@ -361,11 +392,15 @@ python -m pyshape.web --host 127.0.0.1 --port 8000
 
 Open <http://127.0.0.1:8000>. The interface has two pages:
 
-- **Single particle** (`/`): upload a mesh file, choose input units,
+- **Single particle** (`/`): upload a mesh file, choose input and output
+  units, the principal-dimensions method and the treatment of nested shells,
   view grouped results, select descriptors, and download CSV. The interactive
-  mesh preview supports drag rotation, zoom, an XYZ triad, auto-rotation and
-  an opacity control (default 20 %); the outer side of the surface is light blue and the
-  inner side darker blue.
+  mesh preview supports grab-and-turn dragging (the surface under the pointer
+  follows it), zoom, an XYZ triad, auto-rotation and an opacity control
+  (5–100 %, default 20 %). Each triangle is coloured by the side facing the
+  viewer: light blue outside, darker blue inside; cavity walls are orange.
+  The axes are depth-sorted with the triangles, so the translucent surface
+  veils the parts inside or behind the particle.
   For large meshes only the preview is sampled (at most 5000 triangles);
   analysis always uses the full mesh.
 - **Batch** (`/batch`): choose a folder (optionally with subfolders) or several
@@ -393,7 +428,8 @@ glTF (`.gltf`), up to 32 MiB per file: STL, the native format, read by
 pySHAPE's built-in parser (see [Reading STL files](#reading-stl-files)), and OBJ, PLY, OFF, GLB, 3MF and DAE, read by trimesh (any case
 of the extension). The
 reader is chosen by the extension, and every mesh is then
-prepared in the same way (orientation of closed shells, solid union). Each
+prepared in the same way (orientation of closed shells, solid union or, with
+`cavities=keep`, cavities). Each
 upload must be one **self-contained file**: `.gltf` is not accepted because it
 usually keeps its buffers in separate files (export `.glb`), a `.glb` that
 refers to external buffers or images is rejected, and OBJ or DAE
@@ -417,16 +453,18 @@ curl -F "file=@particle.stl" -F "units=mm" \
 ```
 
 - `POST /api/analyze`: multipart `file`, optional `units` (default `as-is`),
-  optional `include_preview` (default `false`), optional `include_csv`
+  `output_units` (default `m`), `axes` (default `pca`), `cavities` (default
+  `fill`), `include_preview` (default `false`) and `include_csv`
   (default `false`) with optional `keys`. Returns the same JSON data
-  as the Python result, plus `preview` and `csv` (the text `/api/export`
-  returns) when requested. `reader`, `reader_version` and `warnings` tell
-  which reader loaded the file and why a fallback was used.
-- `POST /api/export`: multipart `file`, optional `units`, optional
-  comma-separated `keys`. Returns CSV.
+  as the Python result, plus `preview` (with `cavity_triangles` for the
+  cavity walls) and `csv` (the text `/api/export` returns) when requested.
+  `reader`, `reader_version` and `warnings` tell which reader loaded the file
+  and why a fallback was used.
+- `POST /api/export`: multipart `file`, optional `units`, `output_units`,
+  `axes`, `cavities` and comma-separated `keys`. Returns CSV.
 - `GET /api/health`: readiness response.
 - `/docs`: generated interactive API documentation.
-- Invalid data/selection returns 422, unsupported extensions (including
+- Invalid data/selection (including an unknown `cavities` value) returns 422, unsupported extensions (including
   `.gltf`, and `.glb` files with external buffers or images) 415, and uploads exceeding the
   file-size limit 413. A missing dependency (trimesh for non-STL formats, or
   the union backend) returns 503.
@@ -457,6 +495,13 @@ python examples/shapes_gallery.py
 
 The optional GUI viewer is in `examples/gui_shape_viewer.py`; it requires Tk and Matplotlib.
 
+`examples/assets/synthetic/` holds 13 synthetic particles (binary STL,
+dimensionless coordinates) for tests and for trying the interfaces: sphere,
+ellipsoid, cuboid, subdivided cube, regular tetrahedron, torus, rough
+particle, two overlapping spheres, an open surface, and four solids with
+cavities. `python examples/make_synthetic_assets.py` regenerates them; their
+[README](examples/assets/synthetic/README.md) says what each is for.
+
 ## Desktop GUI
 
 A desktop viewer is available in `pyshape/gui.py` (requires Tk, Matplotlib, and
@@ -476,11 +521,16 @@ It lets you:
 - **Load compatible geometry** — STL natively, plus OBJ, PLY, OFF, glTF/GLB,
   3MF and DAE via `trimesh`, which are transparently unified into the same
   triangle-mesh representation used for STL.
+- **Choose the method and the treatment of nested shells** — "Principal
+  dimensions (S, I, L)" selects the PCA or minimum-volume box, or the
+  inertia-equivalent or fitted ellipsoid; "Nested shells" selects `fill`
+  (all solid) or `keep` (cavities). Changing "Nested shells" prepares the
+  loaded mesh again.
 - **Review result parameters and tick which to export** — clicking
-  "Calculate results" computes surface area, volume, centroid, Wadell and
-  Krumbein sphericity, the surface orientation tensor (compactness C, flakiness F, elongation E), Potticary,
-  Kong & Fonseca and Zingg form parameters, convexity, and PCA-estimated
-  axes, each shown with a checkbox.
+  "Calculate results" computes the same 34 results as the library, in the
+  same groups (mesh; size and mass properties, including the cavity results;
+  surface-based form; principal dimensions; form from S, I, L), each shown
+  with a checkbox.
 - **Read what a result or control means** — hovering shows a one-line
   description; the **?** next to it opens a help window with the definition,
   formula and references (links open in the system browser).
@@ -493,8 +543,9 @@ It lets you:
   mesh's bounding box and a slow auto-rotation (pauses while you drag to
   rotate manually). The outer side of the surface is light blue and the inner
   side darker blue, so the inside showing through an opening is not mistaken
-  for the outside; the surface is drawn at 20 % opacity by default (slider
-  from 5 % to opaque).
+  for the outside; cavity walls are orange (darker from behind). The surface
+  is drawn at 20 % opacity by default (slider from 5 % to opaque), and the
+  axes are drawn beneath it, so the surface veils them.
 
 ## Tests
 
@@ -506,8 +557,12 @@ python -m pytest -q tests
 ```
 
 Tests cover the public Python API, existing helpers, STL reading and its fallback,
-unit conversion, explicit unavailable metrics, HTTP responses, CSV output,
-and bundled web assets. CI runs the suite and builds the distribution, then
+mesh preparation and solid unions, cavities (on the synthetic particles in
+`examples/assets/synthetic/`), the principal-dimension methods, unit
+conversion, explicit unavailable metrics, the help texts, the preview colours,
+HTTP responses, CSV output, batch analysis, bundled web assets and the audit
+baseline. Tests that need an optional extra (SciPy, manifold3d, FastAPI) are
+skipped without it. CI runs the suite and builds the distribution, then
 checks that the installed wheel imports and analyzes without UI dependencies.
 
 ### Checking that existing behaviour is preserved
