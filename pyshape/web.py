@@ -57,7 +57,7 @@ class AnalysisResponse(BaseModel):
     source_name: Optional[str] = Field(description="Uploaded file name, without folders.")
     input_units: str = Field(description="Units of the coordinates in the file.")
     scale_factor: float = Field(description="Metres per input unit (1 for as-is).")
-    axes_method: str = Field(description="How S, I and L were measured: pca or min_volume.")
+    axes_method: str = Field(description="How S, I and L were measured: pca, min_volume, inertia_ellipsoid or fitted_ellipsoid.")
     output_units: str = Field(description="Length unit of the results, or as-is.")
     output_scale: float = Field(description="Factor applied to lengths after conversion to metres.")
     reader: Optional[str] = Field(description="Reader of the file: `builtin-stl` (STL, built-in "
@@ -119,8 +119,11 @@ def _choices(values) -> dict[str, object]:
 UNITS_DOC = ("Units of the coordinates in the file. `as-is` keeps them unchanged, and the "
              "results are then in the file's own units.")
 AXES_DOC = ("How the principal dimensions S, I, L are measured: `pca` (box aligned with the "
-            "principal directions, fast) or `min_volume` (minimum-volume box, "
-            "orientation-independent, slower).")
+            "principal directions, fast), `min_volume` (minimum-volume box, "
+            "orientation-independent, slower), `inertia_ellipsoid` (full axes of the "
+            "ellipsoid with the same volume and principal moments of inertia) or "
+            "`fitted_ellipsoid` (area-weighted least-squares ellipsoid through the surface "
+            "vertices). Ellipsoid axes are not enclosing dimensions.")
 OUTPUT_DOC = ("Length unit of the results: areas in its square, volumes in its cube, "
               "inertia per unit density in its fifth power. `same` follows `units`. "
               "Ignored when `units` is `as-is`.")

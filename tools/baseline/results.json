@@ -1,6 +1,522 @@
 {
  "batch_summary_header": "source_file,surface_area [input_units^2],volume [input_units^3],sphericity_wadell,convexity,orientation_C,orientation_F,orientation_E,sphericity_krumbein,potticary_flatness,potticary_elongation,kongfonseca_flatness,kongfonseca_elongation,angelidakis_flatness,angelidakis_elongation,zingg_SI,zingg_IL,reader,warnings",
  "cases": {
+  "cube|axes=fitted_ellipsoid": {
+   "excluded": [],
+   "meta": {
+    "axes_method": "fitted_ellipsoid",
+    "input_units": "as-is",
+    "output_scale": 1.0,
+    "output_units": "as-is",
+    "reader": null,
+    "scale_factor": 1.0,
+    "source_name": null,
+    "warnings": []
+   },
+   "metrics": {
+    "angelidakis_elongation": {
+     "default_selected": true,
+     "error": "ellipsoid fit failed: an ellipsoid fit needs at least nine points with positive weight",
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Elongation (Angelidakis et al.)",
+     "unit": "",
+     "value": null
+    },
+    "angelidakis_flatness": {
+     "default_selected": true,
+     "error": "ellipsoid fit failed: an ellipsoid fit needs at least nine points with positive weight",
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Flatness (Angelidakis et al.)",
+     "unit": "",
+     "value": null
+    },
+    "axis_I": {
+     "default_selected": false,
+     "error": "ellipsoid fit failed: an ellipsoid fit needs at least nine points with positive weight",
+     "group": "Principal dimensions (fitted ellipsoid)",
+     "label": "Intermediate axis I (fitted ellipsoid)",
+     "unit": "input_units",
+     "value": null
+    },
+    "axis_L": {
+     "default_selected": false,
+     "error": "ellipsoid fit failed: an ellipsoid fit needs at least nine points with positive weight",
+     "group": "Principal dimensions (fitted ellipsoid)",
+     "label": "Long axis L (fitted ellipsoid)",
+     "unit": "input_units",
+     "value": null
+    },
+    "axis_S": {
+     "default_selected": false,
+     "error": "ellipsoid fit failed: an ellipsoid fit needs at least nine points with positive weight",
+     "group": "Principal dimensions (fitted ellipsoid)",
+     "label": "Short axis S (fitted ellipsoid)",
+     "unit": "input_units",
+     "value": null
+    },
+    "centroid_x": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Centroid X",
+     "unit": "input_units",
+     "value": 0.5
+    },
+    "centroid_y": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Centroid Y",
+     "unit": "input_units",
+     "value": 0.5
+    },
+    "centroid_z": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Centroid Z",
+     "unit": "input_units",
+     "value": 0.5
+    },
+    "convexity": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Convexity (V / V_convex_hull)",
+     "unit": "",
+     "value": 1.0
+    },
+    "inertia_I1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Principal inertia I1 (unit density)",
+     "unit": "input_units⁵",
+     "value": 0.16666666666666669
+    },
+    "inertia_I2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Principal inertia I2 (unit density)",
+     "unit": "input_units⁵",
+     "value": 0.1666666666666667
+    },
+    "inertia_I3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Principal inertia I3 (unit density)",
+     "unit": "input_units⁵",
+     "value": 0.1666666666666667
+    },
+    "kongfonseca_elongation": {
+     "default_selected": true,
+     "error": "ellipsoid fit failed: an ellipsoid fit needs at least nine points with positive weight",
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Elongation (Kong & Fonseca)",
+     "unit": "",
+     "value": null
+    },
+    "kongfonseca_flatness": {
+     "default_selected": true,
+     "error": "ellipsoid fit failed: an ellipsoid fit needs at least nine points with positive weight",
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Flatness (Kong & Fonseca)",
+     "unit": "",
+     "value": null
+    },
+    "n_faces": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Face count",
+     "unit": "",
+     "value": 12.0
+    },
+    "n_vertices": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Vertex count",
+     "unit": "",
+     "value": 8.0
+    },
+    "orientation_C": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Compactness C (surface orientation tensor)",
+     "unit": "",
+     "value": 1.0
+    },
+    "orientation_E": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Elongation E (surface orientation tensor)",
+     "unit": "",
+     "value": 0.0
+    },
+    "orientation_F": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Flakiness F (surface orientation tensor)",
+     "unit": "",
+     "value": 0.0
+    },
+    "orientation_eig1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f1 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.3333333333333333
+    },
+    "orientation_eig2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f2 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.3333333333333333
+    },
+    "orientation_eig3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f3 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.3333333333333333
+    },
+    "potticary_elongation": {
+     "default_selected": true,
+     "error": "ellipsoid fit failed: an ellipsoid fit needs at least nine points with positive weight",
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Elongation (Potticary et al.)",
+     "unit": "",
+     "value": null
+    },
+    "potticary_flatness": {
+     "default_selected": true,
+     "error": "ellipsoid fit failed: an ellipsoid fit needs at least nine points with positive weight",
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Flatness (Potticary et al.)",
+     "unit": "",
+     "value": null
+    },
+    "sphericity_krumbein": {
+     "default_selected": true,
+     "error": "ellipsoid fit failed: an ellipsoid fit needs at least nine points with positive weight",
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Sphericity (Krumbein)",
+     "unit": "",
+     "value": null
+    },
+    "sphericity_wadell": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Sphericity (Wadell)",
+     "unit": "",
+     "value": 0.8059959770082349
+    },
+    "surface_area": {
+     "default_selected": true,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Surface area",
+     "unit": "input_units²",
+     "value": 6.0
+    },
+    "volume": {
+     "default_selected": true,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Volume (mesh)",
+     "unit": "input_units³",
+     "value": 1.0
+    },
+    "zingg_IL": {
+     "default_selected": true,
+     "error": "ellipsoid fit failed: an ellipsoid fit needs at least nine points with positive weight",
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Zingg ratio I/L",
+     "unit": "",
+     "value": null
+    },
+    "zingg_SI": {
+     "default_selected": true,
+     "error": "ellipsoid fit failed: an ellipsoid fit needs at least nine points with positive weight",
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Zingg ratio S/I",
+     "unit": "",
+     "value": null
+    }
+   },
+   "requires": [
+    "scipy"
+   ]
+  },
+  "cube|axes=inertia_ellipsoid": {
+   "excluded": [],
+   "meta": {
+    "axes_method": "inertia_ellipsoid",
+    "input_units": "as-is",
+    "output_scale": 1.0,
+    "output_units": "as-is",
+    "reader": null,
+    "scale_factor": 1.0,
+    "source_name": null,
+    "warnings": []
+   },
+   "metrics": {
+    "angelidakis_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Elongation (Angelidakis et al.)",
+     "unit": "",
+     "value": 2.220446049250313e-16
+    },
+    "angelidakis_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Flatness (Angelidakis et al.)",
+     "unit": "",
+     "value": 5.551115123125783e-17
+    },
+    "axis_I": {
+     "default_selected": false,
+     "error": null,
+     "group": "Principal dimensions (inertia-equivalent ellipsoid)",
+     "label": "Intermediate axis I (inertia ellipsoid)",
+     "unit": "input_units",
+     "value": 1.2909944487358056
+    },
+    "axis_L": {
+     "default_selected": false,
+     "error": null,
+     "group": "Principal dimensions (inertia-equivalent ellipsoid)",
+     "label": "Long axis L (inertia ellipsoid)",
+     "unit": "input_units",
+     "value": 1.2909944487358058
+    },
+    "axis_S": {
+     "default_selected": false,
+     "error": null,
+     "group": "Principal dimensions (inertia-equivalent ellipsoid)",
+     "label": "Short axis S (inertia ellipsoid)",
+     "unit": "input_units",
+     "value": 1.2909944487358056
+    },
+    "centroid_x": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Centroid X",
+     "unit": "input_units",
+     "value": 0.5
+    },
+    "centroid_y": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Centroid Y",
+     "unit": "input_units",
+     "value": 0.5
+    },
+    "centroid_z": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Centroid Z",
+     "unit": "input_units",
+     "value": 0.5
+    },
+    "convexity": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Convexity (V / V_convex_hull)",
+     "unit": "",
+     "value": 1.0
+    },
+    "inertia_I1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Principal inertia I1 (unit density)",
+     "unit": "input_units⁵",
+     "value": 0.16666666666666669
+    },
+    "inertia_I2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Principal inertia I2 (unit density)",
+     "unit": "input_units⁵",
+     "value": 0.1666666666666667
+    },
+    "inertia_I3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Principal inertia I3 (unit density)",
+     "unit": "input_units⁵",
+     "value": 0.1666666666666667
+    },
+    "kongfonseca_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Elongation (Kong & Fonseca)",
+     "unit": "",
+     "value": 1.719950113979703e-16
+    },
+    "kongfonseca_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Flatness (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.0
+    },
+    "n_faces": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Face count",
+     "unit": "",
+     "value": 12.0
+    },
+    "n_vertices": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Vertex count",
+     "unit": "",
+     "value": 8.0
+    },
+    "orientation_C": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Compactness C (surface orientation tensor)",
+     "unit": "",
+     "value": 1.0
+    },
+    "orientation_E": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Elongation E (surface orientation tensor)",
+     "unit": "",
+     "value": 0.0
+    },
+    "orientation_F": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Flakiness F (surface orientation tensor)",
+     "unit": "",
+     "value": 0.0
+    },
+    "orientation_eig1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f1 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.3333333333333333
+    },
+    "orientation_eig2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f2 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.3333333333333333
+    },
+    "orientation_eig3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f3 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.3333333333333333
+    },
+    "potticary_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Elongation (Potticary et al.)",
+     "unit": "",
+     "value": 5.73316704659901e-17
+    },
+    "potticary_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Flatness (Potticary et al.)",
+     "unit": "",
+     "value": 0.0
+    },
+    "sphericity_krumbein": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Sphericity (Krumbein)",
+     "unit": "",
+     "value": 0.9999999999999999
+    },
+    "sphericity_wadell": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Sphericity (Wadell)",
+     "unit": "",
+     "value": 0.8059959770082349
+    },
+    "surface_area": {
+     "default_selected": true,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Surface area",
+     "unit": "input_units²",
+     "value": 6.0
+    },
+    "volume": {
+     "default_selected": true,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Volume (mesh)",
+     "unit": "input_units³",
+     "value": 1.0
+    },
+    "zingg_IL": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Zingg ratio I/L",
+     "unit": "",
+     "value": 0.9999999999999998
+    },
+    "zingg_SI": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Zingg ratio S/I",
+     "unit": "",
+     "value": 1.0
+    }
+   },
+   "requires": [
+    "scipy"
+   ]
+  },
   "cube|axes=min_volume": {
    "excluded": [],
    "meta": {
@@ -524,6 +1040,522 @@
      "label": "Zingg ratio S/I",
      "unit": "",
      "value": 1.0
+    }
+   },
+   "requires": [
+    "scipy"
+   ]
+  },
+  "cuboid_4x2x1_rotated|axes=fitted_ellipsoid": {
+   "excluded": [],
+   "meta": {
+    "axes_method": "fitted_ellipsoid",
+    "input_units": "as-is",
+    "output_scale": 1.0,
+    "output_units": "as-is",
+    "reader": null,
+    "scale_factor": 1.0,
+    "source_name": null,
+    "warnings": []
+   },
+   "metrics": {
+    "angelidakis_elongation": {
+     "default_selected": true,
+     "error": "ellipsoid fit failed: an ellipsoid fit needs at least nine points with positive weight",
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Elongation (Angelidakis et al.)",
+     "unit": "",
+     "value": null
+    },
+    "angelidakis_flatness": {
+     "default_selected": true,
+     "error": "ellipsoid fit failed: an ellipsoid fit needs at least nine points with positive weight",
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Flatness (Angelidakis et al.)",
+     "unit": "",
+     "value": null
+    },
+    "axis_I": {
+     "default_selected": false,
+     "error": "ellipsoid fit failed: an ellipsoid fit needs at least nine points with positive weight",
+     "group": "Principal dimensions (fitted ellipsoid)",
+     "label": "Intermediate axis I (fitted ellipsoid)",
+     "unit": "input_units",
+     "value": null
+    },
+    "axis_L": {
+     "default_selected": false,
+     "error": "ellipsoid fit failed: an ellipsoid fit needs at least nine points with positive weight",
+     "group": "Principal dimensions (fitted ellipsoid)",
+     "label": "Long axis L (fitted ellipsoid)",
+     "unit": "input_units",
+     "value": null
+    },
+    "axis_S": {
+     "default_selected": false,
+     "error": "ellipsoid fit failed: an ellipsoid fit needs at least nine points with positive weight",
+     "group": "Principal dimensions (fitted ellipsoid)",
+     "label": "Short axis S (fitted ellipsoid)",
+     "unit": "input_units",
+     "value": null
+    },
+    "centroid_x": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Centroid X",
+     "unit": "input_units",
+     "value": 4.748203892237981
+    },
+    "centroid_y": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Centroid Y",
+     "unit": "input_units",
+     "value": -0.7143323900350299
+    },
+    "centroid_z": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Centroid Z",
+     "unit": "input_units",
+     "value": 2.879802520692761
+    },
+    "convexity": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Convexity (V / V_convex_hull)",
+     "unit": "",
+     "value": 0.9999999999999998
+    },
+    "inertia_I1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Principal inertia I1 (unit density)",
+     "unit": "input_units⁵",
+     "value": 3.3333333333333313
+    },
+    "inertia_I2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Principal inertia I2 (unit density)",
+     "unit": "input_units⁵",
+     "value": 11.333333333333334
+    },
+    "inertia_I3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Principal inertia I3 (unit density)",
+     "unit": "input_units⁵",
+     "value": 13.333333333333332
+    },
+    "kongfonseca_elongation": {
+     "default_selected": true,
+     "error": "ellipsoid fit failed: an ellipsoid fit needs at least nine points with positive weight",
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Elongation (Kong & Fonseca)",
+     "unit": "",
+     "value": null
+    },
+    "kongfonseca_flatness": {
+     "default_selected": true,
+     "error": "ellipsoid fit failed: an ellipsoid fit needs at least nine points with positive weight",
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Flatness (Kong & Fonseca)",
+     "unit": "",
+     "value": null
+    },
+    "n_faces": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Face count",
+     "unit": "",
+     "value": 12.0
+    },
+    "n_vertices": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Vertex count",
+     "unit": "",
+     "value": 8.0
+    },
+    "orientation_C": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Compactness C (surface orientation tensor)",
+     "unit": "",
+     "value": 0.25000000000000017
+    },
+    "orientation_E": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Elongation E (surface orientation tensor)",
+     "unit": "",
+     "value": 0.25000000000000006
+    },
+    "orientation_F": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Flakiness F (surface orientation tensor)",
+     "unit": "",
+     "value": 0.49999999999999983
+    },
+    "orientation_eig1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f1 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.5714285714285715
+    },
+    "orientation_eig2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f2 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.28571428571428586
+    },
+    "orientation_eig3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f3 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.14285714285714296
+    },
+    "potticary_elongation": {
+     "default_selected": true,
+     "error": "ellipsoid fit failed: an ellipsoid fit needs at least nine points with positive weight",
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Elongation (Potticary et al.)",
+     "unit": "",
+     "value": null
+    },
+    "potticary_flatness": {
+     "default_selected": true,
+     "error": "ellipsoid fit failed: an ellipsoid fit needs at least nine points with positive weight",
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Flatness (Potticary et al.)",
+     "unit": "",
+     "value": null
+    },
+    "sphericity_krumbein": {
+     "default_selected": true,
+     "error": "ellipsoid fit failed: an ellipsoid fit needs at least nine points with positive weight",
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Sphericity (Krumbein)",
+     "unit": "",
+     "value": null
+    },
+    "sphericity_wadell": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Sphericity (Wadell)",
+     "unit": "",
+     "value": 0.690853694578487
+    },
+    "surface_area": {
+     "default_selected": true,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Surface area",
+     "unit": "input_units²",
+     "value": 28.0
+    },
+    "volume": {
+     "default_selected": true,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Volume (mesh)",
+     "unit": "input_units³",
+     "value": 8.0
+    },
+    "zingg_IL": {
+     "default_selected": true,
+     "error": "ellipsoid fit failed: an ellipsoid fit needs at least nine points with positive weight",
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Zingg ratio I/L",
+     "unit": "",
+     "value": null
+    },
+    "zingg_SI": {
+     "default_selected": true,
+     "error": "ellipsoid fit failed: an ellipsoid fit needs at least nine points with positive weight",
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Zingg ratio S/I",
+     "unit": "",
+     "value": null
+    }
+   },
+   "requires": [
+    "scipy"
+   ]
+  },
+  "cuboid_4x2x1_rotated|axes=inertia_ellipsoid": {
+   "excluded": [],
+   "meta": {
+    "axes_method": "inertia_ellipsoid",
+    "input_units": "as-is",
+    "output_scale": 1.0,
+    "output_units": "as-is",
+    "reader": null,
+    "scale_factor": 1.0,
+    "source_name": null,
+    "warnings": []
+   },
+   "metrics": {
+    "angelidakis_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Elongation (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.30000000000000016
+    },
+    "angelidakis_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Flatness (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.30000000000000004
+    },
+    "axis_I": {
+     "default_selected": false,
+     "error": null,
+     "group": "Principal dimensions (inertia-equivalent ellipsoid)",
+     "label": "Intermediate axis I (inertia ellipsoid)",
+     "unit": "input_units",
+     "value": 2.5819888974716103
+    },
+    "axis_L": {
+     "default_selected": false,
+     "error": null,
+     "group": "Principal dimensions (inertia-equivalent ellipsoid)",
+     "label": "Long axis L (inertia ellipsoid)",
+     "unit": "input_units",
+     "value": 5.163977794943222
+    },
+    "axis_S": {
+     "default_selected": false,
+     "error": null,
+     "group": "Principal dimensions (inertia-equivalent ellipsoid)",
+     "label": "Short axis S (inertia ellipsoid)",
+     "unit": "input_units",
+     "value": 1.2909944487358052
+    },
+    "centroid_x": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Centroid X",
+     "unit": "input_units",
+     "value": 4.748203892237981
+    },
+    "centroid_y": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Centroid Y",
+     "unit": "input_units",
+     "value": -0.7143323900350299
+    },
+    "centroid_z": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Centroid Z",
+     "unit": "input_units",
+     "value": 2.879802520692761
+    },
+    "convexity": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Convexity (V / V_convex_hull)",
+     "unit": "",
+     "value": 0.9999999999999998
+    },
+    "inertia_I1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Principal inertia I1 (unit density)",
+     "unit": "input_units⁵",
+     "value": 3.3333333333333313
+    },
+    "inertia_I2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Principal inertia I2 (unit density)",
+     "unit": "input_units⁵",
+     "value": 11.333333333333334
+    },
+    "inertia_I3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Principal inertia I3 (unit density)",
+     "unit": "input_units⁵",
+     "value": 13.333333333333332
+    },
+    "kongfonseca_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Elongation (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.5000000000000002
+    },
+    "kongfonseca_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Flatness (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.5
+    },
+    "n_faces": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Face count",
+     "unit": "",
+     "value": 12.0
+    },
+    "n_vertices": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Vertex count",
+     "unit": "",
+     "value": 8.0
+    },
+    "orientation_C": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Compactness C (surface orientation tensor)",
+     "unit": "",
+     "value": 0.25000000000000017
+    },
+    "orientation_E": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Elongation E (surface orientation tensor)",
+     "unit": "",
+     "value": 0.25000000000000006
+    },
+    "orientation_F": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Flakiness F (surface orientation tensor)",
+     "unit": "",
+     "value": 0.49999999999999983
+    },
+    "orientation_eig1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f1 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.5714285714285715
+    },
+    "orientation_eig2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f2 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.28571428571428586
+    },
+    "orientation_eig3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f3 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.14285714285714296
+    },
+    "potticary_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Elongation (Potticary et al.)",
+     "unit": "",
+     "value": 0.28571428571428586
+    },
+    "potticary_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Flatness (Potticary et al.)",
+     "unit": "",
+     "value": 0.28571428571428564
+    },
+    "sphericity_krumbein": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Sphericity (Krumbein)",
+     "unit": "",
+     "value": 0.4999999999999999
+    },
+    "sphericity_wadell": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Sphericity (Wadell)",
+     "unit": "",
+     "value": 0.690853694578487
+    },
+    "surface_area": {
+     "default_selected": true,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Surface area",
+     "unit": "input_units²",
+     "value": 28.0
+    },
+    "volume": {
+     "default_selected": true,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Volume (mesh)",
+     "unit": "input_units³",
+     "value": 8.0
+    },
+    "zingg_IL": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Zingg ratio I/L",
+     "unit": "",
+     "value": 0.49999999999999983
+    },
+    "zingg_SI": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Zingg ratio S/I",
+     "unit": "",
+     "value": 0.5
     }
    },
    "requires": [
@@ -1304,6 +2336,522 @@
     "scipy"
    ]
   },
+  "ellipsoid_3_2_1_rotated|axes=fitted_ellipsoid": {
+   "excluded": [],
+   "meta": {
+    "axes_method": "fitted_ellipsoid",
+    "input_units": "as-is",
+    "output_scale": 1.0,
+    "output_units": "as-is",
+    "reader": null,
+    "scale_factor": 1.0,
+    "source_name": null,
+    "warnings": []
+   },
+   "metrics": {
+    "angelidakis_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Elongation (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.17857142857142966
+    },
+    "angelidakis_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Flatness (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.32142857142857106
+    },
+    "axis_I": {
+     "default_selected": false,
+     "error": null,
+     "group": "Principal dimensions (fitted ellipsoid)",
+     "label": "Intermediate axis I (fitted ellipsoid)",
+     "unit": "input_units",
+     "value": 3.999999999999999
+    },
+    "axis_L": {
+     "default_selected": false,
+     "error": null,
+     "group": "Principal dimensions (fitted ellipsoid)",
+     "label": "Long axis L (fitted ellipsoid)",
+     "unit": "input_units",
+     "value": 6.000000000000012
+    },
+    "axis_S": {
+     "default_selected": false,
+     "error": null,
+     "group": "Principal dimensions (fitted ellipsoid)",
+     "label": "Short axis S (fitted ellipsoid)",
+     "unit": "input_units",
+     "value": 2.000000000000001
+    },
+    "centroid_x": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Centroid X",
+     "unit": "input_units",
+     "value": 2.0410112749155572e-17
+    },
+    "centroid_y": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Centroid Y",
+     "unit": "input_units",
+     "value": -2.443807304929991e-16
+    },
+    "centroid_z": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Centroid Z",
+     "unit": "input_units",
+     "value": 5.582570488899059e-16
+    },
+    "convexity": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Convexity (V / V_convex_hull)",
+     "unit": "",
+     "value": 1.0000000000000009
+    },
+    "inertia_I1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Principal inertia I1 (unit density)",
+     "unit": "input_units⁵",
+     "value": 24.77336142231321
+    },
+    "inertia_I2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Principal inertia I2 (unit density)",
+     "unit": "input_units⁵",
+     "value": 49.546722844626366
+    },
+    "inertia_I3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Principal inertia I3 (unit density)",
+     "unit": "input_units⁵",
+     "value": 64.41073969801427
+    },
+    "kongfonseca_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Elongation (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.33333333333333487
+    },
+    "kongfonseca_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Flatness (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.49999999999999967
+    },
+    "n_faces": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Face count",
+     "unit": "",
+     "value": 1280.0
+    },
+    "n_vertices": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Vertex count",
+     "unit": "",
+     "value": 642.0
+    },
+    "orientation_C": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Compactness C (surface orientation tensor)",
+     "unit": "",
+     "value": 0.17190134230021042
+    },
+    "orientation_E": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Elongation E (surface orientation tensor)",
+     "unit": "",
+     "value": 0.1692565650362299
+    },
+    "orientation_F": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Flakiness F (surface orientation tensor)",
+     "unit": "",
+     "value": 0.6588420926635596
+    },
+    "orientation_eig1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f1 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.6609126511338812
+    },
+    "orientation_eig2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f2 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.22547557699301377
+    },
+    "orientation_eig3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f3 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.11361177187310487
+    },
+    "potticary_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Elongation (Potticary et al.)",
+     "unit": "",
+     "value": 0.16666666666666763
+    },
+    "potticary_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Flatness (Potticary et al.)",
+     "unit": "",
+     "value": 0.33333333333333276
+    },
+    "sphericity_krumbein": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Sphericity (Krumbein)",
+     "unit": "",
+     "value": 0.6057068642773791
+    },
+    "sphericity_wadell": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Sphericity (Wadell)",
+     "unit": "",
+     "value": 0.8480130973473048
+    },
+    "surface_area": {
+     "default_selected": true,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Surface area",
+     "unit": "input_units²",
+     "value": 48.64881684712526
+    },
+    "volume": {
+     "default_selected": true,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Volume (mesh)",
+     "unit": "input_units³",
+     "value": 24.916444902558347
+    },
+    "zingg_IL": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Zingg ratio I/L",
+     "unit": "",
+     "value": 0.6666666666666652
+    },
+    "zingg_SI": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Zingg ratio S/I",
+     "unit": "",
+     "value": 0.5000000000000003
+    }
+   },
+   "requires": [
+    "scipy"
+   ]
+  },
+  "ellipsoid_3_2_1_rotated|axes=inertia_ellipsoid": {
+   "excluded": [],
+   "meta": {
+    "axes_method": "inertia_ellipsoid",
+    "input_units": "as-is",
+    "output_scale": 1.0,
+    "output_units": "as-is",
+    "reader": null,
+    "scale_factor": 1.0,
+    "source_name": null,
+    "warnings": []
+   },
+   "metrics": {
+    "angelidakis_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Elongation (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.1785714285714285
+    },
+    "angelidakis_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Flatness (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.32142857142857084
+    },
+    "axis_I": {
+     "default_selected": false,
+     "error": null,
+     "group": "Principal dimensions (inertia-equivalent ellipsoid)",
+     "label": "Intermediate axis I (inertia ellipsoid)",
+     "unit": "input_units",
+     "value": 3.9884984003058004
+    },
+    "axis_L": {
+     "default_selected": false,
+     "error": null,
+     "group": "Principal dimensions (inertia-equivalent ellipsoid)",
+     "label": "Long axis L (inertia ellipsoid)",
+     "unit": "input_units",
+     "value": 5.982747600458698
+    },
+    "axis_S": {
+     "default_selected": false,
+     "error": null,
+     "group": "Principal dimensions (inertia-equivalent ellipsoid)",
+     "label": "Short axis S (inertia ellipsoid)",
+     "unit": "input_units",
+     "value": 1.9942492001529029
+    },
+    "centroid_x": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Centroid X",
+     "unit": "input_units",
+     "value": 2.0410112749155572e-17
+    },
+    "centroid_y": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Centroid Y",
+     "unit": "input_units",
+     "value": -2.443807304929991e-16
+    },
+    "centroid_z": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Centroid Z",
+     "unit": "input_units",
+     "value": 5.582570488899059e-16
+    },
+    "convexity": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Convexity (V / V_convex_hull)",
+     "unit": "",
+     "value": 1.0000000000000009
+    },
+    "inertia_I1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Principal inertia I1 (unit density)",
+     "unit": "input_units⁵",
+     "value": 24.77336142231321
+    },
+    "inertia_I2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Principal inertia I2 (unit density)",
+     "unit": "input_units⁵",
+     "value": 49.546722844626366
+    },
+    "inertia_I3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Principal inertia I3 (unit density)",
+     "unit": "input_units⁵",
+     "value": 64.41073969801427
+    },
+    "kongfonseca_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Elongation (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.33333333333333304
+    },
+    "kongfonseca_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Flatness (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.49999999999999933
+    },
+    "n_faces": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Face count",
+     "unit": "",
+     "value": 1280.0
+    },
+    "n_vertices": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Vertex count",
+     "unit": "",
+     "value": 642.0
+    },
+    "orientation_C": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Compactness C (surface orientation tensor)",
+     "unit": "",
+     "value": 0.17190134230021042
+    },
+    "orientation_E": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Elongation E (surface orientation tensor)",
+     "unit": "",
+     "value": 0.1692565650362299
+    },
+    "orientation_F": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Flakiness F (surface orientation tensor)",
+     "unit": "",
+     "value": 0.6588420926635596
+    },
+    "orientation_eig1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f1 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.6609126511338812
+    },
+    "orientation_eig2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f2 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.22547557699301377
+    },
+    "orientation_eig3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f3 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.11361177187310487
+    },
+    "potticary_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Elongation (Potticary et al.)",
+     "unit": "",
+     "value": 0.16666666666666644
+    },
+    "potticary_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Flatness (Potticary et al.)",
+     "unit": "",
+     "value": 0.3333333333333329
+    },
+    "sphericity_krumbein": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Sphericity (Krumbein)",
+     "unit": "",
+     "value": 0.6057068642773803
+    },
+    "sphericity_wadell": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Sphericity (Wadell)",
+     "unit": "",
+     "value": 0.8480130973473048
+    },
+    "surface_area": {
+     "default_selected": true,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Surface area",
+     "unit": "input_units²",
+     "value": 48.64881684712526
+    },
+    "volume": {
+     "default_selected": true,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Volume (mesh)",
+     "unit": "input_units³",
+     "value": 24.916444902558347
+    },
+    "zingg_IL": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Zingg ratio I/L",
+     "unit": "",
+     "value": 0.666666666666667
+    },
+    "zingg_SI": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Zingg ratio S/I",
+     "unit": "",
+     "value": 0.5000000000000007
+    }
+   },
+   "requires": [
+    "scipy"
+   ]
+  },
   "ellipsoid_3_2_1_rotated|axes=min_volume": {
    "excluded": [],
    "meta": {
@@ -1814,6 +3362,642 @@
      "label": "Zingg ratio S/I",
      "unit": "",
      "value": 0.49999999999999994
+    }
+   },
+   "requires": [
+    "scipy"
+   ]
+  },
+  "file:Tetrahedron_ascii.stl|axes=fitted_ellipsoid": {
+   "csv": [
+    [
+     "parameter",
+     "unit"
+    ],
+    [
+     "source_file",
+     ""
+    ],
+    [
+     "reader",
+     ""
+    ],
+    [
+     "surface_area",
+     "input_units^2"
+    ],
+    [
+     "volume",
+     "input_units^3"
+    ],
+    [
+     "sphericity_wadell",
+     ""
+    ],
+    [
+     "convexity",
+     ""
+    ],
+    [
+     "orientation_C",
+     ""
+    ],
+    [
+     "orientation_F",
+     ""
+    ],
+    [
+     "orientation_E",
+     ""
+    ]
+   ],
+   "excluded": [],
+   "meta": {
+    "axes_method": "fitted_ellipsoid",
+    "input_units": "as-is",
+    "output_scale": 1.0,
+    "output_units": "as-is",
+    "reader": "builtin-stl",
+    "scale_factor": 1.0,
+    "source_name": "Tetrahedron_ascii.stl",
+    "warnings": []
+   },
+   "metrics": {
+    "angelidakis_elongation": {
+     "default_selected": true,
+     "error": "ellipsoid fit failed: an ellipsoid fit needs at least nine points with positive weight",
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Elongation (Angelidakis et al.)",
+     "unit": "",
+     "value": null
+    },
+    "angelidakis_flatness": {
+     "default_selected": true,
+     "error": "ellipsoid fit failed: an ellipsoid fit needs at least nine points with positive weight",
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Flatness (Angelidakis et al.)",
+     "unit": "",
+     "value": null
+    },
+    "axis_I": {
+     "default_selected": false,
+     "error": "ellipsoid fit failed: an ellipsoid fit needs at least nine points with positive weight",
+     "group": "Principal dimensions (fitted ellipsoid)",
+     "label": "Intermediate axis I (fitted ellipsoid)",
+     "unit": "input_units",
+     "value": null
+    },
+    "axis_L": {
+     "default_selected": false,
+     "error": "ellipsoid fit failed: an ellipsoid fit needs at least nine points with positive weight",
+     "group": "Principal dimensions (fitted ellipsoid)",
+     "label": "Long axis L (fitted ellipsoid)",
+     "unit": "input_units",
+     "value": null
+    },
+    "axis_S": {
+     "default_selected": false,
+     "error": "ellipsoid fit failed: an ellipsoid fit needs at least nine points with positive weight",
+     "group": "Principal dimensions (fitted ellipsoid)",
+     "label": "Short axis S (fitted ellipsoid)",
+     "unit": "input_units",
+     "value": null
+    },
+    "centroid_x": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Centroid X",
+     "unit": "input_units",
+     "value": 0.25
+    },
+    "centroid_y": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Centroid Y",
+     "unit": "input_units",
+     "value": 0.25
+    },
+    "centroid_z": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Centroid Z",
+     "unit": "input_units",
+     "value": 0.25
+    },
+    "convexity": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Convexity (V / V_convex_hull)",
+     "unit": "",
+     "value": 0.9999999999999999
+    },
+    "inertia_I1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Principal inertia I1 (unit density)",
+     "unit": "input_units⁵",
+     "value": 0.010416666666666668
+    },
+    "inertia_I2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Principal inertia I2 (unit density)",
+     "unit": "input_units⁵",
+     "value": 0.01041666666666667
+    },
+    "inertia_I3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Principal inertia I3 (unit density)",
+     "unit": "input_units⁵",
+     "value": 0.016666666666666663
+    },
+    "kongfonseca_elongation": {
+     "default_selected": true,
+     "error": "ellipsoid fit failed: an ellipsoid fit needs at least nine points with positive weight",
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Elongation (Kong & Fonseca)",
+     "unit": "",
+     "value": null
+    },
+    "kongfonseca_flatness": {
+     "default_selected": true,
+     "error": "ellipsoid fit failed: an ellipsoid fit needs at least nine points with positive weight",
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Flatness (Kong & Fonseca)",
+     "unit": "",
+     "value": null
+    },
+    "n_faces": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Face count",
+     "unit": "",
+     "value": 4.0
+    },
+    "n_vertices": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Vertex count",
+     "unit": "",
+     "value": 4.0
+    },
+    "orientation_C": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Compactness C (surface orientation tensor)",
+     "unit": "",
+     "value": 0.36602540378443854
+    },
+    "orientation_E": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Elongation E (surface orientation tensor)",
+     "unit": "",
+     "value": 4.8074067159589083e-17
+    },
+    "orientation_F": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Flakiness F (surface orientation tensor)",
+     "unit": "",
+     "value": 0.6339745962155614
+    },
+    "orientation_eig1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f1 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.577350269189626
+    },
+    "orientation_eig2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f2 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.21132486540518716
+    },
+    "orientation_eig3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f3 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.21132486540518713
+    },
+    "potticary_elongation": {
+     "default_selected": true,
+     "error": "ellipsoid fit failed: an ellipsoid fit needs at least nine points with positive weight",
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Elongation (Potticary et al.)",
+     "unit": "",
+     "value": null
+    },
+    "potticary_flatness": {
+     "default_selected": true,
+     "error": "ellipsoid fit failed: an ellipsoid fit needs at least nine points with positive weight",
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Flatness (Potticary et al.)",
+     "unit": "",
+     "value": null
+    },
+    "sphericity_krumbein": {
+     "default_selected": true,
+     "error": "ellipsoid fit failed: an ellipsoid fit needs at least nine points with positive weight",
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Sphericity (Krumbein)",
+     "unit": "",
+     "value": null
+    },
+    "sphericity_wadell": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Sphericity (Wadell)",
+     "unit": "",
+     "value": 0.6190093670249357
+    },
+    "surface_area": {
+     "default_selected": true,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Surface area",
+     "unit": "input_units²",
+     "value": 2.3660254037844384
+    },
+    "volume": {
+     "default_selected": true,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Volume (mesh)",
+     "unit": "input_units³",
+     "value": 0.16666666666666666
+    },
+    "zingg_IL": {
+     "default_selected": true,
+     "error": "ellipsoid fit failed: an ellipsoid fit needs at least nine points with positive weight",
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Zingg ratio I/L",
+     "unit": "",
+     "value": null
+    },
+    "zingg_SI": {
+     "default_selected": true,
+     "error": "ellipsoid fit failed: an ellipsoid fit needs at least nine points with positive weight",
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Zingg ratio S/I",
+     "unit": "",
+     "value": null
+    }
+   },
+   "requires": [
+    "scipy"
+   ]
+  },
+  "file:Tetrahedron_ascii.stl|axes=inertia_ellipsoid": {
+   "csv": [
+    [
+     "parameter",
+     "unit"
+    ],
+    [
+     "source_file",
+     ""
+    ],
+    [
+     "reader",
+     ""
+    ],
+    [
+     "surface_area",
+     "input_units^2"
+    ],
+    [
+     "volume",
+     "input_units^3"
+    ],
+    [
+     "sphericity_wadell",
+     ""
+    ],
+    [
+     "convexity",
+     ""
+    ],
+    [
+     "orientation_C",
+     ""
+    ],
+    [
+     "orientation_F",
+     ""
+    ],
+    [
+     "orientation_E",
+     ""
+    ],
+    [
+     "sphericity_krumbein",
+     ""
+    ],
+    [
+     "potticary_flatness",
+     ""
+    ],
+    [
+     "potticary_elongation",
+     ""
+    ],
+    [
+     "kongfonseca_flatness",
+     ""
+    ],
+    [
+     "kongfonseca_elongation",
+     ""
+    ],
+    [
+     "angelidakis_flatness",
+     ""
+    ],
+    [
+     "angelidakis_elongation",
+     ""
+    ],
+    [
+     "zingg_SI",
+     ""
+    ],
+    [
+     "zingg_IL",
+     ""
+    ]
+   ],
+   "excluded": [],
+   "meta": {
+    "axes_method": "inertia_ellipsoid",
+    "input_units": "as-is",
+    "output_scale": 1.0,
+    "output_units": "as-is",
+    "reader": "builtin-stl",
+    "scale_factor": 1.0,
+    "source_name": "Tetrahedron_ascii.stl",
+    "warnings": []
+   },
+   "metrics": {
+    "angelidakis_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Elongation (Angelidakis et al.)",
+     "unit": "",
+     "value": 5.551115123125783e-17
+    },
+    "angelidakis_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Flatness (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.33333333333333304
+    },
+    "axis_I": {
+     "default_selected": false,
+     "error": null,
+     "group": "Principal dimensions (inertia-equivalent ellipsoid)",
+     "label": "Intermediate axis I (inertia ellipsoid)",
+     "unit": "input_units",
+     "value": 0.9999999999999999
+    },
+    "axis_L": {
+     "default_selected": false,
+     "error": null,
+     "group": "Principal dimensions (inertia-equivalent ellipsoid)",
+     "label": "Long axis L (inertia ellipsoid)",
+     "unit": "input_units",
+     "value": 1.0
+    },
+    "axis_S": {
+     "default_selected": false,
+     "error": null,
+     "group": "Principal dimensions (inertia-equivalent ellipsoid)",
+     "label": "Short axis S (inertia ellipsoid)",
+     "unit": "input_units",
+     "value": 0.5000000000000003
+    },
+    "centroid_x": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Centroid X",
+     "unit": "input_units",
+     "value": 0.25
+    },
+    "centroid_y": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Centroid Y",
+     "unit": "input_units",
+     "value": 0.25
+    },
+    "centroid_z": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Centroid Z",
+     "unit": "input_units",
+     "value": 0.25
+    },
+    "convexity": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Convexity (V / V_convex_hull)",
+     "unit": "",
+     "value": 0.9999999999999999
+    },
+    "inertia_I1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Principal inertia I1 (unit density)",
+     "unit": "input_units⁵",
+     "value": 0.010416666666666668
+    },
+    "inertia_I2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Principal inertia I2 (unit density)",
+     "unit": "input_units⁵",
+     "value": 0.01041666666666667
+    },
+    "inertia_I3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Principal inertia I3 (unit density)",
+     "unit": "input_units⁵",
+     "value": 0.016666666666666663
+    },
+    "kongfonseca_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Elongation (Kong & Fonseca)",
+     "unit": "",
+     "value": 1.1102230246251565e-16
+    },
+    "kongfonseca_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Flatness (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.4999999999999996
+    },
+    "n_faces": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Face count",
+     "unit": "",
+     "value": 4.0
+    },
+    "n_vertices": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Vertex count",
+     "unit": "",
+     "value": 4.0
+    },
+    "orientation_C": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Compactness C (surface orientation tensor)",
+     "unit": "",
+     "value": 0.36602540378443854
+    },
+    "orientation_E": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Elongation E (surface orientation tensor)",
+     "unit": "",
+     "value": 4.8074067159589083e-17
+    },
+    "orientation_F": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Flakiness F (surface orientation tensor)",
+     "unit": "",
+     "value": 0.6339745962155614
+    },
+    "orientation_eig1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f1 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.577350269189626
+    },
+    "orientation_eig2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f2 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.21132486540518716
+    },
+    "orientation_eig3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f3 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.21132486540518713
+    },
+    "potticary_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Elongation (Potticary et al.)",
+     "unit": "",
+     "value": 4.440892098500625e-17
+    },
+    "potticary_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Flatness (Potticary et al.)",
+     "unit": "",
+     "value": 0.3999999999999996
+    },
+    "sphericity_krumbein": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Sphericity (Krumbein)",
+     "unit": "",
+     "value": 0.7937005259840999
+    },
+    "sphericity_wadell": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Sphericity (Wadell)",
+     "unit": "",
+     "value": 0.6190093670249357
+    },
+    "surface_area": {
+     "default_selected": true,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Surface area",
+     "unit": "input_units²",
+     "value": 2.3660254037844384
+    },
+    "volume": {
+     "default_selected": true,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Volume (mesh)",
+     "unit": "input_units³",
+     "value": 0.16666666666666666
+    },
+    "zingg_IL": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Zingg ratio I/L",
+     "unit": "",
+     "value": 0.9999999999999999
+    },
+    "zingg_SI": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Zingg ratio S/I",
+     "unit": "",
+     "value": 0.5000000000000004
     }
    },
    "requires": [
@@ -2505,6 +4689,678 @@
     "scipy"
    ]
   },
+  "file:case-000001.stl|axes=fitted_ellipsoid": {
+   "csv": [
+    [
+     "parameter",
+     "unit"
+    ],
+    [
+     "source_file",
+     ""
+    ],
+    [
+     "reader",
+     ""
+    ],
+    [
+     "surface_area",
+     "input_units^2"
+    ],
+    [
+     "volume",
+     "input_units^3"
+    ],
+    [
+     "sphericity_wadell",
+     ""
+    ],
+    [
+     "convexity",
+     ""
+    ],
+    [
+     "orientation_C",
+     ""
+    ],
+    [
+     "orientation_F",
+     ""
+    ],
+    [
+     "orientation_E",
+     ""
+    ],
+    [
+     "sphericity_krumbein",
+     ""
+    ],
+    [
+     "potticary_flatness",
+     ""
+    ],
+    [
+     "potticary_elongation",
+     ""
+    ],
+    [
+     "kongfonseca_flatness",
+     ""
+    ],
+    [
+     "kongfonseca_elongation",
+     ""
+    ],
+    [
+     "angelidakis_flatness",
+     ""
+    ],
+    [
+     "angelidakis_elongation",
+     ""
+    ],
+    [
+     "zingg_SI",
+     ""
+    ],
+    [
+     "zingg_IL",
+     ""
+    ]
+   ],
+   "excluded": [],
+   "meta": {
+    "axes_method": "fitted_ellipsoid",
+    "input_units": "as-is",
+    "output_scale": 1.0,
+    "output_units": "as-is",
+    "reader": "builtin-stl",
+    "scale_factor": 1.0,
+    "source_name": "case-000001.stl",
+    "warnings": []
+   },
+   "metrics": {
+    "angelidakis_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Elongation (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.00020665398677743863
+    },
+    "angelidakis_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Flatness (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.0011448637549316687
+    },
+    "axis_I": {
+     "default_selected": false,
+     "error": null,
+     "group": "Principal dimensions (fitted ellipsoid)",
+     "label": "Intermediate axis I (fitted ellipsoid)",
+     "unit": "input_units",
+     "value": 7.451015026534031e-05
+    },
+    "axis_L": {
+     "default_selected": false,
+     "error": null,
+     "group": "Principal dimensions (fitted ellipsoid)",
+     "label": "Long axis L (fitted ellipsoid)",
+     "unit": "input_units",
+     "value": 7.454095231029377e-05
+    },
+    "axis_S": {
+     "default_selected": false,
+     "error": null,
+     "group": "Principal dimensions (fitted ellipsoid)",
+     "label": "Short axis S (fitted ellipsoid)",
+     "unit": "input_units",
+     "value": 7.433973741672982e-05
+    },
+    "centroid_x": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Centroid X",
+     "unit": "input_units",
+     "value": 1.028474709371845e-08
+    },
+    "centroid_y": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Centroid Y",
+     "unit": "input_units",
+     "value": 4.31577518770372e-09
+    },
+    "centroid_z": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Centroid Z",
+     "unit": "input_units",
+     "value": -3.7135244471851383e-09
+    },
+    "convexity": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Convexity (V / V_convex_hull)",
+     "unit": "",
+     "value": 0.9999983534485141
+    },
+    "inertia_I1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Principal inertia I1 (unit density)",
+     "unit": "input_units⁵",
+     "value": 1.168261284235746e-22
+    },
+    "inertia_I2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Principal inertia I2 (unit density)",
+     "unit": "input_units⁵",
+     "value": 1.168769513552795e-22
+    },
+    "inertia_I3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Principal inertia I3 (unit density)",
+     "unit": "input_units⁵",
+     "value": 1.1716176968458087e-22
+    },
+    "kongfonseca_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Elongation (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.00041322312096639575
+    },
+    "kongfonseca_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Flatness (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.002287109179133671
+    },
+    "n_faces": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Face count",
+     "unit": "",
+     "value": 770.0
+    },
+    "n_vertices": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Vertex count",
+     "unit": "",
+     "value": 387.0
+    },
+    "orientation_C": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Compactness C (surface orientation tensor)",
+     "unit": "",
+     "value": 0.9951163933653947
+    },
+    "orientation_E": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Elongation E (surface orientation tensor)",
+     "unit": "",
+     "value": 0.0006544232917674632
+    },
+    "orientation_F": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Flakiness F (surface orientation tensor)",
+     "unit": "",
+     "value": 0.004229183342837828
+    },
+    "orientation_eig1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f1 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.33434895058863084
+    },
+    "orientation_eig2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f2 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.3329349275761061
+    },
+    "orientation_eig3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f3 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.3327161218352629
+    },
+    "potticary_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Elongation (Potticary et al.)",
+     "unit": "",
+     "value": 0.000137884100147167
+    },
+    "potticary_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Flatness (Potticary et al.)",
+     "unit": "",
+     "value": 0.0015256923570931924
+    },
+    "sphericity_krumbein": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Sphericity (Krumbein)",
+     "unit": "",
+     "value": 0.9989617574636713
+    },
+    "sphericity_wadell": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Sphericity (Wadell)",
+     "unit": "",
+     "value": 0.9981882660867715
+    },
+    "surface_area": {
+     "default_selected": true,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Surface area",
+     "unit": "input_units²",
+     "value": 1.7279899272760144e-08
+    },
+    "volume": {
+     "default_selected": true,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Volume (mesh)",
+     "unit": "input_units³",
+     "value": 2.1301211948057196e-13
+    },
+    "zingg_IL": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Zingg ratio I/L",
+     "unit": "",
+     "value": 0.9995867768790336
+    },
+    "zingg_SI": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Zingg ratio S/I",
+     "unit": "",
+     "value": 0.9977128908208663
+    }
+   },
+   "requires": [
+    "scipy"
+   ]
+  },
+  "file:case-000001.stl|axes=inertia_ellipsoid": {
+   "csv": [
+    [
+     "parameter",
+     "unit"
+    ],
+    [
+     "source_file",
+     ""
+    ],
+    [
+     "reader",
+     ""
+    ],
+    [
+     "surface_area",
+     "input_units^2"
+    ],
+    [
+     "volume",
+     "input_units^3"
+    ],
+    [
+     "sphericity_wadell",
+     ""
+    ],
+    [
+     "convexity",
+     ""
+    ],
+    [
+     "orientation_C",
+     ""
+    ],
+    [
+     "orientation_F",
+     ""
+    ],
+    [
+     "orientation_E",
+     ""
+    ],
+    [
+     "sphericity_krumbein",
+     ""
+    ],
+    [
+     "potticary_flatness",
+     ""
+    ],
+    [
+     "potticary_elongation",
+     ""
+    ],
+    [
+     "kongfonseca_flatness",
+     ""
+    ],
+    [
+     "kongfonseca_elongation",
+     ""
+    ],
+    [
+     "angelidakis_flatness",
+     ""
+    ],
+    [
+     "angelidakis_elongation",
+     ""
+    ],
+    [
+     "zingg_SI",
+     ""
+    ],
+    [
+     "zingg_IL",
+     ""
+    ]
+   ],
+   "excluded": [],
+   "meta": {
+    "axes_method": "inertia_ellipsoid",
+    "input_units": "as-is",
+    "output_scale": 1.0,
+    "output_units": "as-is",
+    "reader": "builtin-stl",
+    "scale_factor": 1.0,
+    "source_name": "case-000001.stl",
+    "warnings": []
+   },
+   "metrics": {
+    "angelidakis_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Elongation (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.00021689181852335704
+    },
+    "angelidakis_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Flatness (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.0012189856112033715
+    },
+    "axis_I": {
+     "default_selected": false,
+     "error": null,
+     "group": "Principal dimensions (inertia-equivalent ellipsoid)",
+     "label": "Intermediate axis I (inertia ellipsoid)",
+     "unit": "input_units",
+     "value": 7.414751305342766e-05
+    },
+    "axis_L": {
+     "default_selected": false,
+     "error": null,
+     "group": "Principal dimensions (inertia-equivalent ellipsoid)",
+     "label": "Long axis L (inertia ellipsoid)",
+     "unit": "input_units",
+     "value": 7.417968405674908e-05
+    },
+    "axis_S": {
+     "default_selected": false,
+     "error": null,
+     "group": "Principal dimensions (inertia-equivalent ellipsoid)",
+     "label": "Short axis S (inertia ellipsoid)",
+     "unit": "input_units",
+     "value": 7.396696362904737e-05
+    },
+    "centroid_x": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Centroid X",
+     "unit": "input_units",
+     "value": 1.028474709371845e-08
+    },
+    "centroid_y": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Centroid Y",
+     "unit": "input_units",
+     "value": 4.31577518770372e-09
+    },
+    "centroid_z": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Centroid Z",
+     "unit": "input_units",
+     "value": -3.7135244471851383e-09
+    },
+    "convexity": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Convexity (V / V_convex_hull)",
+     "unit": "",
+     "value": 0.9999983534485141
+    },
+    "inertia_I1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Principal inertia I1 (unit density)",
+     "unit": "input_units⁵",
+     "value": 1.168261284235746e-22
+    },
+    "inertia_I2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Principal inertia I2 (unit density)",
+     "unit": "input_units⁵",
+     "value": 1.168769513552795e-22
+    },
+    "inertia_I3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Principal inertia I3 (unit density)",
+     "unit": "input_units⁵",
+     "value": 1.1716176968458087e-22
+    },
+    "kongfonseca_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Elongation (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.00043369021761822924
+    },
+    "kongfonseca_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Flatness (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.0024350031032084863
+    },
+    "n_faces": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Face count",
+     "unit": "",
+     "value": 770.0
+    },
+    "n_vertices": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Vertex count",
+     "unit": "",
+     "value": 387.0
+    },
+    "orientation_C": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Compactness C (surface orientation tensor)",
+     "unit": "",
+     "value": 0.9951163933653947
+    },
+    "orientation_E": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Elongation E (surface orientation tensor)",
+     "unit": "",
+     "value": 0.0006544232917674632
+    },
+    "orientation_F": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Flakiness F (surface orientation tensor)",
+     "unit": "",
+     "value": 0.004229183342837828
+    },
+    "orientation_eig1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f1 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.33434895058863084
+    },
+    "orientation_eig2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f2 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.3329349275761061
+    },
+    "orientation_eig3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f3 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.3327161218352629
+    },
+    "potticary_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Elongation (Potticary et al.)",
+     "unit": "",
+     "value": 0.00014472266484391906
+    },
+    "potticary_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Flatness (Potticary et al.)",
+     "unit": "",
+     "value": 0.0016244189571141523
+    },
+    "sphericity_krumbein": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Sphericity (Krumbein)",
+     "unit": "",
+     "value": 0.9988987597700645
+    },
+    "sphericity_wadell": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Sphericity (Wadell)",
+     "unit": "",
+     "value": 0.9981882660867715
+    },
+    "surface_area": {
+     "default_selected": true,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Surface area",
+     "unit": "input_units²",
+     "value": 1.7279899272760144e-08
+    },
+    "volume": {
+     "default_selected": true,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Volume (mesh)",
+     "unit": "input_units³",
+     "value": 2.1301211948057196e-13
+    },
+    "zingg_IL": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Zingg ratio I/L",
+     "unit": "",
+     "value": 0.9995663097823818
+    },
+    "zingg_SI": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Zingg ratio S/I",
+     "unit": "",
+     "value": 0.9975649968967916
+    }
+   },
+   "requires": [
+    "scipy"
+   ]
+  },
   "file:case-000001.stl|axes=min_volume": {
    "csv": [
     [
@@ -3175,6 +6031,680 @@
    },
    "requires": [
     "scipy"
+   ]
+  },
+  "file:case-000005.stl|axes=fitted_ellipsoid": {
+   "csv": [
+    [
+     "parameter",
+     "unit"
+    ],
+    [
+     "source_file",
+     ""
+    ],
+    [
+     "reader",
+     ""
+    ],
+    [
+     "surface_area",
+     "input_units^2"
+    ],
+    [
+     "volume",
+     "input_units^3"
+    ],
+    [
+     "sphericity_wadell",
+     ""
+    ],
+    [
+     "convexity",
+     ""
+    ],
+    [
+     "orientation_C",
+     ""
+    ],
+    [
+     "orientation_F",
+     ""
+    ],
+    [
+     "orientation_E",
+     ""
+    ],
+    [
+     "sphericity_krumbein",
+     ""
+    ],
+    [
+     "potticary_flatness",
+     ""
+    ],
+    [
+     "potticary_elongation",
+     ""
+    ],
+    [
+     "kongfonseca_flatness",
+     ""
+    ],
+    [
+     "kongfonseca_elongation",
+     ""
+    ],
+    [
+     "angelidakis_flatness",
+     ""
+    ],
+    [
+     "angelidakis_elongation",
+     ""
+    ],
+    [
+     "zingg_SI",
+     ""
+    ],
+    [
+     "zingg_IL",
+     ""
+    ]
+   ],
+   "excluded": [],
+   "meta": {
+    "axes_method": "fitted_ellipsoid",
+    "input_units": "as-is",
+    "output_scale": 1.0,
+    "output_units": "as-is",
+    "reader": "builtin-stl",
+    "scale_factor": 1.0,
+    "source_name": "case-000005.stl",
+    "warnings": []
+   },
+   "metrics": {
+    "angelidakis_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Elongation (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.3826385252102817
+    },
+    "angelidakis_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Flatness (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.023969504090205207
+    },
+    "axis_I": {
+     "default_selected": false,
+     "error": null,
+     "group": "Principal dimensions (fitted ellipsoid)",
+     "label": "Intermediate axis I (fitted ellipsoid)",
+     "unit": "input_units",
+     "value": 2.923541701017443e-05
+    },
+    "axis_L": {
+     "default_selected": false,
+     "error": null,
+     "group": "Principal dimensions (fitted ellipsoid)",
+     "label": "Long axis L (fitted ellipsoid)",
+     "unit": "input_units",
+     "value": 6.551499822165549e-05
+    },
+    "axis_S": {
+     "default_selected": false,
+     "error": null,
+     "group": "Principal dimensions (fitted ellipsoid)",
+     "label": "Short axis S (fitted ellipsoid)",
+     "unit": "input_units",
+     "value": 2.763817147016892e-05
+    },
+    "centroid_x": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Centroid X",
+     "unit": "input_units",
+     "value": 4.923808686158813e-06
+    },
+    "centroid_y": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Centroid Y",
+     "unit": "input_units",
+     "value": -5.794376736455085e-06
+    },
+    "centroid_z": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Centroid Z",
+     "unit": "input_units",
+     "value": 3.54768349259374e-07
+    },
+    "convexity": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Convexity (V / V_convex_hull)",
+     "unit": "",
+     "value": 0.8106608592903691
+    },
+    "inertia_I1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Principal inertia I1 (unit density)",
+     "unit": "input_units⁵",
+     "value": 2.320766369102453e-24
+    },
+    "inertia_I2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Principal inertia I2 (unit density)",
+     "unit": "input_units⁵",
+     "value": 5.9705600177876265e-24
+    },
+    "inertia_I3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Principal inertia I3 (unit density)",
+     "unit": "input_units⁵",
+     "value": 6.028171678522224e-24
+    },
+    "kongfonseca_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Elongation (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.5537599358354118
+    },
+    "kongfonseca_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Flatness (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.05463392362248978
+    },
+    "n_faces": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Face count",
+     "unit": "",
+     "value": 2284.0
+    },
+    "n_vertices": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Vertex count",
+     "unit": "",
+     "value": 1144.0
+    },
+    "orientation_C": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Compactness C (surface orientation tensor)",
+     "unit": "",
+     "value": 0.9561505367365919
+    },
+    "orientation_E": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Elongation E (surface orientation tensor)",
+     "unit": "",
+     "value": 0.022665618954473537
+    },
+    "orientation_F": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Flakiness F (surface orientation tensor)",
+     "unit": "",
+     "value": 0.021183844308934593
+    },
+    "orientation_eig1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f1 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.3407193691771848
+    },
+    "orientation_eig2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f2 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.3335016231074969
+    },
+    "orientation_eig3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f3 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.32577900771531826
+    },
+    "potticary_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Elongation (Potticary et al.)",
+     "unit": "",
+     "value": 0.29642944811363325
+    },
+    "potticary_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Flatness (Potticary et al.)",
+     "unit": "",
+     "value": 0.026101217164875106
+    },
+    "sphericity_krumbein": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Sphericity (Krumbein)",
+     "unit": "",
+     "value": 0.5731201936402279
+    },
+    "sphericity_wadell": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Sphericity (Wadell)",
+     "unit": "",
+     "value": 0.8098568564502062
+    },
+    "surface_area": {
+     "default_selected": true,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Surface area",
+     "unit": "input_units²",
+     "value": 5.095525210797647e-09
+    },
+    "volume": {
+     "default_selected": true,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Volume (mesh)",
+     "unit": "input_units³",
+     "value": 2.492697857129396e-14
+    },
+    "zingg_IL": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Zingg ratio I/L",
+     "unit": "",
+     "value": 0.4462400641645882
+    },
+    "zingg_SI": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Zingg ratio S/I",
+     "unit": "",
+     "value": 0.9453660763775102
+    }
+   },
+   "requires": [
+    "scipy",
+    "manifold3d"
+   ]
+  },
+  "file:case-000005.stl|axes=inertia_ellipsoid": {
+   "csv": [
+    [
+     "parameter",
+     "unit"
+    ],
+    [
+     "source_file",
+     ""
+    ],
+    [
+     "reader",
+     ""
+    ],
+    [
+     "surface_area",
+     "input_units^2"
+    ],
+    [
+     "volume",
+     "input_units^3"
+    ],
+    [
+     "sphericity_wadell",
+     ""
+    ],
+    [
+     "convexity",
+     ""
+    ],
+    [
+     "orientation_C",
+     ""
+    ],
+    [
+     "orientation_F",
+     ""
+    ],
+    [
+     "orientation_E",
+     ""
+    ],
+    [
+     "sphericity_krumbein",
+     ""
+    ],
+    [
+     "potticary_flatness",
+     ""
+    ],
+    [
+     "potticary_elongation",
+     ""
+    ],
+    [
+     "kongfonseca_flatness",
+     ""
+    ],
+    [
+     "kongfonseca_elongation",
+     ""
+    ],
+    [
+     "angelidakis_flatness",
+     ""
+    ],
+    [
+     "angelidakis_elongation",
+     ""
+    ],
+    [
+     "zingg_SI",
+     ""
+    ],
+    [
+     "zingg_IL",
+     ""
+    ]
+   ],
+   "excluded": [],
+   "meta": {
+    "axes_method": "inertia_ellipsoid",
+    "input_units": "as-is",
+    "output_scale": 1.0,
+    "output_units": "as-is",
+    "reader": "builtin-stl",
+    "scale_factor": 1.0,
+    "source_name": "case-000005.stl",
+    "warnings": []
+   },
+   "metrics": {
+    "angelidakis_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Elongation (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.337090397728306
+    },
+    "angelidakis_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Flatness (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.011003310649069065
+    },
+    "axis_I": {
+     "default_selected": false,
+     "error": null,
+     "group": "Principal dimensions (inertia-equivalent ellipsoid)",
+     "label": "Intermediate axis I (inertia ellipsoid)",
+     "unit": "input_units",
+     "value": 3.088912612980123e-05
+    },
+    "axis_L": {
+     "default_selected": false,
+     "error": null,
+     "group": "Principal dimensions (inertia-equivalent ellipsoid)",
+     "label": "Long axis L (inertia ellipsoid)",
+     "unit": "input_units",
+     "value": 6.230992245201979e-05
+    },
+    "axis_S": {
+     "default_selected": false,
+     "error": null,
+     "group": "Principal dimensions (inertia-equivalent ellipsoid)",
+     "label": "Short axis S (inertia ellipsoid)",
+     "unit": "input_units",
+     "value": 3.0131607487347342e-05
+    },
+    "centroid_x": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Centroid X",
+     "unit": "input_units",
+     "value": 4.923808686158813e-06
+    },
+    "centroid_y": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Centroid Y",
+     "unit": "input_units",
+     "value": -5.794376736455085e-06
+    },
+    "centroid_z": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Centroid Z",
+     "unit": "input_units",
+     "value": 3.54768349259374e-07
+    },
+    "convexity": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Convexity (V / V_convex_hull)",
+     "unit": "",
+     "value": 0.8106608592903691
+    },
+    "inertia_I1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Principal inertia I1 (unit density)",
+     "unit": "input_units⁵",
+     "value": 2.320766369102453e-24
+    },
+    "inertia_I2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Principal inertia I2 (unit density)",
+     "unit": "input_units⁵",
+     "value": 5.9705600177876265e-24
+    },
+    "inertia_I3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Principal inertia I3 (unit density)",
+     "unit": "input_units⁵",
+     "value": 6.028171678522224e-24
+    },
+    "kongfonseca_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Elongation (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.5042663364958183
+    },
+    "kongfonseca_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Flatness (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.024523796473576873
+    },
+    "n_faces": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Face count",
+     "unit": "",
+     "value": 2284.0
+    },
+    "n_vertices": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Vertex count",
+     "unit": "",
+     "value": 1144.0
+    },
+    "orientation_C": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Compactness C (surface orientation tensor)",
+     "unit": "",
+     "value": 0.9561505367365919
+    },
+    "orientation_E": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Elongation E (surface orientation tensor)",
+     "unit": "",
+     "value": 0.022665618954473537
+    },
+    "orientation_F": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Flakiness F (surface orientation tensor)",
+     "unit": "",
+     "value": 0.021183844308934593
+    },
+    "orientation_eig1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f1 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.3407193691771848
+    },
+    "orientation_eig2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f2 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.3335016231074969
+    },
+    "orientation_eig3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f3 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.32577900771531826
+    },
+    "potticary_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Elongation (Potticary et al.)",
+     "unit": "",
+     "value": 0.2547687438279467
+    },
+    "potticary_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Flatness (Potticary et al.)",
+     "unit": "",
+     "value": 0.012284352757015195
+    },
+    "sphericity_krumbein": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Sphericity (Krumbein)",
+     "unit": "",
+     "value": 0.6212091357119082
+    },
+    "sphericity_wadell": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Sphericity (Wadell)",
+     "unit": "",
+     "value": 0.8098568564502062
+    },
+    "surface_area": {
+     "default_selected": true,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Surface area",
+     "unit": "input_units²",
+     "value": 5.095525210797647e-09
+    },
+    "volume": {
+     "default_selected": true,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Volume (mesh)",
+     "unit": "input_units³",
+     "value": 2.492697857129396e-14
+    },
+    "zingg_IL": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Zingg ratio I/L",
+     "unit": "",
+     "value": 0.4957336635041817
+    },
+    "zingg_SI": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Zingg ratio S/I",
+     "unit": "",
+     "value": 0.9754762035264232
+    }
+   },
+   "requires": [
+    "scipy",
+    "manifold3d"
    ]
   },
   "file:case-000005.stl|axes=min_volume": {
@@ -3851,6 +7381,522 @@
     "manifold3d"
    ]
   },
+  "regular_tetrahedron|axes=fitted_ellipsoid": {
+   "excluded": [],
+   "meta": {
+    "axes_method": "fitted_ellipsoid",
+    "input_units": "as-is",
+    "output_scale": 1.0,
+    "output_units": "as-is",
+    "reader": null,
+    "scale_factor": 1.0,
+    "source_name": null,
+    "warnings": []
+   },
+   "metrics": {
+    "angelidakis_elongation": {
+     "default_selected": true,
+     "error": "ellipsoid fit failed: an ellipsoid fit needs at least nine points with positive weight",
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Elongation (Angelidakis et al.)",
+     "unit": "",
+     "value": null
+    },
+    "angelidakis_flatness": {
+     "default_selected": true,
+     "error": "ellipsoid fit failed: an ellipsoid fit needs at least nine points with positive weight",
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Flatness (Angelidakis et al.)",
+     "unit": "",
+     "value": null
+    },
+    "axis_I": {
+     "default_selected": false,
+     "error": "ellipsoid fit failed: an ellipsoid fit needs at least nine points with positive weight",
+     "group": "Principal dimensions (fitted ellipsoid)",
+     "label": "Intermediate axis I (fitted ellipsoid)",
+     "unit": "input_units",
+     "value": null
+    },
+    "axis_L": {
+     "default_selected": false,
+     "error": "ellipsoid fit failed: an ellipsoid fit needs at least nine points with positive weight",
+     "group": "Principal dimensions (fitted ellipsoid)",
+     "label": "Long axis L (fitted ellipsoid)",
+     "unit": "input_units",
+     "value": null
+    },
+    "axis_S": {
+     "default_selected": false,
+     "error": "ellipsoid fit failed: an ellipsoid fit needs at least nine points with positive weight",
+     "group": "Principal dimensions (fitted ellipsoid)",
+     "label": "Short axis S (fitted ellipsoid)",
+     "unit": "input_units",
+     "value": null
+    },
+    "centroid_x": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Centroid X",
+     "unit": "input_units",
+     "value": 0.0
+    },
+    "centroid_y": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Centroid Y",
+     "unit": "input_units",
+     "value": 0.0
+    },
+    "centroid_z": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Centroid Z",
+     "unit": "input_units",
+     "value": 0.0
+    },
+    "convexity": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Convexity (V / V_convex_hull)",
+     "unit": "",
+     "value": 0.9999999999999997
+    },
+    "inertia_I1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Principal inertia I1 (unit density)",
+     "unit": "input_units⁵",
+     "value": 1.0666666666666669
+    },
+    "inertia_I2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Principal inertia I2 (unit density)",
+     "unit": "input_units⁵",
+     "value": 1.0666666666666669
+    },
+    "inertia_I3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Principal inertia I3 (unit density)",
+     "unit": "input_units⁵",
+     "value": 1.0666666666666669
+    },
+    "kongfonseca_elongation": {
+     "default_selected": true,
+     "error": "ellipsoid fit failed: an ellipsoid fit needs at least nine points with positive weight",
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Elongation (Kong & Fonseca)",
+     "unit": "",
+     "value": null
+    },
+    "kongfonseca_flatness": {
+     "default_selected": true,
+     "error": "ellipsoid fit failed: an ellipsoid fit needs at least nine points with positive weight",
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Flatness (Kong & Fonseca)",
+     "unit": "",
+     "value": null
+    },
+    "n_faces": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Face count",
+     "unit": "",
+     "value": 4.0
+    },
+    "n_vertices": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Vertex count",
+     "unit": "",
+     "value": 4.0
+    },
+    "orientation_C": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Compactness C (surface orientation tensor)",
+     "unit": "",
+     "value": 1.0
+    },
+    "orientation_E": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Elongation E (surface orientation tensor)",
+     "unit": "",
+     "value": 0.0
+    },
+    "orientation_F": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Flakiness F (surface orientation tensor)",
+     "unit": "",
+     "value": 0.0
+    },
+    "orientation_eig1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f1 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.33333333333333337
+    },
+    "orientation_eig2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f2 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.33333333333333337
+    },
+    "orientation_eig3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f3 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.33333333333333337
+    },
+    "potticary_elongation": {
+     "default_selected": true,
+     "error": "ellipsoid fit failed: an ellipsoid fit needs at least nine points with positive weight",
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Elongation (Potticary et al.)",
+     "unit": "",
+     "value": null
+    },
+    "potticary_flatness": {
+     "default_selected": true,
+     "error": "ellipsoid fit failed: an ellipsoid fit needs at least nine points with positive weight",
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Flatness (Potticary et al.)",
+     "unit": "",
+     "value": null
+    },
+    "sphericity_krumbein": {
+     "default_selected": true,
+     "error": "ellipsoid fit failed: an ellipsoid fit needs at least nine points with positive weight",
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Sphericity (Krumbein)",
+     "unit": "",
+     "value": null
+    },
+    "sphericity_wadell": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Sphericity (Wadell)",
+     "unit": "",
+     "value": 0.6711392913128503
+    },
+    "surface_area": {
+     "default_selected": true,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Surface area",
+     "unit": "input_units²",
+     "value": 13.856406460551018
+    },
+    "volume": {
+     "default_selected": true,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Volume (mesh)",
+     "unit": "input_units³",
+     "value": 2.6666666666666665
+    },
+    "zingg_IL": {
+     "default_selected": true,
+     "error": "ellipsoid fit failed: an ellipsoid fit needs at least nine points with positive weight",
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Zingg ratio I/L",
+     "unit": "",
+     "value": null
+    },
+    "zingg_SI": {
+     "default_selected": true,
+     "error": "ellipsoid fit failed: an ellipsoid fit needs at least nine points with positive weight",
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Zingg ratio S/I",
+     "unit": "",
+     "value": null
+    }
+   },
+   "requires": [
+    "scipy"
+   ]
+  },
+  "regular_tetrahedron|axes=inertia_ellipsoid": {
+   "excluded": [],
+   "meta": {
+    "axes_method": "inertia_ellipsoid",
+    "input_units": "as-is",
+    "output_scale": 1.0,
+    "output_units": "as-is",
+    "reader": null,
+    "scale_factor": 1.0,
+    "source_name": null,
+    "warnings": []
+   },
+   "metrics": {
+    "angelidakis_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Elongation (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.0
+    },
+    "angelidakis_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Flatness (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.0
+    },
+    "axis_I": {
+     "default_selected": false,
+     "error": null,
+     "group": "Principal dimensions (inertia-equivalent ellipsoid)",
+     "label": "Intermediate axis I (inertia ellipsoid)",
+     "unit": "input_units",
+     "value": 2.0
+    },
+    "axis_L": {
+     "default_selected": false,
+     "error": null,
+     "group": "Principal dimensions (inertia-equivalent ellipsoid)",
+     "label": "Long axis L (inertia ellipsoid)",
+     "unit": "input_units",
+     "value": 2.0
+    },
+    "axis_S": {
+     "default_selected": false,
+     "error": null,
+     "group": "Principal dimensions (inertia-equivalent ellipsoid)",
+     "label": "Short axis S (inertia ellipsoid)",
+     "unit": "input_units",
+     "value": 2.0
+    },
+    "centroid_x": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Centroid X",
+     "unit": "input_units",
+     "value": 0.0
+    },
+    "centroid_y": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Centroid Y",
+     "unit": "input_units",
+     "value": 0.0
+    },
+    "centroid_z": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Centroid Z",
+     "unit": "input_units",
+     "value": 0.0
+    },
+    "convexity": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Convexity (V / V_convex_hull)",
+     "unit": "",
+     "value": 0.9999999999999997
+    },
+    "inertia_I1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Principal inertia I1 (unit density)",
+     "unit": "input_units⁵",
+     "value": 1.0666666666666669
+    },
+    "inertia_I2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Principal inertia I2 (unit density)",
+     "unit": "input_units⁵",
+     "value": 1.0666666666666669
+    },
+    "inertia_I3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Principal inertia I3 (unit density)",
+     "unit": "input_units⁵",
+     "value": 1.0666666666666669
+    },
+    "kongfonseca_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Elongation (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.0
+    },
+    "kongfonseca_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Flatness (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.0
+    },
+    "n_faces": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Face count",
+     "unit": "",
+     "value": 4.0
+    },
+    "n_vertices": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Vertex count",
+     "unit": "",
+     "value": 4.0
+    },
+    "orientation_C": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Compactness C (surface orientation tensor)",
+     "unit": "",
+     "value": 1.0
+    },
+    "orientation_E": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Elongation E (surface orientation tensor)",
+     "unit": "",
+     "value": 0.0
+    },
+    "orientation_F": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Flakiness F (surface orientation tensor)",
+     "unit": "",
+     "value": 0.0
+    },
+    "orientation_eig1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f1 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.33333333333333337
+    },
+    "orientation_eig2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f2 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.33333333333333337
+    },
+    "orientation_eig3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f3 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.33333333333333337
+    },
+    "potticary_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Elongation (Potticary et al.)",
+     "unit": "",
+     "value": 0.0
+    },
+    "potticary_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Flatness (Potticary et al.)",
+     "unit": "",
+     "value": 0.0
+    },
+    "sphericity_krumbein": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Sphericity (Krumbein)",
+     "unit": "",
+     "value": 1.0
+    },
+    "sphericity_wadell": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Sphericity (Wadell)",
+     "unit": "",
+     "value": 0.6711392913128503
+    },
+    "surface_area": {
+     "default_selected": true,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Surface area",
+     "unit": "input_units²",
+     "value": 13.856406460551018
+    },
+    "volume": {
+     "default_selected": true,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Volume (mesh)",
+     "unit": "input_units³",
+     "value": 2.6666666666666665
+    },
+    "zingg_IL": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Zingg ratio I/L",
+     "unit": "",
+     "value": 1.0
+    },
+    "zingg_SI": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Zingg ratio S/I",
+     "unit": "",
+     "value": 1.0
+    }
+   },
+   "requires": [
+    "scipy"
+   ]
+  },
   "regular_tetrahedron|axes=min_volume": {
    "excluded": [],
    "meta": {
@@ -4380,6 +8426,522 @@
     "scipy"
    ]
   },
+  "rough_particle|axes=fitted_ellipsoid": {
+   "excluded": [],
+   "meta": {
+    "axes_method": "fitted_ellipsoid",
+    "input_units": "as-is",
+    "output_scale": 1.0,
+    "output_units": "as-is",
+    "reader": null,
+    "scale_factor": 1.0,
+    "source_name": null,
+    "warnings": []
+   },
+   "metrics": {
+    "angelidakis_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Elongation (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.23743908011128234
+    },
+    "angelidakis_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Flatness (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.1665414848090332
+    },
+    "axis_I": {
+     "default_selected": false,
+     "error": null,
+     "group": "Principal dimensions (fitted ellipsoid)",
+     "label": "Intermediate axis I (fitted ellipsoid)",
+     "unit": "input_units",
+     "value": 2.0060696779826426
+    },
+    "axis_L": {
+     "default_selected": false,
+     "error": null,
+     "group": "Principal dimensions (fitted ellipsoid)",
+     "label": "Long axis L (fitted ellipsoid)",
+     "unit": "input_units",
+     "value": 3.3055104190244537
+    },
+    "axis_S": {
+     "default_selected": false,
+     "error": null,
+     "group": "Principal dimensions (fitted ellipsoid)",
+     "label": "Short axis S (fitted ellipsoid)",
+     "unit": "input_units",
+     "value": 1.4032590634249875
+    },
+    "centroid_x": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Centroid X",
+     "unit": "input_units",
+     "value": -0.06381706439288219
+    },
+    "centroid_y": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Centroid Y",
+     "unit": "input_units",
+     "value": -0.018983809568491588
+    },
+    "centroid_z": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Centroid Z",
+     "unit": "input_units",
+     "value": -0.00048110431014117483
+    },
+    "convexity": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Convexity (V / V_convex_hull)",
+     "unit": "",
+     "value": 0.994308086354384
+    },
+    "inertia_I1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Principal inertia I1 (unit density)",
+     "unit": "input_units⁵",
+     "value": 1.4345306847874078
+    },
+    "inertia_I2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Principal inertia I2 (unit density)",
+     "unit": "input_units⁵",
+     "value": 3.0116425961784734
+    },
+    "inertia_I3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Principal inertia I3 (unit density)",
+     "unit": "input_units⁵",
+     "value": 3.4959510890254575
+    },
+    "kongfonseca_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Elongation (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.39311349120639333
+    },
+    "kongfonseca_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Flatness (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.3004933583183699
+    },
+    "n_faces": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Face count",
+     "unit": "",
+     "value": 1280.0
+    },
+    "n_vertices": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Vertex count",
+     "unit": "",
+     "value": 642.0
+    },
+    "orientation_C": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Compactness C (surface orientation tensor)",
+     "unit": "",
+     "value": 0.2631361929737778
+    },
+    "orientation_E": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Elongation E (surface orientation tensor)",
+     "unit": "",
+     "value": 0.37579850412857163
+    },
+    "orientation_F": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Flakiness F (surface orientation tensor)",
+     "unit": "",
+     "value": 0.36106530289765054
+    },
+    "orientation_eig1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f1 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.525742760281651
+    },
+    "orientation_eig2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f2 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.3359152912943098
+    },
+    "orientation_eig3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f3 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.13834194842403913
+    },
+    "potticary_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Elongation (Potticary et al.)",
+     "unit": "",
+     "value": 0.1935177760770364
+    },
+    "potticary_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Flatness (Potticary et al.)",
+     "unit": "",
+     "value": 0.17954580896286595
+    },
+    "sphericity_krumbein": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Sphericity (Krumbein)",
+     "unit": "",
+     "value": 0.6363102750612009
+    },
+    "sphericity_wadell": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Sphericity (Wadell)",
+     "unit": "",
+     "value": 0.8990947961381117
+    },
+    "surface_area": {
+     "default_selected": true,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Surface area",
+     "unit": "input_units²",
+     "value": 15.210825117433528
+    },
+    "volume": {
+     "default_selected": true,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Volume (mesh)",
+     "unit": "input_units³",
+     "value": 4.755664394947953
+    },
+    "zingg_IL": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Zingg ratio I/L",
+     "unit": "",
+     "value": 0.6068865087936066
+    },
+    "zingg_SI": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Zingg ratio S/I",
+     "unit": "",
+     "value": 0.6995066416816301
+    }
+   },
+   "requires": [
+    "scipy"
+   ]
+  },
+  "rough_particle|axes=inertia_ellipsoid": {
+   "excluded": [],
+   "meta": {
+    "axes_method": "inertia_ellipsoid",
+    "input_units": "as-is",
+    "output_scale": 1.0,
+    "output_units": "as-is",
+    "reader": null,
+    "scale_factor": 1.0,
+    "source_name": null,
+    "warnings": []
+   },
+   "metrics": {
+    "angelidakis_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Elongation (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.2315685859339806
+    },
+    "angelidakis_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Flatness (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.1643091542171367
+    },
+    "axis_I": {
+     "default_selected": false,
+     "error": null,
+     "group": "Principal dimensions (inertia-equivalent ellipsoid)",
+     "label": "Intermediate axis I (inertia ellipsoid)",
+     "unit": "input_units",
+     "value": 2.008693568269318
+    },
+    "axis_L": {
+     "default_selected": false,
+     "error": null,
+     "group": "Principal dimensions (inertia-equivalent ellipsoid)",
+     "label": "Long axis L (inertia ellipsoid)",
+     "unit": "input_units",
+     "value": 3.266100381067
+    },
+    "axis_S": {
+     "default_selected": false,
+     "error": null,
+     "group": "Principal dimensions (inertia-equivalent ellipsoid)",
+     "label": "Short axis S (inertia ellipsoid)",
+     "unit": "input_units",
+     "value": 1.4135363623535415
+    },
+    "centroid_x": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Centroid X",
+     "unit": "input_units",
+     "value": -0.06381706439288219
+    },
+    "centroid_y": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Centroid Y",
+     "unit": "input_units",
+     "value": -0.018983809568491588
+    },
+    "centroid_z": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Centroid Z",
+     "unit": "input_units",
+     "value": -0.00048110431014117483
+    },
+    "convexity": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Convexity (V / V_convex_hull)",
+     "unit": "",
+     "value": 0.994308086354384
+    },
+    "inertia_I1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Principal inertia I1 (unit density)",
+     "unit": "input_units⁵",
+     "value": 1.4345306847874078
+    },
+    "inertia_I2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Principal inertia I2 (unit density)",
+     "unit": "input_units⁵",
+     "value": 3.0116425961784734
+    },
+    "inertia_I3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Principal inertia I3 (unit density)",
+     "unit": "input_units⁵",
+     "value": 3.4959510890254575
+    },
+    "kongfonseca_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Elongation (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.3849871914796755
+    },
+    "kongfonseca_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Flatness (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.29629069128177743
+    },
+    "n_faces": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Face count",
+     "unit": "",
+     "value": 1280.0
+    },
+    "n_vertices": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Vertex count",
+     "unit": "",
+     "value": 642.0
+    },
+    "orientation_C": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Compactness C (surface orientation tensor)",
+     "unit": "",
+     "value": 0.2631361929737778
+    },
+    "orientation_E": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Elongation E (surface orientation tensor)",
+     "unit": "",
+     "value": 0.37579850412857163
+    },
+    "orientation_F": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Flakiness F (surface orientation tensor)",
+     "unit": "",
+     "value": 0.36106530289765054
+    },
+    "orientation_eig1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f1 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.525742760281651
+    },
+    "orientation_eig2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f2 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.3359152912943098
+    },
+    "orientation_eig3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f3 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.13834194842403913
+    },
+    "potticary_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Elongation (Potticary et al.)",
+     "unit": "",
+     "value": 0.1880001067830019
+    },
+    "potticary_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Flatness (Potticary et al.)",
+     "unit": "",
+     "value": 0.1779688436964786
+    },
+    "sphericity_krumbein": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Sphericity (Krumbein)",
+     "unit": "",
+     "value": 0.6432609766299074
+    },
+    "sphericity_wadell": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Sphericity (Wadell)",
+     "unit": "",
+     "value": 0.8990947961381117
+    },
+    "surface_area": {
+     "default_selected": true,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Surface area",
+     "unit": "input_units²",
+     "value": 15.210825117433528
+    },
+    "volume": {
+     "default_selected": true,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Volume (mesh)",
+     "unit": "input_units³",
+     "value": 4.755664394947953
+    },
+    "zingg_IL": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Zingg ratio I/L",
+     "unit": "",
+     "value": 0.6150128085203246
+    },
+    "zingg_SI": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Zingg ratio S/I",
+     "unit": "",
+     "value": 0.7037093087182226
+    }
+   },
+   "requires": [
+    "scipy"
+   ]
+  },
   "rough_particle|axes=min_volume": {
    "excluded": [],
    "meta": {
@@ -4890,6 +9452,522 @@
      "label": "Zingg ratio S/I",
      "unit": "",
      "value": 0.7262419688939679
+    }
+   },
+   "requires": [
+    "scipy"
+   ]
+  },
+  "torus_3_1|axes=fitted_ellipsoid": {
+   "excluded": [],
+   "meta": {
+    "axes_method": "fitted_ellipsoid",
+    "input_units": "as-is",
+    "output_scale": 1.0,
+    "output_units": "as-is",
+    "reader": null,
+    "scale_factor": 1.0,
+    "source_name": null,
+    "warnings": []
+   },
+   "metrics": {
+    "angelidakis_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Elongation (Angelidakis et al.)",
+     "unit": "",
+     "value": 8.049116928532385e-16
+    },
+    "angelidakis_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Flatness (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.6901504213770423
+    },
+    "axis_I": {
+     "default_selected": false,
+     "error": null,
+     "group": "Principal dimensions (fitted ellipsoid)",
+     "label": "Intermediate axis I (fitted ellipsoid)",
+     "unit": "input_units",
+     "value": 10.068791167500017
+    },
+    "axis_L": {
+     "default_selected": false,
+     "error": null,
+     "group": "Principal dimensions (fitted ellipsoid)",
+     "label": "Long axis L (fitted ellipsoid)",
+     "unit": "input_units",
+     "value": 10.068791167500047
+    },
+    "axis_S": {
+     "default_selected": false,
+     "error": null,
+     "group": "Principal dimensions (fitted ellipsoid)",
+     "label": "Short axis S (fitted ellipsoid)",
+     "unit": "input_units",
+     "value": 1.8458775390835254
+    },
+    "centroid_x": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Centroid X",
+     "unit": "input_units",
+     "value": 2.0950773847446895e-16
+    },
+    "centroid_y": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Centroid Y",
+     "unit": "input_units",
+     "value": 5.282780928357694e-16
+    },
+    "centroid_z": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Centroid Z",
+     "unit": "input_units",
+     "value": -6.140274895104701e-17
+    },
+    "convexity": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Convexity (V / V_convex_hull)",
+     "unit": "",
+     "value": 0.6452668712734065
+    },
+    "inertia_I1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Principal inertia I1 (unit density)",
+     "unit": "input_units⁵",
+     "value": 293.1951089868102
+    },
+    "inertia_I2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Principal inertia I2 (unit density)",
+     "unit": "input_units⁵",
+     "value": 293.1951089868105
+    },
+    "inertia_I3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Principal inertia I3 (unit density)",
+     "unit": "input_units⁵",
+     "value": 558.3489251111716
+    },
+    "kongfonseca_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Elongation (Kong & Fonseca)",
+     "unit": "",
+     "value": 2.99917495232966e-15
+    },
+    "kongfonseca_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Flatness (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.8166733713733543
+    },
+    "n_faces": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Face count",
+     "unit": "",
+     "value": 1536.0
+    },
+    "n_vertices": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Vertex count",
+     "unit": "",
+     "value": 768.0
+    },
+    "orientation_C": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Compactness C (surface orientation tensor)",
+     "unit": "",
+     "value": 0.5016101161060453
+    },
+    "orientation_E": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Elongation E (surface orientation tensor)",
+     "unit": "",
+     "value": 1.0008095513385647e-15
+    },
+    "orientation_F": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Flakiness F (surface orientation tensor)",
+     "unit": "",
+     "value": 0.4983898838939537
+    },
+    "orientation_eig1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f1 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.4991962361001791
+    },
+    "orientation_eig2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f2 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.25040188194991214
+    },
+    "orientation_eig3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f3 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.25040188194991164
+    },
+    "potticary_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Elongation (Potticary et al.)",
+     "unit": "",
+     "value": 1.3736721354496575e-15
+    },
+    "potticary_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Flatness (Potticary et al.)",
+     "unit": "",
+     "value": 0.7481000420785016
+    },
+    "sphericity_krumbein": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Sphericity (Krumbein)",
+     "unit": "",
+     "value": 0.5680787150243823
+    },
+    "sphericity_wadell": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Sphericity (Wadell)",
+     "unit": "",
+     "value": 0.6136192807274895
+    },
+    "surface_area": {
+     "default_selected": true,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Surface area",
+     "unit": "input_units²",
+     "value": 117.46586095543171
+    },
+    "volume": {
+     "default_selected": true,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Volume (mesh)",
+     "unit": "input_units³",
+     "value": 57.54264336266668
+    },
+    "zingg_IL": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Zingg ratio I/L",
+     "unit": "",
+     "value": 0.999999999999997
+    },
+    "zingg_SI": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Zingg ratio S/I",
+     "unit": "",
+     "value": 0.18332662862664564
+    }
+   },
+   "requires": [
+    "scipy"
+   ]
+  },
+  "torus_3_1|axes=inertia_ellipsoid": {
+   "excluded": [],
+   "meta": {
+    "axes_method": "inertia_ellipsoid",
+    "input_units": "as-is",
+    "output_scale": 1.0,
+    "output_units": "as-is",
+    "reader": null,
+    "scale_factor": 1.0,
+    "source_name": null,
+    "warnings": []
+   },
+   "metrics": {
+    "angelidakis_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Elongation (Angelidakis et al.)",
+     "unit": "",
+     "value": 1.3877787807814457e-16
+    },
+    "angelidakis_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Flatness (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.6338504694658923
+    },
+    "axis_I": {
+     "default_selected": false,
+     "error": null,
+     "group": "Principal dimensions (inertia-equivalent ellipsoid)",
+     "label": "Intermediate axis I (inertia ellipsoid)",
+     "unit": "input_units",
+     "value": 9.850492348619944
+    },
+    "axis_L": {
+     "default_selected": false,
+     "error": null,
+     "group": "Principal dimensions (inertia-equivalent ellipsoid)",
+     "label": "Long axis L (inertia ellipsoid)",
+     "unit": "input_units",
+     "value": 9.850492348619948
+    },
+    "axis_S": {
+     "default_selected": false,
+     "error": null,
+     "group": "Principal dimensions (inertia-equivalent ellipsoid)",
+     "label": "Short axis S (inertia ellipsoid)",
+     "unit": "input_units",
+     "value": 2.2075172828735456
+    },
+    "centroid_x": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Centroid X",
+     "unit": "input_units",
+     "value": 2.0950773847446895e-16
+    },
+    "centroid_y": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Centroid Y",
+     "unit": "input_units",
+     "value": 5.282780928357694e-16
+    },
+    "centroid_z": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Centroid Z",
+     "unit": "input_units",
+     "value": -6.140274895104701e-17
+    },
+    "convexity": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Convexity (V / V_convex_hull)",
+     "unit": "",
+     "value": 0.6452668712734065
+    },
+    "inertia_I1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Principal inertia I1 (unit density)",
+     "unit": "input_units⁵",
+     "value": 293.1951089868102
+    },
+    "inertia_I2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Principal inertia I2 (unit density)",
+     "unit": "input_units⁵",
+     "value": 293.1951089868105
+    },
+    "inertia_I3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Principal inertia I3 (unit density)",
+     "unit": "input_units⁵",
+     "value": 558.3489251111716
+    },
+    "kongfonseca_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Elongation (Kong & Fonseca)",
+     "unit": "",
+     "value": 3.6066356412105993e-16
+    },
+    "kongfonseca_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Flatness (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.7758977719339257
+    },
+    "n_faces": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Face count",
+     "unit": "",
+     "value": 1536.0
+    },
+    "n_vertices": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Vertex count",
+     "unit": "",
+     "value": 768.0
+    },
+    "orientation_C": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Compactness C (surface orientation tensor)",
+     "unit": "",
+     "value": 0.5016101161060453
+    },
+    "orientation_E": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Elongation E (surface orientation tensor)",
+     "unit": "",
+     "value": 1.0008095513385647e-15
+    },
+    "orientation_F": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Flakiness F (surface orientation tensor)",
+     "unit": "",
+     "value": 0.4983898838939537
+    },
+    "orientation_eig1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f1 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.4991962361001791
+    },
+    "orientation_eig2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f2 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.25040188194991214
+    },
+    "orientation_eig3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f3 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.25040188194991164
+    },
+    "potticary_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Elongation (Potticary et al.)",
+     "unit": "",
+     "value": 1.621614148710548e-16
+    },
+    "potticary_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Flatness (Potticary et al.)",
+     "unit": "",
+     "value": 0.6977177237114616
+    },
+    "sphericity_krumbein": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Sphericity (Krumbein)",
+     "unit": "",
+     "value": 0.6074101686033023
+    },
+    "sphericity_wadell": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Sphericity (Wadell)",
+     "unit": "",
+     "value": 0.6136192807274895
+    },
+    "surface_area": {
+     "default_selected": true,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Surface area",
+     "unit": "input_units²",
+     "value": 117.46586095543171
+    },
+    "volume": {
+     "default_selected": true,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Volume (mesh)",
+     "unit": "input_units³",
+     "value": 57.54264336266668
+    },
+    "zingg_IL": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Zingg ratio I/L",
+     "unit": "",
+     "value": 0.9999999999999997
+    },
+    "zingg_SI": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Zingg ratio S/I",
+     "unit": "",
+     "value": 0.2241022280660742
     }
    },
    "requires": [
@@ -5423,6 +10501,524 @@
    },
    "requires": [
     "scipy"
+   ]
+  },
+  "two_sphere_union|axes=fitted_ellipsoid": {
+   "excluded": [],
+   "meta": {
+    "axes_method": "fitted_ellipsoid",
+    "input_units": "as-is",
+    "output_scale": 1.0,
+    "output_units": "as-is",
+    "reader": null,
+    "scale_factor": 1.0,
+    "source_name": null,
+    "warnings": []
+   },
+   "metrics": {
+    "angelidakis_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Elongation (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.20615559805863115
+    },
+    "angelidakis_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Flatness (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.00013722297445473153
+    },
+    "axis_I": {
+     "default_selected": false,
+     "error": null,
+     "group": "Principal dimensions (fitted ellipsoid)",
+     "label": "Intermediate axis I (fitted ellipsoid)",
+     "unit": "input_units",
+     "value": 1.8542358557080754
+    },
+    "axis_L": {
+     "default_selected": false,
+     "error": null,
+     "group": "Principal dimensions (fitted ellipsoid)",
+     "label": "Long axis L (fitted ellipsoid)",
+     "unit": "input_units",
+     "value": 2.8172989202335685
+    },
+    "axis_S": {
+     "default_selected": false,
+     "error": null,
+     "group": "Principal dimensions (fitted ellipsoid)",
+     "label": "Short axis S (fitted ellipsoid)",
+     "unit": "input_units",
+     "value": 1.8537044565763752
+    },
+    "centroid_x": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Centroid X",
+     "unit": "input_units",
+     "value": 0.19409608589695554
+    },
+    "centroid_y": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Centroid Y",
+     "unit": "input_units",
+     "value": 2.415316187746516e-17
+    },
+    "centroid_z": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Centroid Z",
+     "unit": "input_units",
+     "value": -2.3239345008509804e-17
+    },
+    "convexity": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Convexity (V / V_convex_hull)",
+     "unit": "",
+     "value": 0.9284241681053117
+    },
+    "inertia_I1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Principal inertia I1 (unit density)",
+     "unit": "input_units⁵",
+     "value": 1.692868512351232
+    },
+    "inertia_I2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Principal inertia I2 (unit density)",
+     "unit": "input_units⁵",
+     "value": 2.676790509779747
+    },
+    "inertia_I3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Principal inertia I3 (unit density)",
+     "unit": "input_units⁵",
+     "value": 2.676863641947082
+    },
+    "kongfonseca_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Elongation (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.3418391486997944
+    },
+    "kongfonseca_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Flatness (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.00028658659040830024
+    },
+    "n_faces": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Face count",
+     "unit": "",
+     "value": 668.0
+    },
+    "n_vertices": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Vertex count",
+     "unit": "",
+     "value": 336.0
+    },
+    "orientation_C": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Compactness C (surface orientation tensor)",
+     "unit": "",
+     "value": 0.8012650719499379
+    },
+    "orientation_E": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Elongation E (surface orientation tensor)",
+     "unit": "",
+     "value": 0.19852387699308052
+    },
+    "orientation_F": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Flakiness F (surface orientation tensor)",
+     "unit": "",
+     "value": 0.00021105105698154947
+    },
+    "orientation_eig1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f1 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.3570084662919875
+    },
+    "orientation_eig2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f2 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.35693311927782523
+    },
+    "orientation_eig3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f3 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.28605841443018637
+    },
+    "potticary_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Elongation (Potticary et al.)",
+     "unit": "",
+     "value": 0.14759046070313311
+    },
+    "potticary_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Flatness (Potticary et al.)",
+     "unit": "",
+     "value": 0.00016287498826158227
+    },
+    "sphericity_krumbein": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Sphericity (Krumbein)",
+     "unit": "",
+     "value": 0.7565655067240706
+    },
+    "sphericity_wadell": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Sphericity (Wadell)",
+     "unit": "",
+     "value": 0.9122767020348023
+    },
+    "surface_area": {
+     "default_selected": true,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Surface area",
+     "unit": "input_units²",
+     "value": 15.021135696646098
+    },
+    "volume": {
+     "default_selected": true,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Volume (mesh)",
+     "unit": "input_units³",
+     "value": 4.769994115002748
+    },
+    "zingg_IL": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Zingg ratio I/L",
+     "unit": "",
+     "value": 0.6581608513002055
+    },
+    "zingg_SI": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (fitted ellipsoid)",
+     "label": "Zingg ratio S/I",
+     "unit": "",
+     "value": 0.9997134134095917
+    }
+   },
+   "requires": [
+    "scipy",
+    "manifold3d"
+   ]
+  },
+  "two_sphere_union|axes=inertia_ellipsoid": {
+   "excluded": [],
+   "meta": {
+    "axes_method": "inertia_ellipsoid",
+    "input_units": "as-is",
+    "output_scale": 1.0,
+    "output_units": "as-is",
+    "reader": null,
+    "scale_factor": 1.0,
+    "source_name": null,
+    "warnings": []
+   },
+   "metrics": {
+    "angelidakis_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Elongation (Angelidakis et al.)",
+     "unit": "",
+     "value": 0.19044852776220444
+    },
+    "angelidakis_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Flatness (Angelidakis et al.)",
+     "unit": "",
+     "value": 2.0816624626385227e-05
+    },
+    "axis_I": {
+     "default_selected": false,
+     "error": null,
+     "group": "Principal dimensions (inertia-equivalent ellipsoid)",
+     "label": "Intermediate axis I (inertia ellipsoid)",
+     "unit": "input_units",
+     "value": 1.8839183335837335
+    },
+    "axis_L": {
+     "default_selected": false,
+     "error": null,
+     "group": "Principal dimensions (inertia-equivalent ellipsoid)",
+     "label": "Long axis L (inertia ellipsoid)",
+     "unit": "input_units",
+     "value": 2.7703090957739263
+    },
+    "axis_S": {
+     "default_selected": false,
+     "error": null,
+     "group": "Principal dimensions (inertia-equivalent ellipsoid)",
+     "label": "Short axis S (inertia ellipsoid)",
+     "unit": "input_units",
+     "value": 1.8838369497940355
+    },
+    "centroid_x": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Centroid X",
+     "unit": "input_units",
+     "value": 0.19409608589695554
+    },
+    "centroid_y": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Centroid Y",
+     "unit": "input_units",
+     "value": 2.415316187746516e-17
+    },
+    "centroid_z": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Centroid Z",
+     "unit": "input_units",
+     "value": -2.3239345008509804e-17
+    },
+    "convexity": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Convexity (V / V_convex_hull)",
+     "unit": "",
+     "value": 0.9284241681053117
+    },
+    "inertia_I1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Principal inertia I1 (unit density)",
+     "unit": "input_units⁵",
+     "value": 1.692868512351232
+    },
+    "inertia_I2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Principal inertia I2 (unit density)",
+     "unit": "input_units⁵",
+     "value": 2.676790509779747
+    },
+    "inertia_I3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Principal inertia I3 (unit density)",
+     "unit": "input_units⁵",
+     "value": 2.676863641947082
+    },
+    "kongfonseca_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Elongation (Kong & Fonseca)",
+     "unit": "",
+     "value": 0.3199609615917485
+    },
+    "kongfonseca_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Flatness (Kong & Fonseca)",
+     "unit": "",
+     "value": 4.319921317566094e-05
+    },
+    "n_faces": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Face count",
+     "unit": "",
+     "value": 668.0
+    },
+    "n_vertices": {
+     "default_selected": false,
+     "error": null,
+     "group": "Mesh",
+     "label": "Vertex count",
+     "unit": "",
+     "value": 336.0
+    },
+    "orientation_C": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Compactness C (surface orientation tensor)",
+     "unit": "",
+     "value": 0.8012650719499379
+    },
+    "orientation_E": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Elongation E (surface orientation tensor)",
+     "unit": "",
+     "value": 0.19852387699308052
+    },
+    "orientation_F": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Flakiness F (surface orientation tensor)",
+     "unit": "",
+     "value": 0.00021105105698154947
+    },
+    "orientation_eig1": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f1 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.3570084662919875
+    },
+    "orientation_eig2": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f2 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.35693311927782523
+    },
+    "orientation_eig3": {
+     "default_selected": false,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Eigenvalue f3 (surface orientation tensor)",
+     "unit": "",
+     "value": 0.28605841443018637
+    },
+    "potticary_elongation": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Elongation (Potticary et al.)",
+     "unit": "",
+     "value": 0.13557388101234952
+    },
+    "potticary_flatness": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Flatness (Potticary et al.)",
+     "unit": "",
+     "value": 2.4895377279407905e-05
+    },
+    "sphericity_krumbein": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Sphericity (Krumbein)",
+     "unit": "",
+     "value": 0.7733029065523057
+    },
+    "sphericity_wadell": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form, surface-based (independent of the box)",
+     "label": "Sphericity (Wadell)",
+     "unit": "",
+     "value": 0.9122767020348023
+    },
+    "surface_area": {
+     "default_selected": true,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Surface area",
+     "unit": "input_units²",
+     "value": 15.021135696646098
+    },
+    "volume": {
+     "default_selected": true,
+     "error": null,
+     "group": "Size and mass properties",
+     "label": "Volume (mesh)",
+     "unit": "input_units³",
+     "value": 4.769994115002748
+    },
+    "zingg_IL": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Zingg ratio I/L",
+     "unit": "",
+     "value": 0.6800390384082515
+    },
+    "zingg_SI": {
+     "default_selected": true,
+     "error": null,
+     "group": "Form from S, I, L (inertia-equivalent ellipsoid)",
+     "label": "Zingg ratio S/I",
+     "unit": "",
+     "value": 0.9999568007868244
+    }
+   },
+   "requires": [
+    "scipy",
+    "manifold3d"
    ]
   },
   "two_sphere_union|axes=min_volume": {

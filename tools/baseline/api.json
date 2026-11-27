@@ -4,10 +4,12 @@
   "analysis.LoadedGeometry": "io.LoadedGeometry",
   "analysis.closed_surface_inertia_tensor": "geometry.closed_surface_inertia_tensor",
   "analysis.csv_text": "export.csv_text",
+  "analysis.fitted_ellipsoid": "ellipsoid.fitted_ellipsoid",
   "analysis.form_parameters_angelidakis_et_al": "form.form_parameters_angelidakis_et_al",
   "analysis.form_parameters_kong_and_fonseca": "form.form_parameters_kong_and_fonseca",
   "analysis.form_parameters_potticary_et_al": "form.form_parameters_potticary_et_al",
   "analysis.form_parameters_zingg": "form.form_parameters_zingg",
+  "analysis.inertia_ellipsoid_from_moments": "ellipsoid.inertia_ellipsoid_from_moments",
   "analysis.load_geometry": "io.load_geometry",
   "analysis.oriented_box": "bounding.oriented_box",
   "analysis.prepare_mesh": "preprocess.prepare_mesh",
@@ -129,6 +131,8 @@
   "AnalysisResult",
   "BatchItem",
   "BatchResult",
+  "ELLIPSOID_METHODS",
+  "Ellipsoid",
   "LoadedGeometry",
   "Metric",
   "OrientedBox",
@@ -139,12 +143,14 @@
   "compute_metrics",
   "convexity",
   "find_particle_files",
+  "fitted_ellipsoid",
   "form_functions_1",
   "form_functions_2",
   "form_parameters_angelidakis_et_al",
   "form_parameters_kong_and_fonseca",
   "form_parameters_potticary_et_al",
   "form_parameters_zingg",
+  "inertia_ellipsoid",
   "load_geometry",
   "load_stl",
   "min_volume_box",
@@ -982,6 +988,181 @@
     }
    ],
    "returns": "OrientedBox"
+  },
+  "ellipsoid.Ellipsoid": {
+   "bases": [
+    "NamedTuple"
+   ],
+   "deprecated": null,
+   "exported": true,
+   "interface": false,
+   "kind": "class",
+   "params": [],
+   "returns": null
+  },
+  "ellipsoid.Ellipsoid.intermediate": {
+   "bases": [],
+   "deprecated": null,
+   "exported": true,
+   "interface": false,
+   "kind": "property",
+   "params": [],
+   "returns": "float"
+  },
+  "ellipsoid.Ellipsoid.long": {
+   "bases": [],
+   "deprecated": null,
+   "exported": true,
+   "interface": false,
+   "kind": "property",
+   "params": [],
+   "returns": "float"
+  },
+  "ellipsoid.Ellipsoid.short": {
+   "bases": [],
+   "deprecated": null,
+   "exported": true,
+   "interface": false,
+   "kind": "property",
+   "params": [],
+   "returns": "float"
+  },
+  "ellipsoid.Ellipsoid.volume": {
+   "bases": [],
+   "deprecated": null,
+   "exported": true,
+   "interface": false,
+   "kind": "property",
+   "params": [],
+   "returns": "float"
+  },
+  "ellipsoid.fit_ellipsoid": {
+   "bases": [],
+   "deprecated": null,
+   "exported": false,
+   "interface": false,
+   "kind": "function",
+   "params": [
+    {
+     "annotation": "ArrayLike",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "points"
+    },
+    {
+     "annotation": "ArrayLike | None",
+     "default": "None",
+     "kind": "positional_or_keyword",
+     "name": "weights"
+    }
+   ],
+   "returns": "Ellipsoid"
+  },
+  "ellipsoid.fitted_ellipsoid": {
+   "bases": [],
+   "deprecated": null,
+   "exported": true,
+   "interface": false,
+   "kind": "function",
+   "params": [
+    {
+     "annotation": "ArrayLike",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "nodes"
+    },
+    {
+     "annotation": "ArrayLike",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "faces"
+    },
+    {
+     "annotation": "str",
+     "default": "'area'",
+     "kind": "keyword_only",
+     "name": "weighting"
+    }
+   ],
+   "returns": "Ellipsoid"
+  },
+  "ellipsoid.inertia_ellipsoid": {
+   "bases": [],
+   "deprecated": null,
+   "exported": true,
+   "interface": false,
+   "kind": "function",
+   "params": [
+    {
+     "annotation": "ArrayLike",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "nodes"
+    },
+    {
+     "annotation": "ArrayLike",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "faces"
+    }
+   ],
+   "returns": "Ellipsoid"
+  },
+  "ellipsoid.inertia_ellipsoid_from_moments": {
+   "bases": [],
+   "deprecated": null,
+   "exported": false,
+   "interface": false,
+   "kind": "function",
+   "params": [
+    {
+     "annotation": "float",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "volume"
+    },
+    {
+     "annotation": "ArrayLike",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "moments"
+    },
+    {
+     "annotation": "ArrayLike",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "axes"
+    },
+    {
+     "annotation": "ArrayLike",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "centroid"
+    }
+   ],
+   "returns": "Ellipsoid"
+  },
+  "ellipsoid.vertex_areas": {
+   "bases": [],
+   "deprecated": null,
+   "exported": false,
+   "interface": false,
+   "kind": "function",
+   "params": [
+    {
+     "annotation": "ArrayLike",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "nodes"
+    },
+    {
+     "annotation": "ArrayLike",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "faces"
+    }
+   ],
+   "returns": "np.ndarray"
   },
   "export.csv_text": {
    "bases": [],

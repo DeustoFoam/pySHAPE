@@ -435,7 +435,7 @@ def cases() -> list[dict]:
     """Every (mesh, options) combination checked, with the extras it needs."""
     out = []
     for name, mesh in reference_meshes().items():
-        for axes in ("pca", "min_volume"):
+        for axes in ("pca", "min_volume", "inertia_ellipsoid", "fitted_ellipsoid"):
             out.append({"id": f"{name}|axes={axes}", "mesh": name, "axes": axes,
                         "units": "as-is", "output_units": "m"})
     out.append({"id": "cuboid_4x2x1_rotated|units=mm->um", "mesh": "cuboid_4x2x1_rotated",

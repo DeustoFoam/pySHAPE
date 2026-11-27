@@ -5,6 +5,7 @@ __version__ = "0.1.3"
 from .analysis import AnalysisResult, Metric, analyze_file, analyze_mesh, compute_metrics
 from .batch import BatchItem, BatchResult, analyze_folder, find_particle_files
 from .bounding import AXES_METHODS, OrientedBox, min_volume_box, oriented_box, pca_box
+from .ellipsoid import ELLIPSOID_METHODS, Ellipsoid, fitted_ellipsoid, inertia_ellipsoid
 from .geometry import closed_surface_inertia_tensor, surface_area, volume_centroid_inertia_tensor
 from .form import (
 	convexity,
@@ -40,6 +41,10 @@ __all__ = [
 	"min_volume_box",
 	"oriented_box",
 	"pca_box",
+	"ELLIPSOID_METHODS",
+	"Ellipsoid",
+	"inertia_ellipsoid",
+	"fitted_ellipsoid",
 	"surface_area",
 	"volume_centroid_inertia_tensor",
 	"closed_surface_inertia_tensor",

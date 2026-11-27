@@ -15,7 +15,8 @@ The Python package provides tools for 3D particle geometry and form analysis. It
 - Geometry: surface area, enclosed volume, centroid and principal moments of inertia of closed
   triangle meshes (and of tetrahedral meshes)
 - Principal dimensions S, I, L from a PCA-aligned box (fast) or a minimum-volume oriented
-  bounding box (orientation-independent), as in the original SHAPE
+  bounding box (orientation-independent), as in the original SHAPE, or from an
+  equivalent ellipsoid: inertia-equivalent, or least-squares fitted to the surface
 - Surface-based form (independent of any box): Wadell sphericity, convexity, and
   the surface orientation tensor (compactness C, flakiness F, elongation E)
 - Form from S, I, L: Krumbein sphericity, Zingg ratios, and Potticary, Kong-Fonseca and Angelidakis et al. (2022) flatness/elongation parameters
@@ -270,6 +271,28 @@ warning.
   quadratically with the number of convex-hull vertices (about 1 s for 2,500
   and 12 s for 10,000 hull vertices on a laptop); for very dense meshes use
   a decimated copy or the PCA box.
+- `axes="inertia_ellipsoid"` and `axes="fitted_ellipsoid"` take S, I, L as
+  the full axes 2c ≤ 2b ≤ 2a of an equivalent ellipsoid (`pyshape.ellipsoid`;
+  NumPy only):
+  - **inertia-equivalent ellipsoid**: the uniform ellipsoid with the
+    particle's volume V and principal moments I1 ≤ I2 ≤ I3,
+    a² = 5(I2 + I3 − I1)/(2V), b² = 5(I1 + I3 − I2)/(2V),
+    c² = 5(I1 + I2 − I3)/(2V). Unique, rotation-invariant and insensitive to
+    vertex density; needs a closed surface. For a cuboid, the ratios equal the
+    box ratios; for the Platonic solids, all three lengths are equal.
+  - **fitted ellipsoid**: algebraic least-squares fit of a quadric to the
+    surface vertices with the constraint A + B + C = 3, as the
+    `ellipsoid_fit` routine used by SHAPE, but with each vertex weighted by
+    its share of the surface area, and with a check that the result is an
+    ellipsoid: otherwise S, I, L and the indices derived from them carry an
+    error. At least nine vertices are needed. `fitted_ellipsoid(nodes, faces,
+    weighting="none")` reproduces SHAPE's unweighted fit.
+
+  Ellipsoid axes are not enclosing dimensions: for angular particles they are
+  shorter than box dimensions, and a thin tip or corner adds reach but little
+  material, so the form indices and Zingg classes from them are not directly
+  comparable with box-based ones. The equivalent ellipsoid generally does not
+  have the particle's volume.
 - Closed, orientable mesh shells have their triangle winding corrected
   automatically by `prepare_mesh`, including wholly reversed shells; the original arrays/files
   are not changed. Volume requires nonzero enclosed volume. Open/non-manifold

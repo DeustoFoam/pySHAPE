@@ -50,6 +50,8 @@
         <select id="axes" name="axes">
           <option value="pca">PCA-aligned box (fast)</option>
           <option value="min_volume">Minimum-volume box</option>
+          <option value="inertia_ellipsoid">Inertia-equivalent ellipsoid</option>
+          <option value="fitted_ellipsoid">Fitted ellipsoid (least squares)</option>
         </select>
         <p class="hint">PCA directions are not unique for highly symmetric shapes
           (e.g. cubes); the minimum-volume box is orientation-independent but slower.</p>

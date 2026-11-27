@@ -30,7 +30,9 @@ from typing import NamedTuple
 import numpy as np
 from numpy.typing import ArrayLike
 
-AXES_METHODS = ("pca", "min_volume")
+# Box methods; AXES_METHODS also lists the ellipsoid methods of pyshape.ellipsoid.
+BOX_METHODS = ("pca", "min_volume")
+AXES_METHODS = (*BOX_METHODS, "inertia_ellipsoid", "fitted_ellipsoid")
 # Hulls with at most this many distinct edge directions also test the axes
 # perpendicular to every pair of edges (at most ~45,000 extra candidates).
 MAX_EDGE_PAIR_DIRECTIONS = 300
@@ -234,4 +236,4 @@ def oriented_box(nodes: ArrayLike, method: str = "pca") -> OrientedBox:
         return pca_box(nodes)
     if method == "min_volume":
         return min_volume_box(nodes)
-    raise ValueError(f"Unknown axes method '{method}'. Choose one of: {', '.join(AXES_METHODS)}")
+    raise ValueError(f"Unknown axes method '{method}' for a box. Choose one of: {', '.join(BOX_METHODS)}")

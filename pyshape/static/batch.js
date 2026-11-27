@@ -156,7 +156,7 @@ $("batch-form").addEventListener("submit", async (event) => {
       link.replaceChildren(downloadLink(result.csv, name));
       if (!$("metadata").textContent) {
         $("metadata").textContent = `Input: ${result.input_units} | Output: ${result.output_units}`
-          + ` | Axes: ${result.axes_method === "min_volume" ? "minimum-volume box" : "PCA"}.`;
+          + ` | Axes: ${({pca: "PCA", min_volume: "minimum-volume box", inertia_ellipsoid: "inertia-equivalent ellipsoid", fitted_ellipsoid: "fitted ellipsoid"})[result.axes_method] || result.axes_method}.`;
       }
     } catch (error) {
       failed++;

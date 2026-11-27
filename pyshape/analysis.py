@@ -9,6 +9,7 @@ import numpy as np
 from numpy.typing import ArrayLike
 
 from .bounding import AXES_METHODS, oriented_box
+from .ellipsoid import fitted_ellipsoid, inertia_ellipsoid_from_moments
 from .export import csv_text
 from .form import (
     form_parameters_kong_and_fonseca,
@@ -30,9 +31,13 @@ GROUP_SIZE = "Size and mass properties"
 GROUP_SURFACE_FORM = "Form, surface-based (independent of the box)"
 # Per axes method: short label used in metric labels, name of the source of
 # S, I, L, and the group of S, I, L.
-AXES_SOURCES = {"pca": "PCA box", "min_volume": "minimum-volume box"}
+AXES_SOURCES = {"pca": "PCA box", "min_volume": "minimum-volume box",
+                "inertia_ellipsoid": "inertia-equivalent ellipsoid",
+                "fitted_ellipsoid": "fitted ellipsoid"}
 AXES_LABELS = {method: (short, f"Principal dimensions ({AXES_SOURCES[method]})")
-               for method, short in (("pca", "PCA"), ("min_volume", "min. volume box"))}
+               for method, short in (("pca", "PCA"), ("min_volume", "min. volume box"),
+                                     ("inertia_ellipsoid", "inertia ellipsoid"),
+                                     ("fitted_ellipsoid", "fitted ellipsoid"))}
 
 
 def result_groups(axes: str = "pca") -> list[str]:
@@ -266,8 +271,14 @@ def compute_metrics(nodes: ArrayLike, faces: ArrayLike, *, axes: str = "pca") ->
 
     ``axes`` selects how the short/intermediate/long dimensions S, I, L used by
     the axis-based form indices are measured: ``"pca"`` (principal directions
-    of the vertices; default) or ``"min_volume"`` (minimum-volume oriented
-    bounding box, which requires SciPy). See :mod:`pyshape.bounding`.
+    of the vertices; default), ``"min_volume"`` (minimum-volume oriented
+    bounding box, which requires SciPy; see :mod:`pyshape.bounding`),
+    ``"inertia_ellipsoid"`` (full axes of the ellipsoid with the same volume
+    and principal moments; needs a closed surface) or ``"fitted_ellipsoid"``
+    (area-weighted least-squares ellipsoid through the surface vertices); see
+    :mod:`pyshape.ellipsoid`. Ellipsoid axes are not enclosing dimensions. If
+    they cannot be computed, S, I, L and the indices derived from them carry
+    an error.
     """
     if axes not in AXES_METHODS:
         raise ValueError(f"Unknown axes method '{axes}'. Choose one of: {', '.join(AXES_METHODS)}")
@@ -302,9 +313,9 @@ def compute_metrics(nodes: ArrayLike, faces: ArrayLike, *, axes: str = "pca") ->
         add(f"centroid_{axis}", f"Centroid {axis.upper()}",
             float(centroid[i]) if centroid is not None else None,
             GROUP_SIZE, False, volume_error)
-    moments = (
-        closed_surface_inertia_tensor(nodes, faces, centroid)[1]
-        if volume is not None else [None, None, None]
+    moments, principal_axes = (
+        closed_surface_inertia_tensor(nodes, faces, centroid)[1:]
+        if volume is not None else ([None, None, None], None)
     )
     for i, value in enumerate(moments, 1):
         add(f"inertia_I{i}", f"Principal inertia I{i} (unit density)", value,
@@ -340,34 +351,59 @@ def compute_metrics(nodes: ArrayLike, faces: ArrayLike, *, axes: str = "pca") ->
         add(f"orientation_eig{i}", f"Eigenvalue f{i} (surface orientation tensor)", value,
             GROUP_SURFACE_FORM, False)
 
-    try:
-        box = oriented_box(nodes, axes)
-    except ModuleNotFoundError as exc:
-        if exc.name not in {"scipy", "scipy.spatial"}:
-            raise
-        raise ImportError(
-            "axes='min_volume' requires scipy; install with: pip install 'pyshape[analysis]'"
-        ) from exc
-    short, intermediate, long = box.short, box.intermediate, box.long
+    dims_error = None
+    if axes == "inertia_ellipsoid":
+        if volume is None:
+            dims_error = f"inertia-equivalent ellipsoid unavailable: {volume_error}"
+        else:
+            try:
+                dims = inertia_ellipsoid_from_moments(volume, moments, principal_axes, centroid)
+            except ValueError as exc:
+                dims_error = f"inertia-equivalent ellipsoid unavailable: {exc}"
+    elif axes == "fitted_ellipsoid":
+        try:
+            dims = fitted_ellipsoid(nodes, faces)
+        except ValueError as exc:
+            dims_error = f"ellipsoid fit failed: {exc}"
+    else:
+        try:
+            dims = oriented_box(nodes, axes)
+        except ModuleNotFoundError as exc:
+            if exc.name not in {"scipy", "scipy.spatial"}:
+                raise
+            raise ImportError(
+                "axes='min_volume' requires scipy; install with: pip install 'pyshape[analysis]'"
+            ) from exc
+    if dims_error is None:
+        short, intermediate, long = dims.short, dims.intermediate, dims.long
+    else:
+        short = intermediate = long = None
     method_label, axes_group = AXES_LABELS[axes]
     for axis, label, value in (
         ("S", "Short", short), ("I", "Intermediate", intermediate), ("L", "Long", long),
     ):
-        add(f"axis_{axis}", f"{label} axis {axis} ({method_label})", value, axes_group, False)
+        add(f"axis_{axis}", f"{label} axis {axis} ({method_label})", value, axes_group, False,
+            dims_error)
     dims_group = f"Form from S, I, L ({AXES_SOURCES[axes]})"
+
+    def from_dims(function):
+        return (None, None) if dims_error is not None else function(short, intermediate, long)
+
     add("sphericity_krumbein", "Sphericity (Krumbein)",
-        sphericity_krumbein(short, intermediate, long), dims_group)
+        None if dims_error else sphericity_krumbein(short, intermediate, long), dims_group,
+        error=dims_error)
     for prefix, label, function in (
         ("potticary", "Potticary et al.", form_parameters_potticary_et_al),
         ("kongfonseca", "Kong & Fonseca", form_parameters_kong_and_fonseca),
         ("angelidakis", "Angelidakis et al.", form_parameters_angelidakis_et_al),
     ):
-        flatness, elongation = function(short, intermediate, long)
-        add(f"{prefix}_flatness", f"Flatness ({label})", flatness, dims_group)
-        add(f"{prefix}_elongation", f"Elongation ({label})", elongation, dims_group)
-    si, il = form_parameters_zingg(short, intermediate, long)
-    add("zingg_SI", "Zingg ratio S/I", si, dims_group)
-    add("zingg_IL", "Zingg ratio I/L", il, dims_group)
+        flatness, elongation = from_dims(function)
+        add(f"{prefix}_flatness", f"Flatness ({label})", flatness, dims_group, error=dims_error)
+        add(f"{prefix}_elongation", f"Elongation ({label})", elongation, dims_group,
+            error=dims_error)
+    si, il = from_dims(form_parameters_zingg)
+    add("zingg_SI", "Zingg ratio S/I", si, dims_group, error=dims_error)
+    add("zingg_IL", "Zingg ratio I/L", il, dims_group, error=dims_error)
     return metrics
 
 
