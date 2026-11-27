@@ -16,8 +16,9 @@ The Python package provides tools for 3D particle geometry and form analysis. It
   triangle meshes (and of tetrahedral meshes)
 - Principal dimensions S, I, L from a PCA-aligned box (fast) or a minimum-volume oriented
   bounding box (orientation-independent), as in the original SHAPE
-- Form: convexity, Wadell and Krumbein sphericities, Zingg ratios, and Potticary, Kong-Fonseca and Angelidakis et al. (2021) flatness/elongation parameters
-- Surface orientation tensor
+- Surface-based form (independent of any box): Wadell sphericity, convexity, and
+  the surface orientation tensor (compactness C, flakiness F, elongation E)
+- Form from S, I, L: Krumbein sphericity, Zingg ratios, and Potticary, Kong-Fonseca and Angelidakis et al. (2022) flatness/elongation parameters
 - Surface roughness statistics
 - STL loading with a built-in ASCII/binary parser (no extra package), trimesh
   as a recorded fallback, and other formats through trimesh
@@ -241,10 +242,23 @@ warning.
   volumes and inertia per unit density follow as its square, cube and fifth
   power. It is ignored for `"as-is"` input. Each metric record carries its
   `unit`, and the CSV export has a `unit` column.
-- Results contain mesh counts, surface area, volume, centroid, principal moments
-  of inertia (unit density), Wadell and Krumbein sphericity, orientation
-  indices/eigenvalues, the principal dimensions S, I, L,
-  Potticary/Kong-Fonseca/Angelidakis/Zingg parameters, and convexity.
+- Results are grouped, in this order, by what they depend on (the `group` of
+  each metric record; the interfaces show the same groups):
+  1. **Mesh**: vertex and face counts.
+  2. **Size and mass properties**: surface area, volume, centroid, principal
+     moments of inertia I1–I3 (unit density).
+  3. **Form, surface-based (independent of the box)**: Wadell sphericity,
+     convexity, and the surface orientation tensor indices compactness C,
+     flakiness F and elongation E (Orosz et al., 2021) with its eigenvalues
+     f1 ≥ f2 ≥ f3.
+  4. **Principal dimensions (PCA box / minimum-volume box)**: S, I, L; the
+     group name states the `axes` method.
+  5. **Form from S, I, L (PCA box / minimum-volume box)**: Krumbein
+     sphericity, Zingg ratios S/I and I/L, and the Potticary et al., Kong &
+     Fonseca and Angelidakis et al. flatness/elongation. They depend on the
+     `axes` method; the surface-based group does not.
+
+  `pyshape.analysis.result_groups(axes)` returns the group names in order.
 - `axes="pca"` (default) measures S, I, L on the box aligned with the principal
   directions of the vertices, as SHAPE's `PCA_points` option. These directions
   are not unique for shapes with isotropic vertex covariance (cubes, regular

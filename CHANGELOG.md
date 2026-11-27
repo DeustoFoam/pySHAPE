@@ -40,6 +40,16 @@ https://doi.org/10.5281/zenodo.24004678).
   too.
 - CSV exports of files have the new metadata rows, and the batch summary the
   new columns, described above.
+- Results are grouped by what they depend on (#7): "Mesh", "Size and mass
+  properties", "Form, surface-based (independent of the box)" (Wadell
+  sphericity, convexity, surface orientation tensor), "Principal dimensions
+  (<box>)" (S, I, L) and "Form from S, I, L (<box>)" (Krumbein sphericity,
+  Zingg ratios, Potticary, Kong & Fonseca and Angelidakis indices). Keys,
+  values and units are unchanged; the order of the metrics, and therefore of
+  the CSV rows and batch-summary columns, follows the groups (convexity now
+  comes after Wadell sphericity). The eigenvalues are labelled
+  "Eigenvalue f1 (surface orientation tensor)" etc.
+  `pyshape.analysis.result_groups(axes)` gives the group names in order.
 
 ## 0.1.3 (2026-11-24)
 

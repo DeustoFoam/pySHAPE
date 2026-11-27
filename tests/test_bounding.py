@@ -81,7 +81,7 @@ def test_analysis_with_min_volume_axes(cube_mesh):
     assert values["sphericity_krumbein"] == pytest.approx(1)
     assert values["zingg_SI"] == pytest.approx(1)
     assert values["angelidakis_flatness"] == pytest.approx(0, abs=1e-12)
-    assert next(m.group for m in result.metrics if m.key == "axis_S") == "Axes (minimum-volume box)"
+    assert next(m.group for m in result.metrics if m.key == "axis_S") == "Principal dimensions (minimum-volume box)"
     assert analyze_mesh(rotated, faces).axes_method == "pca"
     with pytest.raises(ValueError, match="Unknown axes method"):
         analyze_mesh(nodes, faces, axes="feret")

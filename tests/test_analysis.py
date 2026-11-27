@@ -331,3 +331,42 @@ def test_orientation_indices_cuboid_exact():
     assert np.isclose(values["orientation_E"], 0.25)
     labels = {m.key: m.label for m in result.metrics}
     assert labels["orientation_E"] == "Elongation E (surface orientation tensor)"
+
+
+GROUP_MEMBERS = {
+    "Mesh": {"n_vertices", "n_faces"},
+    "Size and mass properties": {
+        "surface_area", "volume", "centroid_x", "centroid_y", "centroid_z",
+        "inertia_I1", "inertia_I2", "inertia_I3"},
+    "Form, surface-based (independent of the box)": {
+        "sphericity_wadell", "convexity", "orientation_C", "orientation_F", "orientation_E",
+        "orientation_eig1", "orientation_eig2", "orientation_eig3"},
+    "Principal dimensions": {"axis_S", "axis_I", "axis_L"},
+    "Form from S, I, L": {
+        "sphericity_krumbein", "zingg_SI", "zingg_IL",
+        "potticary_flatness", "potticary_elongation",
+        "kongfonseca_flatness", "kongfonseca_elongation",
+        "angelidakis_flatness", "angelidakis_elongation"},
+}
+
+
+@pytest.mark.parametrize("axes, source", [("pca", "PCA box"), ("min_volume", "minimum-volume box")])
+def test_results_grouped_by_dependency(cube_mesh, axes, source):
+    if axes == "min_volume":
+        pytest.importorskip("scipy")
+    metrics = analyze_mesh(*cube_mesh, axes=axes).metrics
+    sequence = [m.group for m in metrics]
+    groups = list(dict.fromkeys(sequence))
+    # Each group is contiguous, in the documented order, and names the box method.
+    assert sequence == sorted(sequence, key=groups.index)
+    assert groups == analysis.result_groups(axes)
+    assert groups[3] == f"Principal dimensions ({source})"
+    assert groups[4] == f"Form from S, I, L ({source})"
+    members = {}
+    for metric in metrics:
+        members.setdefault(metric.group.split(" (")[0] if metric.group.startswith(("Principal", "Form from"))
+                           else metric.group, set()).add(metric.key)
+    assert members == GROUP_MEMBERS
+    labels = {m.key: m.label for m in metrics}
+    for key in ("orientation_C", "orientation_F", "orientation_E", "orientation_eig1"):
+        assert labels[key].endswith("(surface orientation tensor)")

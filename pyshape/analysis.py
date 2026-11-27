@@ -24,8 +24,21 @@ from .io import LoadedGeometry, load_geometry
 from .preprocess import _volume_error, prepare_mesh, validate_mesh  # noqa: F401 (re-exported)
 
 UNIT_SCALES = {"as-is": 1.0, "um": 1e-6, "mm": 1e-3, "cm": 1e-2, "m": 1.0, "inch": 0.0254}
-AXES_LABELS = {"pca": ("PCA", "Axes (PCA estimate)"),
-               "min_volume": ("min. volume box", "Axes (minimum-volume box)")}
+# Result groups, ordered by what each descriptor depends on (issue #7).
+GROUP_MESH = "Mesh"
+GROUP_SIZE = "Size and mass properties"
+GROUP_SURFACE_FORM = "Form, surface-based (independent of the box)"
+# Per axes method: short label used in metric labels, name of the source of
+# S, I, L, and the group of S, I, L.
+AXES_SOURCES = {"pca": "PCA box", "min_volume": "minimum-volume box"}
+AXES_LABELS = {method: (short, f"Principal dimensions ({AXES_SOURCES[method]})")
+               for method, short in (("pca", "PCA"), ("min_volume", "min. volume box"))}
+
+
+def result_groups(axes: str = "pca") -> list[str]:
+    """Result groups in display order for an axes method."""
+    return [GROUP_MESH, GROUP_SIZE, GROUP_SURFACE_FORM, AXES_LABELS[axes][1],
+            f"Form from S, I, L ({AXES_SOURCES[axes]})"]
 
 # Power of length of each dimensional metric; all other metrics are dimensionless
 # (counts, ratios, indices). Inertia is per unit density, hence length^5.
@@ -271,10 +284,10 @@ def compute_metrics(nodes: ArrayLike, faces: ArrayLike, *, axes: str = "pca") ->
                 value, error = None, "calculation produced a non-finite value"
         metrics.append(Metric(key, label, value, group, default_selected, error))
 
-    add("n_vertices", "Vertex count", len(nodes), "Mesh", False)
-    add("n_faces", "Face count", len(faces), "Mesh", False)
+    add("n_vertices", "Vertex count", len(nodes), GROUP_MESH, False)
+    add("n_faces", "Face count", len(faces), GROUP_MESH, False)
     area = surface_area(nodes, faces)
-    add("surface_area", "Surface area", area, "Geometry")
+    add("surface_area", "Surface area", area, GROUP_SIZE)
     volume_error = _volume_error(faces)
     volume = None
     centroid = None
@@ -284,59 +297,22 @@ def compute_metrics(nodes: ArrayLike, faces: ArrayLike, *, axes: str = "pca") ->
             volume = abs(signed_volume)
         except ValueError as exc:
             volume_error = str(exc)
-    add("volume", "Volume (mesh)", volume, "Geometry", error=volume_error)
+    add("volume", "Volume (mesh)", volume, GROUP_SIZE, error=volume_error)
     for i, axis in enumerate("xyz"):
         add(f"centroid_{axis}", f"Centroid {axis.upper()}",
             float(centroid[i]) if centroid is not None else None,
-            "Geometry", False, volume_error)
+            GROUP_SIZE, False, volume_error)
     moments = (
         closed_surface_inertia_tensor(nodes, faces, centroid)[1]
         if volume is not None else [None, None, None]
     )
     for i, value in enumerate(moments, 1):
         add(f"inertia_I{i}", f"Principal inertia I{i} (unit density)", value,
-            "Inertia (unit density)", False, volume_error)
+            GROUP_SIZE, False, volume_error)
+
     add("sphericity_wadell", "Sphericity (Wadell)",
         sphericity_wadell(volume, area) if volume is not None else None,
-        "Sphericity", error=volume_error)
-
-    compactness, flakiness, elongation, eigenvalues, _ = surface_orientation_tensor(nodes, faces)
-    for key, label, value in (
-        ("C", "Compactness", compactness), ("F", "Flakiness", flakiness),
-        ("E", "Elongation", elongation),
-    ):
-        add(f"orientation_{key}", f"{label} {key} (surface orientation tensor)", value, "Orientation")
-    for i, value in enumerate(eigenvalues, 1):
-        add(f"orientation_eig{i}", f"Orientation eigenvalue {i}", value, "Orientation", False)
-
-    try:
-        box = oriented_box(nodes, axes)
-    except ModuleNotFoundError as exc:
-        if exc.name not in {"scipy", "scipy.spatial"}:
-            raise
-        raise ImportError(
-            "axes='min_volume' requires scipy; install with: pip install 'pyshape[analysis]'"
-        ) from exc
-    short, intermediate, long = box.short, box.intermediate, box.long
-    method_label, axes_group = AXES_LABELS[axes]
-    for axis, label, value in (
-        ("S", "Short", short), ("I", "Intermediate", intermediate), ("L", "Long", long),
-    ):
-        add(f"axis_{axis}", f"{label} axis {axis} ({method_label})", value, axes_group, False)
-    add("sphericity_krumbein", "Sphericity (Krumbein)",
-        sphericity_krumbein(short, intermediate, long), "Sphericity")
-    for prefix, label, function in (
-        ("potticary", "Potticary et al.", form_parameters_potticary_et_al),
-        ("kongfonseca", "Kong & Fonseca", form_parameters_kong_and_fonseca),
-        ("angelidakis", "Angelidakis et al.", form_parameters_angelidakis_et_al),
-    ):
-        flatness, elongation = function(short, intermediate, long)
-        add(f"{prefix}_flatness", f"Flatness ({label})", flatness, "Form parameters")
-        add(f"{prefix}_elongation", f"Elongation ({label})", elongation, "Form parameters")
-    si, il = form_parameters_zingg(short, intermediate, long)
-    add("zingg_SI", "Zingg ratio S/I", si, "Form parameters")
-    add("zingg_IL", "Zingg ratio I/L", il, "Form parameters")
-
+        GROUP_SURFACE_FORM, error=volume_error)
     convexity = None
     hull_error = volume_error
     if volume is not None:
@@ -352,7 +328,46 @@ def compute_metrics(nodes: ArrayLike, faces: ArrayLike, *, axes: str = "pca") ->
         except ValueError as exc:
             hull_error = str(exc)
     add("convexity", "Convexity (V / V_convex_hull)", convexity,
-        "Form parameters", error=hull_error)
+        GROUP_SURFACE_FORM, error=hull_error)
+    compactness, flakiness, elongation, eigenvalues, _ = surface_orientation_tensor(nodes, faces)
+    for key, label, value in (
+        ("C", "Compactness", compactness), ("F", "Flakiness", flakiness),
+        ("E", "Elongation", elongation),
+    ):
+        add(f"orientation_{key}", f"{label} {key} (surface orientation tensor)", value,
+            GROUP_SURFACE_FORM)
+    for i, value in enumerate(eigenvalues, 1):
+        add(f"orientation_eig{i}", f"Eigenvalue f{i} (surface orientation tensor)", value,
+            GROUP_SURFACE_FORM, False)
+
+    try:
+        box = oriented_box(nodes, axes)
+    except ModuleNotFoundError as exc:
+        if exc.name not in {"scipy", "scipy.spatial"}:
+            raise
+        raise ImportError(
+            "axes='min_volume' requires scipy; install with: pip install 'pyshape[analysis]'"
+        ) from exc
+    short, intermediate, long = box.short, box.intermediate, box.long
+    method_label, axes_group = AXES_LABELS[axes]
+    for axis, label, value in (
+        ("S", "Short", short), ("I", "Intermediate", intermediate), ("L", "Long", long),
+    ):
+        add(f"axis_{axis}", f"{label} axis {axis} ({method_label})", value, axes_group, False)
+    dims_group = f"Form from S, I, L ({AXES_SOURCES[axes]})"
+    add("sphericity_krumbein", "Sphericity (Krumbein)",
+        sphericity_krumbein(short, intermediate, long), dims_group)
+    for prefix, label, function in (
+        ("potticary", "Potticary et al.", form_parameters_potticary_et_al),
+        ("kongfonseca", "Kong & Fonseca", form_parameters_kong_and_fonseca),
+        ("angelidakis", "Angelidakis et al.", form_parameters_angelidakis_et_al),
+    ):
+        flatness, elongation = function(short, intermediate, long)
+        add(f"{prefix}_flatness", f"Flatness ({label})", flatness, dims_group)
+        add(f"{prefix}_elongation", f"Elongation ({label})", elongation, dims_group)
+    si, il = form_parameters_zingg(short, intermediate, long)
+    add("zingg_SI", "Zingg ratio S/I", si, dims_group)
+    add("zingg_IL", "Zingg ratio I/L", il, dims_group)
     return metrics
 
 

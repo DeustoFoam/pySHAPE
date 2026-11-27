@@ -247,3 +247,10 @@ def test_api_documentation_is_complete(client, stl_path):
     documented = set(bodies["AnalysisResponse"]["properties"])
     assert set(result.to_dict()) | {"preview", "csv"} == documented
     assert set(bodies["MetricRecord"]["properties"]) == set(result.to_dict()["metrics"][0])
+
+
+def test_api_groups_match_library(client, stl_path):
+    response = client.post("/api/analyze", files={"file": (stl_path.name, stl_path.read_bytes())})
+    api_groups = [metric["group"] for metric in response.json()["metrics"]]
+    library = [metric.group for metric in analyze_file(stl_path).metrics]
+    assert api_groups == library
