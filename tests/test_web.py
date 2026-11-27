@@ -254,3 +254,19 @@ def test_api_groups_match_library(client, stl_path):
     api_groups = [metric["group"] for metric in response.json()["metrics"]]
     library = [metric.group for metric in analyze_file(stl_path).metrics]
     assert api_groups == library
+
+def test_descriptors_endpoint(client):
+    from pyshape import descriptors
+
+    response = client.get("/api/descriptors")
+    assert response.status_code == 200
+    assert response.json() == descriptors.as_dict()
+    schema = client.get("/openapi.json").json()
+    assert "/api/descriptors" in schema["paths"]
+    assert "/api/descriptors" in schema["info"]["description"]
+    # The metric table in /docs shows the short help of each key.
+    assert descriptors.METRICS["orientation_C"]["short"] in schema["info"]["description"]
+    assert client.get("/static/help.js").status_code == 200
+    for page in ["/", "/batch"]:
+        assert "/static/help.js" in client.get(page).text
+    assert "dataset.metric = metric.key" in client.get("/static/app.js").text

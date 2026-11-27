@@ -6,6 +6,7 @@
   <title>pySHAPE | Batch analysis</title>
   <link rel="icon" href="/static/pyshape-icon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/static/style.css">
+  <script src="/static/help.js" defer></script>
   <script src="/static/batch.js" defer></script>
 </head>
 <body>
@@ -21,14 +22,14 @@
     <section class="controls" aria-label="Batch controls">
       <form id="batch-form">
         <h2>Choose particles</h2>
-        <label for="folder">Folder of mesh files</label>
+        <label for="folder" data-help="folder">Folder of mesh files</label>
         <input id="folder" type="file" webkitdirectory multiple>
-        <label for="files">…or individual mesh files</label>
+        <label for="files" data-help="files">…or individual mesh files</label>
         <input id="files" type="file" accept=".stl,.obj,.ply,.off,.glb,.3mf,.dae" multiple>
-        <label class="check"><input id="recursive" type="checkbox"> Include subfolders</label>
+        <label class="check" data-help="recursive"><input id="recursive" type="checkbox"> Include subfolders</label>
         <p id="selection" class="hint">No files chosen. Formats: STL (native), or OBJ, PLY,
           OFF, GLB, 3MF, DAE (read by trimesh); each file up to 32 MiB.</p>
-        <label for="units">Input units (files)</label>
+        <label for="units" data-help="input_units">Input units (files)</label>
         <select id="units" name="units">
           <option value="as-is">As-is (no conversion)</option>
           <option value="um">Micrometres</option>
@@ -37,7 +38,7 @@
           <option value="m">Metres</option>
           <option value="inch">Inches</option>
         </select>
-        <label for="output-units">Output units</label>
+        <label for="output-units" data-help="output_units">Output units</label>
         <select id="output-units" name="output_units">
           <option value="same">Same as input</option>
           <option value="m">Metres</option>
@@ -46,7 +47,7 @@
           <option value="cm">Centimetres</option>
           <option value="inch">Inches</option>
         </select>
-        <label for="axes">Principal dimensions (S, I, L)</label>
+        <label for="axes" data-help="axes">Principal dimensions (S, I, L)</label>
         <select id="axes" name="axes">
           <option value="pca">PCA-aligned box (fast)</option>
           <option value="min_volume">Minimum-volume box</option>
@@ -55,17 +56,17 @@
         </select>
         <p class="hint">The same settings apply to every file. They work as on the
           single-particle page.</p>
-        <label for="suffix">CSV filename suffix</label>
+        <label for="suffix" data-help="suffix">CSV filename suffix</label>
         <input id="suffix" value="" placeholder="none: particle.stl → particle.csv">
-        <label class="check"><input id="summary" type="checkbox"> Also make a summary CSV (one row per particle)</label>
-        <button id="run" type="submit" disabled>Analyse all</button>
-        <button id="stop" type="button" class="secondary" hidden>Stop after current file</button>
+        <label class="check" data-help="summary"><input id="summary" type="checkbox"> Also make a summary CSV (one row per particle)</label>
+        <button id="run" type="submit" data-help="run" disabled>Analyse all</button>
+        <button id="stop" type="button" class="secondary" data-help="stop" hidden>Stop after current file</button>
       </form>
       <p id="status" role="status" aria-live="polite">Choose a folder or files to begin.</p>
       <progress id="progress" max="1" value="0" hidden></progress>
       <section aria-labelledby="download-heading">
         <h2 id="download-heading">Download results</h2>
-        <button id="download-all" type="button" disabled>Download all CSVs (.zip)</button>
+        <button id="download-all" type="button" data-help="download_all" disabled>Download all CSVs (.zip)</button>
         <p class="hint">The zip holds one CSV per particle, with the same name as its mesh file
           and in the same subfolder. Single CSVs can be downloaded from the table.
           Each CSV has the standard selection of results. With the Python package,

@@ -6,6 +6,7 @@
   <title>pySHAPE | Particle analysis</title>
   <link rel="icon" href="/static/pyshape-icon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/static/style.css">
+  <script src="/static/help.js" defer></script>
   <script src="/static/app.js" defer></script>
 </head>
 <body>
@@ -21,11 +22,11 @@
     <section class="controls" aria-label="Analysis controls">
       <form id="analyze-form">
         <h2>Load geometry</h2>
-        <label for="file">Mesh file (up to 32 MiB)</label>
+        <label for="file" data-help="file">Mesh file (up to 32 MiB)</label>
         <input id="file" name="file" type="file" accept=".stl,.obj,.ply,.off,.glb,.3mf,.dae" required>
         <p class="hint">STL (native), or OBJ, PLY, OFF, GLB, 3MF or DAE (read by
           trimesh).</p>
-        <label for="units">Input units (file)</label>
+        <label for="units" data-help="input_units">Input units (file)</label>
         <select id="units" name="units">
           <option value="as-is">As-is (no conversion)</option>
           <option value="um">Micrometres</option>
@@ -34,7 +35,7 @@
           <option value="m">Metres</option>
           <option value="inch">Inches</option>
         </select>
-        <label for="output-units">Output units</label>
+        <label for="output-units" data-help="output_units">Output units</label>
         <select id="output-units" name="output_units">
           <option value="same">Same as input</option>
           <option value="m">Metres</option>
@@ -46,7 +47,7 @@
         <p class="hint">Input: units of the coordinates in the file. Output: unit of lengths in the
           results (areas in its square, volumes in its cube, inertia per unit density in its fifth
           power). As-is keeps the file's units and disables the output choice.</p>
-        <label for="axes">Principal dimensions (S, I, L)</label>
+        <label for="axes" data-help="axes">Principal dimensions (S, I, L)</label>
         <select id="axes" name="axes">
           <option value="pca">PCA-aligned box (fast)</option>
           <option value="min_volume">Minimum-volume box</option>
@@ -55,14 +56,14 @@
         </select>
         <p class="hint">PCA directions are not unique for highly symmetric shapes
           (e.g. cubes); the minimum-volume box is orientation-independent but slower.</p>
-        <button id="analyze" type="submit">Calculate results</button>
+        <button id="analyze" type="submit" data-help="calculate">Calculate results</button>
       </form>
       <p id="status" role="status" aria-live="polite">Choose a mesh file to begin.</p>
       <section aria-labelledby="export-heading">
         <h2 id="export-heading">Export results</h2>
-        <label for="suffix">Filename suffix</label>
+        <label for="suffix" data-help="suffix">Filename suffix</label>
         <input id="suffix" value="_SHAPE">
-        <button id="export" type="button" disabled>Download selected CSV</button>
+        <button id="export" type="button" data-help="export" disabled>Download selected CSV</button>
         <p class="hint">Downloads use your browser's save and duplicate-filename settings.</p>
       </section>
     </section>
@@ -70,7 +71,7 @@
       <section class="preview-panel">
         <div class="preview-heading">
           <h2>Geometry preview</h2>
-          <label><input id="rotate" type="checkbox" checked> Auto-rotate</label>
+          <label data-help="auto_rotate"><input id="rotate" type="checkbox" checked> Auto-rotate</label>
         </div>
         <canvas id="preview" width="800" height="360"
           aria-label="3D mesh preview. Drag to rotate, scroll to zoom."></canvas>
@@ -78,13 +79,14 @@
       </section>
       <section aria-labelledby="results-heading">
         <div class="preview-heading">
-          <h2 id="results-heading">Results</h2>
+          <h2 id="results-heading" data-help="results">Results</h2>
           <div>
-            <button id="select-all" type="button">Select all</button>
-            <button id="select-none" type="button">Select none</button>
+            <button id="select-all" type="button" data-help="select_all">Select all</button>
+            <button id="select-none" type="button" data-help="select_none">Select none</button>
           </div>
         </div>
         <p id="metadata" class="hint"></p>
+        <p class="hint">Hover over a result for a short description; click its name for details.</p>
         <div class="table-scroll">
           <table>
             <thead><tr><th>Export</th><th>Parameter</th><th>Value</th><th>Unit</th></tr></thead>

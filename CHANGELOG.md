@@ -14,6 +14,14 @@ https://doi.org/10.5281/zenodo.24004678).
   ellipsoid), in the library, `pyshape-batch --axes`, the HTTP API and both
   interfaces. New module `pyshape.ellipsoid` (`inertia_ellipsoid`,
   `fitted_ellipsoid`, `fit_ellipsoid`, `Ellipsoid`). Defaults are unchanged.
+
+- In-app help in the desktop viewer and on both browser pages: hovering over
+  a result or a control shows a one-line description; the "?" buttons (and,
+  in the browser, a click on a result's name) open the definition, formula,
+  what it depends on and the references. The texts are in the new module
+  `pyshape.descriptors`, keyed by metric key and control name, and are served
+  by `GET /api/descriptors`. The table of metric keys in `/docs` gains a
+  description column. Results are unchanged.
 - The browser interface (single-particle and batch pages) and the HTTP API
   accept the formats of the library except the text glTF (`.gltf`): STL
   (native, no extra package) and OBJ, PLY, OFF, GLB, 3MF and DAE (read by

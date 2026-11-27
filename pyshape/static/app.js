@@ -50,6 +50,7 @@ function renderResults(metrics) {
     const cell = document.createElement("th");
     cell.colSpan = 4;
     cell.textContent = group;
+    cell.dataset.group = group;
     heading.append(cell);
     $("results").append(heading);
     for (const metric of metrics.filter((item) => item.group === group)) {
@@ -63,7 +64,12 @@ function renderResults(metrics) {
       check.checked = !check.disabled && metric.default_selected;
       selection.append(check);
       const label = document.createElement("td");
-      label.textContent = metric.label;
+      const name = document.createElement("button");
+      name.type = "button";
+      name.className = "metric-name";
+      name.dataset.metric = metric.key;  // help is keyed by metric key (pyshape.descriptors)
+      name.textContent = metric.label;
+      label.append(name);
       const value = document.createElement("td");
       value.textContent = metric.value === null
         ? `n/a (${metric.error || "unavailable"})`
@@ -76,6 +82,7 @@ function renderResults(metrics) {
       $("results").append(row);
     }
   }
+  pyshapeHelp.refresh($("results"));
 }
 
 $("analyze-form").addEventListener("submit", async (event) => {
