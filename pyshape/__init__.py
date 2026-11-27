@@ -20,7 +20,7 @@ from .form import (
 	form_parameters_zingg,
 )
 from .io import LoadedGeometry, load_geometry, load_stl
-from .preprocess import prepare_mesh
+from .preprocess import CAVITY_MODES, PreparedSolid, prepare_mesh, prepare_solid
 from .roughness import sa, sq, sdq, sku, ssk, roughness_functions
 
 __all__ = [
@@ -35,6 +35,9 @@ __all__ = [
 	"analyze_mesh",
 	"compute_metrics",
 	"prepare_mesh",
+	"prepare_solid",
+	"PreparedSolid",
+	"CAVITY_MODES",
 	"load_geometry",
 	"AXES_METHODS",
 	"OrientedBox",

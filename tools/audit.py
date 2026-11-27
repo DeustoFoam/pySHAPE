@@ -36,6 +36,9 @@ BASELINE = ROOT / "tools" / "baseline"
 API_FILE = BASELINE / "api.json"
 RESULTS_FILE = BASELINE / "results.json"
 ASSETS = ROOT / "examples" / "assets"
+# Synthetic files with nested shells, checked with cavities="keep".
+CAVITY_FILES = ("hollow_sphere", "cube_with_spherical_void", "sphere_with_two_cavities",
+                "nested_island")
 
 # Modules whose internals belong to an interface (GUI/server) rather than to the
 # library: changes there are reported as WARN, not BREAKING (their CLI options
@@ -402,6 +405,8 @@ def reference_meshes() -> dict[str, tuple]:
                                   np.vstack([small_faces, small_faces + len(small)]))
     for path in sorted(ASSETS.glob("*.stl")):
         meshes[f"file:{path.name}"] = path
+    for name in CAVITY_FILES:
+        meshes[f"file:synthetic/{name}.stl"] = ASSETS / "synthetic" / f"{name}.stl"
     return meshes
 
 
@@ -440,6 +445,12 @@ def cases() -> list[dict]:
                         "units": "as-is", "output_units": "m"})
     out.append({"id": "cuboid_4x2x1_rotated|units=mm->um", "mesh": "cuboid_4x2x1_rotated",
                 "axes": "min_volume", "units": "mm", "output_units": "um"})
+    # Nested shells as cavities (static files in examples/assets/synthetic).
+    for name in CAVITY_FILES:
+        for axes in ("pca", "min_volume"):
+            out.append({"id": f"file:synthetic/{name}.stl|axes={axes}|cavities=keep",
+                        "mesh": f"file:synthetic/{name}.stl", "axes": axes, "units": "as-is",
+                        "output_units": "m", "cavities": "keep"})
     return out
 
 
@@ -450,6 +461,8 @@ def run_case(case: dict, meshes: dict) -> dict:
 
     mesh = meshes[case["mesh"]]
     options = dict(axes=case["axes"], units=case["units"], output_units=case["output_units"])
+    if case.get("cavities", "fill") != "fill":
+        options["cavities"] = case["cavities"]
     if isinstance(mesh, Path):
         geometry = load_geometry(mesh)
         nodes, faces = geometry.nodes, geometry.faces
@@ -458,7 +471,13 @@ def run_case(case: dict, meshes: dict) -> dict:
         nodes, faces = (np.asarray(a) for a in mesh)
         result = analyze_mesh(nodes, faces, **options)
     data = result.to_dict()
-    excluded = sorted(BOX_KEYS) if case["axes"] == "pca" and not _pca_unique(np.asarray(nodes, float)) else []
+    excluded = []
+    if case["axes"] == "pca":
+        # The PCA box is measured on the envelope (outer surface) of the prepared mesh.
+        from pyshape import prepare_solid
+        envelope = prepare_solid(nodes, faces, cavities=case.get("cavities", "fill")).envelope_nodes
+        if not _pca_unique(np.asarray(envelope, float)):
+            excluded = sorted(BOX_KEYS)
     record = {
         "requires": ["scipy"] + (["manifold3d"] if _components(np.asarray(faces)) > 1 else []),
         "meta": {k: data[k] for k in ("source_name", "input_units", "scale_factor", "axes_method",

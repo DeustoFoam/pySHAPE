@@ -22,7 +22,7 @@ from .analysis import (
 from . import descriptors
 from . import io as io_module
 from .io import NATIVE_EXTENSIONS, SUPPORTED_EXTENSIONS, load_geometry
-from .preprocess import prepare_mesh
+from .preprocess import CAVITY_MODES, prepare_solid
 
 MAX_UPLOAD_BYTES = 32 * 1024 * 1024
 MAX_PREVIEW_FACES = 5000
@@ -47,14 +47,20 @@ class MetricRecord(BaseModel):
 
 class Preview(BaseModel):
     triangles: list[list[list[float]]] = Field(
-        description="Triangles for display, centred and scaled to unit size; "
-        f"simplified when the mesh has more than {MAX_PREVIEW_FACES} faces.")
-    total_faces: int = Field(description="Faces of the analysed mesh (after the solid union).")
+        description="Triangles of the analysed surface for display, without the cavity "
+        "walls, centred and scaled to unit size; simplified when the mesh has more than "
+        f"{MAX_PREVIEW_FACES} faces.")
+    total_faces: int = Field(description="Faces of the analysed mesh (after preparation: solid "
+                             "union and, with `cavities=keep`, the cavity walls).")
     shown_faces: int = Field(description="Faces in `triangles`.")
+    cavity_triangles: list[list[list[float]]] = Field(
+        default_factory=list, description="With `cavities=keep`: the cavity walls, in the same "
+        "coordinates as `triangles` (and not repeated there), oriented towards the cavity; "
+        "empty otherwise.")
 
 
 class AnalysisResponse(BaseModel):
-    metrics: list[MetricRecord] = Field(description="All 30 results, in a fixed order.")
+    metrics: list[MetricRecord] = Field(description="All 34 results, in a fixed order.")
     source_name: Optional[str] = Field(description="Uploaded file name, without folders.")
     input_units: str = Field(description="Units of the coordinates in the file.")
     scale_factor: float = Field(description="Metres per input unit (1 for as-is).")
@@ -68,6 +74,9 @@ class AnalysisResponse(BaseModel):
                                           "file, otherwise null.")
     warnings: list[str] = Field(description="Notes about the input, e.g. why an STL file was "
                                 "read by the trimesh fallback. Empty for most files.")
+    cavities: str = Field(description="How nested closed shells were treated: `fill` (all "
+                          "solid) or `keep` (even-odd rule: a shell inside one other shell is a "
+                          "cavity, inside two a solid island).")
     preview: Optional[Preview] = Field(None, description="Only with `include_preview=true`.")
     csv: Optional[str] = Field(None, description="Only with `include_csv=true`: the CSV text "
                                "that `/api/export` returns for the same request.")
@@ -112,12 +121,14 @@ UPLOAD_ERRORS = {
     413: _error(f"The file is larger than {MAX_UPLOAD_BYTES // 2**20} MiB."),
     415: _error(f"The file extension is not one of {ACCEPTED}, or a `.glb` file refers "
                 "to external files (its buffers and images must be embedded)."),
-    422: _error("Invalid mesh, or unknown `units`, `axes`, `output_units` or metric key. "
+    422: _error("Invalid mesh, unknown `units`, `axes`, `output_units`, `cavities` or metric "
+                "key, or (with `cavities=keep`) a cavity that crosses the outer surface. "
                 "For a missing `file` or a malformed field, `detail` is instead a list of "
                 "validation errors."),
     503: _error("A package is missing: trimesh, to read formats other than STL, or the "
-                "solid-union packages, for a mesh with several closed shells. Both come "
-                "with `pyshape[mesh]`."),
+                "solid-union packages, for a mesh with several closed shells that must be "
+                "merged (with `cavities=keep`, a solid with separate cavities needs none). "
+                "Both come with `pyshape[mesh]`."),
 }
 
 _POWER_TEXT = {1: "length", 2: "length²", 3: "length³", 5: "length⁵"}
@@ -149,6 +160,12 @@ AXES_DOC = ("How the principal dimensions S, I, L are measured: `pca` (box align
             "ellipsoid with the same volume and principal moments of inertia) or "
             "`fitted_ellipsoid` (area-weighted least-squares ellipsoid through the surface "
             "vertices). Ellipsoid axes are not enclosing dimensions.")
+CAVITIES_DOC = ("How nested closed shells are treated: `fill` (default; every shell is "
+                "solid, e.g. the spheres of a clump) or `keep` (even-odd rule: a shell inside "
+                "one other shell is a cavity, inside two a solid island). With `keep`, volume, "
+                "centroid, inertia and `surface_area` refer to the material, the form "
+                "descriptors to the outer envelope, and `n_cavities`, `cavity_volume` and "
+                "`porosity` are reported (with `fill` they are unavailable, with the reason).")
 OUTPUT_DOC = ("Length unit of the results: areas in its square, volumes in its cube, "
               "inertia per unit density in its fifth power. `same` follows `units`. "
               "Ignored when `units` is `as-is`.")
@@ -182,9 +199,10 @@ with the parser's reason. The other formats are read by trimesh (`reader: "trime
 Each upload must be a
 single self-contained file: the text glTF format (`.gltf`), whose buffers are usually
 separate files, is not accepted (export `.glb`), and references of OBJ or DAE files
-to other files (materials, textures) are not available. Every mesh is then prepared in the same way (orientation of closed
-shells, solid union). Volume-based results need a closed mesh; for open meshes they
-are returned with `value: null` and an `error` instead of failing the request.
+to other files (materials, textures) are not available. Every mesh is then prepared in
+the same way (orientation of closed shells, solid union and, with `cavities=keep`, nested
+shells as cavities). Volume-based results need a closed mesh; for open meshes they are
+returned with `value: null` and an `error` instead of failing the request.
 
 **Security.** The server is meant for local use. It has no authentication; do not expose
 it to untrusted networks. Uploads other than STL are parsed by trimesh (version 5 or
@@ -199,8 +217,10 @@ served as JSON by `GET /api/descriptors`.
 
 {{table}}
 
-The labels and group of `axis_S`, `axis_I` and `axis_L` name the method chosen with
-`axes` (shown here for `pca`). Units follow `units` and `output_units`.
+Results are grouped by what they depend on. The labels and group of `axis_S`, `axis_I`
+and `axis_L`, and the group of the indices computed from them, name the method chosen
+with `axes` (shown here for `pca`). `n_cavities`, `cavity_volume` and `porosity` have
+values only with `cavities=keep`. Units follow `units` and `output_units`.
 """
 
 
@@ -233,6 +253,7 @@ def _glb_external_references(path: Path) -> list[str]:
 
 def _analyze_upload(
     file: UploadFile, units: str, axes: str = "pca", output_units: str = "m",
+    cavities: str = "fill",
 ) -> tuple[AnalysisResult, np.ndarray, np.ndarray]:
     name = (file.filename or "").replace("\\", "/").rsplit("/", 1)[-1]
     # The reader is chosen by the extension (io.load_geometry); every mesh is
@@ -287,6 +308,7 @@ def _analyze_upload(
         try:
             result = analyze_mesh(
                 geometry.nodes, geometry.faces, units=units, axes=axes, output_units=output_units,
+                cavities=cavities,
             )
         except ValueError as exc:
             raise HTTPException(422, str(exc)) from exc
@@ -314,38 +336,50 @@ def _cluster_vertices(nodes: np.ndarray, faces: np.ndarray, cells: int) -> tuple
     return centers, mapped[np.sort(unique)]
 
 
-def _preview(nodes: np.ndarray, faces: np.ndarray) -> dict[str, object]:
+def _simplified(nodes: np.ndarray, faces: np.ndarray, budget: int) -> np.ndarray:
+    """Triangle coordinates of ``faces``, simplified to at most ``budget`` faces.
+
+    Vertex clustering (finest grid that keeps at most ``budget`` faces) keeps a
+    closed surface closed; evenly sampled faces are the fallback.
+    """
+    if len(faces) <= budget:
+        return nodes[faces]
+    best = None
+    low, high = 2, 1024
+    while low <= high:
+        cells = (low + high) // 2
+        candidate = _cluster_vertices(nodes, faces, cells)
+        if 0 < len(candidate[1]) <= budget:
+            best, low = candidate, cells + 1
+        else:
+            high = cells - 1
+    if best is not None:
+        return best[0][best[1]]
+    return nodes[faces[np.linspace(0, len(faces) - 1, budget, dtype=int)]]
+
+
+def _preview(nodes: np.ndarray, faces: np.ndarray, cavities: str = "fill") -> dict[str, object]:
     """Triangles for the browser preview, simplified when the mesh is large.
 
-    Large meshes are simplified by vertex clustering (finest grid that keeps at
-    most MAX_PREVIEW_FACES faces), which keeps the surface closed; evenly
-    sampled faces are the fallback. Calculations always use the full mesh.
+    The outer surface and, with ``cavities="keep"``, the cavity walls are
+    simplified separately (at most MAX_PREVIEW_FACES faces in total, shared in
+    proportion to their face counts). Calculations always use the full mesh.
     """
-    nodes, faces = prepare_mesh(nodes, faces)
-    shown_nodes, shown_faces = nodes, faces
-    if len(faces) > MAX_PREVIEW_FACES:
-        best = None
-        low, high = 2, 1024
-        while low <= high:
-            cells = (low + high) // 2
-            candidate = _cluster_vertices(nodes, faces, cells)
-            if 0 < len(candidate[1]) <= MAX_PREVIEW_FACES:
-                best, low = candidate, cells + 1
-            else:
-                high = cells - 1
-        if best is not None:
-            shown_nodes, shown_faces = best
-        else:
-            selected = np.linspace(0, len(faces) - 1, MAX_PREVIEW_FACES, dtype=int)
-            shown_faces = faces[selected]
+    solid = prepare_solid(nodes, faces, cavities=cavities)
+    nodes = solid.nodes
+    outer, walls = solid.faces[~solid.cavity_faces], solid.faces[solid.cavity_faces]
+    total = len(solid.faces)
+    wall_budget = int(round(MAX_PREVIEW_FACES * len(walls) / total)) if len(walls) else 0
+    outer_tri = _simplified(nodes, outer, MAX_PREVIEW_FACES - wall_budget)
+    wall_tri = _simplified(nodes, walls, max(wall_budget, 1)) if len(walls) else np.zeros((0, 3, 3))
     mins, maxs = nodes.min(axis=0), nodes.max(axis=0)
     center = (mins + maxs) / 2.0
     span = float((maxs - mins).max())
-    triangles = ((shown_nodes[shown_faces] - center) / span).tolist()
     return {
-        "triangles": triangles,
-        "total_faces": len(faces),
-        "shown_faces": len(shown_faces),
+        "triangles": ((outer_tri - center) / span).tolist(),
+        "cavity_triangles": ((wall_tri - center) / span).tolist(),
+        "total_faces": total,
+        "shown_faces": len(outer_tri) + len(wall_tri),
     }
 
 
@@ -401,21 +435,23 @@ def create_app() -> FastAPI:
         file: UploadFile = File(..., description=FILE_DOC),
         units: str = Form("as-is", description=UNITS_DOC, **_choices(UNIT_SCALES)),
         include_preview: bool = Form(False, description="Add `preview`: simplified "
-                                     "triangles of the analysed surface, for display."),
+                                     "triangles of the analysed surface (and, with "
+                                     "`cavities=keep`, of the cavity walls), for display."),
         axes: str = Form("pca", description=AXES_DOC, **_choices(AXES_LABELS)),
         output_units: str = Form("m", description=OUTPUT_DOC,
                                  **_choices(["same", *OUTPUT_UNITS])),
         include_csv: bool = Form(False, description="Add `csv`: the CSV text that "
                                  "`/api/export` would return, so one request gives both."),
         keys: Optional[str] = Form(None, description="With `include_csv`: " + KEYS_DOC),
+        cavities: str = Form("fill", description=CAVITIES_DOC, **_choices(CAVITY_MODES)),
     ) -> dict[str, object]:
         """Returns every result of the particle as a record with key, label, group,
         value, unit and, when unavailable, the reason, together with the units and
         method used. The records match `pyshape.analyze_file(...).to_dict()`."""
-        result, nodes, faces = _analyze_upload(file, units, axes, output_units)
+        result, nodes, faces = _analyze_upload(file, units, axes, output_units, cavities)
         payload = result.to_dict()
         if include_preview:
-            payload["preview"] = _preview(nodes, faces)
+            payload["preview"] = _preview(nodes, faces, cavities)
         if include_csv:
             try:
                 payload["csv"] = result.to_csv(None if keys is None else keys.split(","))
@@ -444,10 +480,11 @@ def create_app() -> FastAPI:
         axes: str = Form("pca", description=AXES_DOC, **_choices(AXES_LABELS)),
         output_units: str = Form("m", description=OUTPUT_DOC,
                                  **_choices(["same", *OUTPUT_UNITS])),
+        cavities: str = Form("fill", description=CAVITIES_DOC, **_choices(CAVITY_MODES)),
     ) -> Response:
         """Returns the selected results as a CSV file (`results.csv`), as written by
         `AnalysisResult.to_csv`. Units use plain ASCII (`mm^2`, `um`)."""
-        result, _, _ = _analyze_upload(file, units, axes, output_units)
+        result, _, _ = _analyze_upload(file, units, axes, output_units, cavities)
         try:
             text = result.to_csv(None if keys is None else keys.split(","))
         except ValueError as exc:

@@ -6,3 +6,5 @@ include examples/assets/Tetrahedron_ascii.stl
 include CITATION.cff
 include .zenodo.json
 recursive-include validation *.py *.m *.md *.csv *.json
+recursive-include examples/assets/synthetic *.stl *.md
+include examples/make_synthetic_assets.py

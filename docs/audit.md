@@ -77,11 +77,12 @@ Two things are compared.
    - a rough, non-convex particle;
    - a torus;
    - two overlapping spheres (solid union);
-   - the STL files in `examples/assets/`.
+   - the STL files in `examples/assets/`;
+   - the synthetic files with nested shells in `examples/assets/synthetic/` (`hollow_sphere`, `cube_with_spherical_void`, `sphere_with_two_cavities`, `nested_island`), analysed with `cavities="keep"`.
 
-   Each mesh is analysed with both bounding-box methods; the cuboid also has a unit-conversion case. The CSV layout of a file result and the header of the batch summary are compared too. This baseline is `tools/baseline/results.json`.
+   Each mesh is analysed with the four principal-dimension methods (`pca`, `min_volume`, `inertia_ellipsoid`, `fitted_ellipsoid`); the files with nested shells with `pca` and `min_volume`, and the cuboid also has a unit-conversion case. The CSV layout of a file result and the header of the batch summary are compared too. This baseline is `tools/baseline/results.json`.
 
-   The meshes are generated in code (NumPy only, fixed seeds), so the check is reproducible on any machine. Values are compared with a relative tolerance of 1e-9 and an absolute one of 1e-12, which absorbs round-off differences between platforms. For meshes whose principal directions are not unique (cube, regular tetrahedron, torus, ...), the PCA box depends on round-off, so the results derived from it are not compared for the `pca` cases.
+   The meshes are generated in code (NumPy only, fixed seeds), so the check is reproducible on any machine. Values are compared with a relative tolerance of 1e-9 and an absolute one of 1e-12, which absorbs round-off differences between platforms. For meshes whose principal directions are not unique (cube, regular tetrahedron, torus, ...), the PCA box depends on round-off, so the results derived from it are not compared for the `pca` cases. This is judged on the outer envelope of the prepared mesh, on which the PCA box is measured (with `cavities="keep"`, the cavity walls do not count).
 
 Each finding has a level:
 

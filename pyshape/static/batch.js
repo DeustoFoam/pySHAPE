@@ -22,7 +22,7 @@ function syncOutputUnits() {
 
 function setBusy(value) {
   busy = value;
-  for (const id of ["run", "folder", "files", "recursive", "units", "output-units", "axes", "suffix", "summary"]) {
+  for (const id of ["run", "folder", "files", "recursive", "units", "output-units", "axes", "cavities", "suffix", "summary"]) {
     $(id).disabled = value;
   }
   if (!value) {
@@ -101,6 +101,7 @@ async function analyse(file) {
   data.append("file", file);
   data.append("units", $("units").value);
   data.append("axes", $("axes").value);
+  data.append("cavities", $("cavities").value);
   data.append("output_units", $("output-units").value);
   data.append("include_csv", "true");
   const response = await fetch("/api/analyze", { method: "POST", body: data });

@@ -1,6 +1,7 @@
 {
  "aliases": {
   "analysis.AXES_METHODS": "bounding.AXES_METHODS",
+  "analysis.CAVITY_MODES": "preprocess.CAVITY_MODES",
   "analysis.LoadedGeometry": "io.LoadedGeometry",
   "analysis.closed_surface_inertia_tensor": "geometry.closed_surface_inertia_tensor",
   "analysis.csv_text": "export.csv_text",
@@ -13,6 +14,7 @@
   "analysis.load_geometry": "io.load_geometry",
   "analysis.oriented_box": "bounding.oriented_box",
   "analysis.prepare_mesh": "preprocess.prepare_mesh",
+  "analysis.prepare_solid": "preprocess.prepare_solid",
   "analysis.sphericity_krumbein": "form.sphericity_krumbein",
   "analysis.sphericity_wadell": "form.sphericity_wadell",
   "analysis.surface_area": "geometry.surface_area",
@@ -20,6 +22,7 @@
   "analysis.validate_mesh": "preprocess.validate_mesh",
   "batch.AXES_LABELS": "analysis.AXES_LABELS",
   "batch.AnalysisResult": "analysis.AnalysisResult",
+  "batch.CAVITY_MODES": "analysis.CAVITY_MODES",
   "batch.OUTPUT_UNITS": "analysis.OUTPUT_UNITS",
   "batch.SUPPORTED_EXTENSIONS": "io.SUPPORTED_EXTENSIONS",
   "batch.UNIT_SCALES": "analysis.UNIT_SCALES",
@@ -27,6 +30,7 @@
   "batch.make_export_path": "export.make_export_path",
   "batch.unit_label": "analysis.unit_label",
   "gui.AXES_METHODS": "bounding.AXES_METHODS",
+  "gui.CAVITY_MODES": "preprocess.CAVITY_MODES",
   "gui.LoadedGeometry": "gui_core.LoadedGeometry",
   "gui.Metric": "gui_core.Metric",
   "gui.OUTPUT_UNITS": "analysis.OUTPUT_UNITS",
@@ -39,7 +43,7 @@
   "gui.geo_metadata_rows": "gui_core.geo_metadata_rows",
   "gui.load_geometry": "gui_core.load_geometry",
   "gui.make_export_path": "gui_core.make_export_path",
-  "gui.prepare_mesh": "preprocess.prepare_mesh",
+  "gui.prepare_solid": "preprocess.prepare_solid",
   "gui.preview_face_colors": "gui_core.preview_face_colors",
   "gui.reader_text": "gui_core.reader_text",
   "gui.resolve_output_units": "analysis.resolve_output_units",
@@ -63,6 +67,7 @@
   "preprocess.surface_area": "geometry.surface_area",
   "web.AXES_LABELS": "analysis.AXES_LABELS",
   "web.AnalysisResult": "analysis.AnalysisResult",
+  "web.CAVITY_MODES": "preprocess.CAVITY_MODES",
   "web.LENGTH_POWERS": "analysis.LENGTH_POWERS",
   "web.NATIVE_EXTENSIONS": "io.NATIVE_EXTENSIONS",
   "web.OUTPUT_UNITS": "analysis.OUTPUT_UNITS",
@@ -72,7 +77,7 @@
   "web.attach_source": "analysis.attach_source",
   "web.compute_metrics": "analysis.compute_metrics",
   "web.load_geometry": "io.load_geometry",
-  "web.prepare_mesh": "preprocess.prepare_mesh",
+  "web.prepare_solid": "preprocess.prepare_solid",
   "web.scale_nodes": "analysis.scale_nodes"
  },
  "cli": {
@@ -81,6 +86,10 @@
     "--axes": {
      "choices": "list(AXES_LABELS)",
      "default": "'pca'"
+    },
+    "--cavities": {
+     "choices": "list(CAVITY_MODES)",
+     "default": "'fill'"
     },
     "--keys": {},
     "--no-overwrite": {
@@ -134,11 +143,13 @@
   "AnalysisResult",
   "BatchItem",
   "BatchResult",
+  "CAVITY_MODES",
   "ELLIPSOID_METHODS",
   "Ellipsoid",
   "LoadedGeometry",
   "Metric",
   "OrientedBox",
+  "PreparedSolid",
   "analyze_file",
   "analyze_folder",
   "analyze_mesh",
@@ -160,6 +171,7 @@
   "oriented_box",
   "pca_box",
   "prepare_mesh",
+  "prepare_solid",
   "roughness_functions",
   "sa",
   "sdq",
@@ -239,6 +251,12 @@
      "default": "field(default_factory=list)",
      "kind": "positional_or_keyword",
      "name": "warnings"
+    },
+    {
+     "annotation": "str",
+     "default": "'fill'",
+     "kind": "positional_or_keyword",
+     "name": "cavities"
     }
    ],
    "returns": null
@@ -405,6 +423,12 @@
      "default": "False",
      "kind": "keyword_only",
      "name": "strict_stl"
+    },
+    {
+     "annotation": "str",
+     "default": "'fill'",
+     "kind": "keyword_only",
+     "name": "cavities"
     }
    ],
    "returns": "AnalysisResult"
@@ -445,6 +469,12 @@
      "default": "'m'",
      "kind": "keyword_only",
      "name": "output_units"
+    },
+    {
+     "annotation": "str",
+     "default": "'fill'",
+     "kind": "keyword_only",
+     "name": "cavities"
     }
    ],
    "returns": "AnalysisResult"
@@ -529,6 +559,12 @@
      "default": "'pca'",
      "kind": "keyword_only",
      "name": "axes"
+    },
+    {
+     "annotation": "str",
+     "default": "'fill'",
+     "kind": "keyword_only",
+     "name": "cavities"
     }
    ],
    "returns": "list[Metric]"
@@ -848,6 +884,12 @@
      "default": "False",
      "kind": "keyword_only",
      "name": "strict_stl"
+    },
+    {
+     "annotation": "str",
+     "default": "'fill'",
+     "kind": "keyword_only",
+     "name": "cavities"
     }
    ],
    "returns": "BatchResult"
@@ -1900,6 +1942,12 @@
      "default": "1.0",
      "kind": "positional_or_keyword",
      "name": "opacity"
+    },
+    {
+     "annotation": "Optional[np.ndarray]",
+     "default": "None",
+     "kind": "positional_or_keyword",
+     "name": "cavity"
     }
    ],
    "returns": "np.ndarray"
@@ -2112,6 +2160,58 @@
    ],
    "returns": "Tuple[np.ndarray, np.ndarray]"
   },
+  "preprocess.PreparedSolid": {
+   "bases": [],
+   "deprecated": null,
+   "exported": true,
+   "interface": false,
+   "kind": "class",
+   "params": [
+    {
+     "annotation": "np.ndarray",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "nodes"
+    },
+    {
+     "annotation": "np.ndarray",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "faces"
+    },
+    {
+     "annotation": "np.ndarray",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "envelope_nodes"
+    },
+    {
+     "annotation": "np.ndarray",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "envelope_faces"
+    },
+    {
+     "annotation": "np.ndarray",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "cavity_faces"
+    },
+    {
+     "annotation": "Optional[int]",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "n_cavities"
+    },
+    {
+     "annotation": "str",
+     "default": "'fill'",
+     "kind": "positional_or_keyword",
+     "name": "cavities"
+    }
+   ],
+   "returns": null
+  },
   "preprocess.prepare_mesh": {
    "bases": [],
    "deprecated": null,
@@ -2130,9 +2230,43 @@
      "default": null,
      "kind": "positional_or_keyword",
      "name": "faces"
+    },
+    {
+     "annotation": "str",
+     "default": "'fill'",
+     "kind": "keyword_only",
+     "name": "cavities"
     }
    ],
    "returns": "tuple[np.ndarray, np.ndarray]"
+  },
+  "preprocess.prepare_solid": {
+   "bases": [],
+   "deprecated": null,
+   "exported": true,
+   "interface": false,
+   "kind": "function",
+   "params": [
+    {
+     "annotation": "ArrayLike",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "nodes"
+    },
+    {
+     "annotation": "ArrayLike",
+     "default": null,
+     "kind": "positional_or_keyword",
+     "name": "faces"
+    },
+    {
+     "annotation": "str",
+     "default": "'fill'",
+     "kind": "keyword_only",
+     "name": "cavities"
+    }
+   ],
+   "returns": "PreparedSolid"
   },
   "preprocess.validate_mesh": {
    "bases": [],

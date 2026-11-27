@@ -7,8 +7,14 @@ Lets a user:
   * export the ticked parameters to CSV next to the input file, with a
     configurable filename suffix and optional progressive numbering to
     avoid overwriting previous exports,
+  * choose how the principal dimensions S, I, L are measured (PCA or
+    minimum-volume box, inertia-equivalent or fitted ellipsoid) and how nested
+    closed shells are treated ("Nested shells": all solid, or cavities),
   * preview the geometry in a slowly auto-rotating 3D view with an XYZ axes
-    triad scaled to the mesh's bounding box,
+    triad scaled to the mesh's bounding box, drawn beneath the translucent
+    surface; each triangle is coloured by the side facing the viewer (light
+    blue outside, darker blue inside), cavity walls are orange, and an opacity
+    slider (5 to 100 %, default 20 %) controls how much shows through,
   * read what each result and control means: hovering shows a one-line
     description and the "?" buttons open the definition, formula and
     references (texts from :mod:`pyshape.descriptors`).
@@ -41,8 +47,9 @@ from .analysis import (
 )
 from . import descriptors
 from .bounding import AXES_METHODS
-from .preprocess import prepare_mesh
+from .preprocess import CAVITY_MODES, prepare_solid
 from .gui_core import (
+    PREVIEW_OPACITY,
     face_normals,
     preview_face_colors,
     view_direction,
@@ -126,6 +133,10 @@ class ShapeGUI(tk.Tk):
         self.geo: Optional[LoadedGeometry] = None
         self.nodes: Optional[np.ndarray] = None
         self.faces: Optional[np.ndarray] = None
+        # Scaled input mesh (before preparation) and the cavity-wall flags of the prepared one.
+        self.raw_nodes: Optional[np.ndarray] = None
+        self.raw_faces: Optional[np.ndarray] = None
+        self.cavity_mask: Optional[np.ndarray] = None
         self.loaded_units = "as-is"
         self.loaded_scale = 1.0
         self.output_effective = "m"
@@ -211,6 +222,18 @@ class ShapeGUI(tk.Tk):
         # The tooltip also describes the method currently chosen.
         Tooltip(axes_combo, lambda: f"{_short('controls', 'axes')}\n"
                 f"{self.axes_var.get()}: {_short('axes', self.axes_var.get())}")
+        row += 1
+
+        self._help_label(parent, "Nested shells", "cavities").grid(
+            row=row, column=0, sticky="w", pady=(6, 0))
+        self.cavities_var = tk.StringVar(value="fill")
+        cavities_combo = ttk.Combobox(
+            parent, textvariable=self.cavities_var, state="readonly", width=17,
+            values=list(CAVITY_MODES),
+        )
+        cavities_combo.grid(row=row, column=1, sticky="w", pady=(6, 0))
+        cavities_combo.bind("<<ComboboxSelected>>", lambda _event: self._prepare_loaded())
+        self._tooltip(cavities_combo, "cavities")
         row += 1
 
         load = ttk.Button(parent, text="Load", command=self.load_mesh)
@@ -318,12 +341,12 @@ class ShapeGUI(tk.Tk):
         self._tooltip(rotate, "auto_rotate")
         opacity_label = ttk.Label(top, text="Opacity")
         opacity_label.pack(side="left", padx=(16, 4))
-        self.opacity_var = tk.DoubleVar(value=1.0)
-        opacity = ttk.Scale(top, from_=0.2, to=1.0, variable=self.opacity_var, length=120,
+        self.opacity_var = tk.DoubleVar(value=PREVIEW_OPACITY)
+        opacity = ttk.Scale(top, from_=0.05, to=1.0, variable=self.opacity_var, length=120,
                             command=lambda _value: self._recolor_mesh(force=True))
         opacity.pack(side="left")
         self._tooltip(opacity, "opacity")
-        legend = ttk.Label(top, text="light: outside, dark: inside of the surface",
+        legend = ttk.Label(top, text="light: outside, dark: inside, orange: cavity walls",
                            foreground="#555555")
         legend.pack(side="left", padx=(12, 0))
         self._tooltip(legend, "surface_sides")
@@ -369,13 +392,16 @@ class ShapeGUI(tk.Tk):
         try:
             geo = load_geometry(path)
             nodes, scale = scale_nodes(geo.nodes, units)
-            nodes, faces = prepare_mesh(nodes, geo.faces)
+            solid = prepare_solid(nodes, geo.faces, cavities=self.cavities_var.get())
         except Exception as exc:
             messagebox.showerror("Load error", str(exc))
             return
 
         self.geo = geo
-        self.nodes, self.faces = nodes, faces
+        self.raw_nodes, self.raw_faces = nodes, geo.faces
+        self.nodes, self.faces = solid.nodes, solid.faces
+        self.cavity_mask = solid.cavity_faces
+        nodes, faces = self.nodes, self.faces
         self.loaded_units, self.loaded_scale = units, scale
         self.metrics = []
         self._clear_results()
@@ -395,6 +421,20 @@ class ShapeGUI(tk.Tk):
         self._start_rotation()
         if geo.warnings:
             messagebox.showwarning("Read with a fallback", "\n\n".join(geo.warnings))
+
+    def _prepare_loaded(self):
+        """Prepare the loaded mesh again after the nested-shell choice changed."""
+        if getattr(self, "raw_nodes", None) is None:
+            return
+        try:
+            solid = prepare_solid(self.raw_nodes, self.raw_faces, cavities=self.cavities_var.get())
+        except Exception as exc:
+            messagebox.showerror("Preparation error", str(exc))
+            return
+        self.nodes, self.faces, self.cavity_mask = solid.nodes, solid.faces, solid.cavity_faces
+        self.metrics = []
+        self._clear_results()
+        self._render_mesh()
 
     def _output_choice(self) -> str:
         choice = self.output_units_var.get()
@@ -433,7 +473,8 @@ class ShapeGUI(tk.Tk):
             messagebox.showwarning("No mesh", "Load a geometry file first.")
             return
         try:
-            self.metrics = compute_metrics(self.nodes, self.faces, axes=self.axes_var.get())
+            self.metrics = compute_metrics(self.raw_nodes, self.raw_faces, axes=self.axes_var.get(),
+                                           cavities=self.cavities_var.get())
         except Exception as exc:
             messagebox.showerror("Compute error", str(exc))
             return
@@ -615,6 +656,11 @@ class ShapeGUI(tk.Tk):
             verts, facecolors=self._face_colors(),
             edgecolors="none" if dense else (0, 0, 0, 0.6), linewidths=0.3,
         )
+        # Draw the axes beneath the translucent surface, which then veils them where
+        # they are inside or behind the particle (Matplotlib cannot interleave the
+        # axis lines with the mesh triangles, so the order is fixed).
+        self.ax.computed_zorder = False
+        self._mesh_collection.set_zorder(2)
         self.ax.add_collection3d(self._mesh_collection)
 
         mins = self.nodes.min(axis=0)
@@ -638,7 +684,7 @@ class ShapeGUI(tk.Tk):
         """Colours for the current view: outer side light blue, inner side darker blue."""
         self._mesh_view = (float(self.ax.elev), float(self.ax.azim))
         return preview_face_colors(self._normals, view_direction(*self._mesh_view),
-                                   self.opacity_var.get())
+                                   self.opacity_var.get(), getattr(self, "cavity_mask", None))
 
     def _recolor_mesh(self, force: bool = False):
         """Recolour the faces when the view (or the opacity) has changed."""
@@ -663,9 +709,10 @@ class ShapeGUI(tk.Tk):
             end = center + direction * length
             self.ax.plot(
                 [center[0], end[0]], [center[1], end[1]], [center[2], end[2]],
-                color=colors[axis_name], linewidth=2,
+                color=colors[axis_name], linewidth=2, zorder=1,
             )
-            self.ax.text(*end, axis_name, color=colors[axis_name], fontsize=10, fontweight="bold")
+            self.ax.text(*end, axis_name, color=colors[axis_name], fontsize=10, fontweight="bold",
+                         zorder=3)
 
     def _on_rotate_toggle(self):
         if self.rotate_var.get():
@@ -681,8 +728,9 @@ class ShapeGUI(tk.Tk):
 
     def _tick_rotation(self):
         if self.nodes is not None and not self._rotating_paused:
-            self._azim = (self._azim + ROTATION_DEG_PER_TICK) % 360.0
-            self.ax.view_init(elev=20, azim=self._azim)
+            # Continue from the current view, so a manual drag is not undone.
+            self._azim = (float(self.ax.azim) + ROTATION_DEG_PER_TICK) % 360.0
+            self.ax.view_init(elev=float(self.ax.elev), azim=self._azim)
             self._recolor_mesh()
             self.canvas.draw_idle()
         self._rotation_job = self.after(ROTATION_INTERVAL_MS, self._tick_rotation)

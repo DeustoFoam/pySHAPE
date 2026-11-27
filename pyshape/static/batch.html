@@ -54,6 +54,11 @@
           <option value="inertia_ellipsoid">Inertia-equivalent ellipsoid</option>
           <option value="fitted_ellipsoid">Fitted ellipsoid (least squares)</option>
         </select>
+        <label for="cavities" data-help="cavities">Nested shells</label>
+        <select id="cavities" name="cavities">
+          <option value="fill">All solid (fill)</option>
+          <option value="keep">Inner shells are cavities (keep)</option>
+        </select>
         <p class="hint">The same settings apply to every file. They work as on the
           single-particle page.</p>
         <label for="suffix" data-help="suffix">CSV filename suffix</label>
