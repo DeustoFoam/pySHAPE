@@ -34,7 +34,7 @@ mesh = ["trimesh>=5.0", "manifold3d>=3"]
 analysis = ["scipy>=1.7"]
 gui = ["matplotlib>=3.8", "trimesh>=5.0", "manifold3d>=3", "scipy>=1.7"]
 web = ["fastapi>=0.100", "uvicorn>=0.23", "python-multipart>=0.0.18", "trimesh>=5.0", "manifold3d>=3"]
-dev = ["pytest>=7", "httpx>=0.24", "build>=1"]
+dev = ["pytest>=7", "httpx>=0.24", "build>=1", "networkx>=3"]
 
 [project.urls]
 Repository = "https://github.com/DeustoFoam/pySHAPE"
