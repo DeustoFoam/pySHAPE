@@ -117,7 +117,7 @@ $("analyze-form").addEventListener("submit", async (event) => {
     const out = unitNames[result.output_units];
     $("metadata").textContent = `${result.source_name} | Input: ${result.input_units}`
       + (out ? ` | Output: ${result.output_units}` : "")
-      + ` | Axes: ${result.axes_method === "min_volume" ? "minimum-volume box" : "PCA"}. `
+      + ` | Axes: ${({pca: "PCA", min_volume: "minimum-volume box", inertia_ellipsoid: "inertia-equivalent ellipsoid", fitted_ellipsoid: "fitted ellipsoid"})[result.axes_method] || result.axes_method}. `
       + (out ? `Results in ${out} (area: ${out}², volume: ${out}³, inertia: ${out}⁵).`
              : "Results use the input units of the file.");
     $("preview-info").textContent = `Showing ${result.preview.shown_faces} of ${result.preview.total_faces} faces. `

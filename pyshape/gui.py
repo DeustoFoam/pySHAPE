@@ -152,7 +152,7 @@ class ShapeGUI(tk.Tk):
         ttk.Label(parent, text="Principal axes").grid(row=row, column=0, sticky="w", pady=(6, 0))
         self.axes_var = tk.StringVar(value="pca")
         ttk.Combobox(
-            parent, textvariable=self.axes_var, state="readonly", width=12,
+            parent, textvariable=self.axes_var, state="readonly", width=17,
             values=list(AXES_METHODS),
         ).grid(row=row, column=1, sticky="w", pady=(6, 0))
         row += 1

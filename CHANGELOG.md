@@ -7,6 +7,13 @@ https://doi.org/10.5281/zenodo.24004678).
 ## Unreleased
 
 ### New
+- Principal dimensions from an equivalent ellipsoid (#6):
+  `axes="inertia_ellipsoid"` (ellipsoid with the particle's volume and
+  principal moments of inertia) and `axes="fitted_ellipsoid"` (area-weighted
+  least-squares ellipsoid through the surface vertices, checked to be an
+  ellipsoid), in the library, `pyshape-batch --axes`, the HTTP API and both
+  interfaces. New module `pyshape.ellipsoid` (`inertia_ellipsoid`,
+  `fitted_ellipsoid`, `fit_ellipsoid`, `Ellipsoid`). Defaults are unchanged.
 - The browser interface (single-particle and batch pages) and the HTTP API
   accept the formats of the library except the text glTF (`.gltf`): STL
   (native, no extra package) and OBJ, PLY, OFF, GLB, 3MF and DAE (read by

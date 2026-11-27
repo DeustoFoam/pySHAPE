@@ -234,7 +234,7 @@ def test_api_documentation_is_complete(client, stl_path):
         fields = bodies[name]["properties"]
         assert all(field.get("description") for field in fields.values())
         assert fields["units"]["enum"] == ["as-is", "um", "mm", "cm", "m", "inch"]
-        assert fields["axes"]["enum"] == ["pca", "min_volume"]
+        assert fields["axes"]["enum"] == ["pca", "min_volume", "inertia_ellipsoid", "fitted_ellipsoid"]
         assert fields["output_units"]["enum"][0] == "same"
     analyze = schema["paths"]["/api/analyze"]["post"]
     export = schema["paths"]["/api/export"]["post"]
