@@ -377,7 +377,10 @@ CONTROLS: dict[str, dict[str, object]] = {
         "Read the file and show the mesh.",
         "Reads the file with the chosen input units, prepares the mesh (orientation, solid "
         "union and, with Nested shells = keep, the cavities) and shows the preview. Results "
-        "are computed separately; changing Nested shells prepares the loaded mesh again."),
+        "are computed separately; changing Nested shells prepares the loaded mesh again. The "
+        "mesh is never repaired: if the surface is open, a warning says whether the openings "
+        "look like small gaps left by export or rounding, which the separate command "
+        "pyshape-repair can close in a copy of the file, or like holes."),
     "calculate": _entry(
         "Compute all results for the mesh.",
         "Computes every result with the chosen principal-dimensions method, nested-shell "

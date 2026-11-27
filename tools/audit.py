@@ -39,6 +39,9 @@ ASSETS = ROOT / "examples" / "assets"
 # Synthetic files with nested shells, checked with cavities="keep".
 CAVITY_FILES = ("hollow_sphere", "cube_with_spherical_void", "sphere_with_two_cavities",
                 "nested_island")
+# Synthetic open surfaces: volume-based results unavailable, diagnosis warning
+# (a hole, and gaps that pyshape-repair closes).
+OPEN_FILES = ("open_ellipsoid", "sphere_with_gaps")
 
 # Modules whose internals belong to an interface (GUI/server) rather than to the
 # library: changes there are reported as WARN, not BREAKING (their CLI options
@@ -405,7 +408,7 @@ def reference_meshes() -> dict[str, tuple]:
                                   np.vstack([small_faces, small_faces + len(small)]))
     for path in sorted(ASSETS.glob("*.stl")):
         meshes[f"file:{path.name}"] = path
-    for name in CAVITY_FILES:
+    for name in CAVITY_FILES + OPEN_FILES:
         meshes[f"file:synthetic/{name}.stl"] = ASSETS / "synthetic" / f"{name}.stl"
     return meshes
 

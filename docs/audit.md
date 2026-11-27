@@ -67,7 +67,7 @@ Two things are compared.
    - dataclass fields;
    - the names exported from `pyshape`;
    - the names re-exported by backward-compatibility modules;
-   - the options of the console scripts (`pyshape-batch`, `pyshape-web`, `pyshape-gui`);
+   - the options of the console scripts (`pyshape-batch`, `pyshape-repair`, `pyshape-web`, `pyshape-gui`);
    - the HTTP routes of the server.
 
    This baseline is `tools/baseline/api.json`.
@@ -78,6 +78,7 @@ Two things are compared.
    - a torus;
    - two overlapping spheres (solid union);
    - the STL files in `examples/assets/`;
+   - the open synthetic files `open_ellipsoid` (a hole) and `sphere_with_gaps` (gaps along a seam), whose records include the diagnosis warning;
    - the synthetic files with nested shells in `examples/assets/synthetic/` (`hollow_sphere`, `cube_with_spherical_void`, `sphere_with_two_cavities`, `nested_island`), analysed with `cavities="keep"`.
 
    Each mesh is analysed with the four principal-dimension methods (`pca`, `min_volume`, `inertia_ellipsoid`, `fitted_ellipsoid`); the files with nested shells with `pca` and `min_volume`, and the cuboid also has a unit-conversion case. The CSV layout of a file result and the header of the batch summary are compared too. This baseline is `tools/baseline/results.json`.

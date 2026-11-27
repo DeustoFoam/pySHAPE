@@ -28,6 +28,9 @@ The Python package provides tools for 3D particle geometry and form analysis. It
   as a recorded fallback, and other formats through trimesh
 - An installable, headless Python library with JSON-compatible analysis results
 - Batch analysis of a folder (`analyze_folder`, `pyshape-batch`)
+- Diagnosis of open meshes (gaps left by export or rounding, or holes) and a
+  separate, conservative repair command (`pyshape-repair`) that writes a
+  repaired copy of the file with a report; the analysis never changes the input
 - Optional local HTTP API and HTML viewer, plus the existing desktop viewer; both
   previews colour the outer and inner side of the surface and the cavity walls
   differently and have an opacity control (default 20 %)
@@ -47,13 +50,15 @@ The Python package provides tools for 3D particle geometry and form analysis. It
 - `pyshape/bounding.py` and `pyshape/ellipsoid.py` — principal dimensions from
   an oriented bounding box or an equivalent ellipsoid
 - `pyshape/batch.py` — batch analysis of a folder (`pyshape-batch`)
+- `pyshape/repair.py` — diagnosis of open meshes and the repair command
+  (`diagnose_mesh`, `repair_mesh`, `pyshape-repair`)
 - `pyshape/descriptors.py` — help texts of the results and controls, used by both viewers
 - `pyshape/gui.py` (with the Tk-free helpers in `pyshape/gui_core.py`) — desktop viewer
 - `pyshape/web.py` and `pyshape/static/` — optional API and browser viewer
 - `examples/` — runnable demos and bundled STL assets;
   `examples/assets/synthetic/` is a fixed collection of synthetic test particles
   (sphere, ellipsoid, cuboid, torus, rough particle, overlapping spheres, open
-  surface, and solids with cavities), made by `examples/make_synthetic_assets.py`
+  surfaces, and solids with cavities), made by `examples/make_synthetic_assets.py`
 - `tests/` — unit tests
 - `tools/audit.py` and `tools/baseline/` — audit of functions and results
   against a recorded baseline ([docs/audit.md](docs/audit.md))
@@ -253,6 +258,62 @@ strict_stl=True)` and `pyshape-batch --strict-stl` disable the fallback and
 raise the parser's error instead. Other formats read by trimesh give no
 warning.
 
+### Open meshes and `pyshape-repair`
+
+pySHAPE analyses the surface it is given and never repairs it during the
+analysis. When a mesh is open (an edge used by one triangle) or non-manifold
+(an edge used by more than two), the volume-based results are unavailable and
+the result carries a warning saying whether the openings look like small gaps
+left by export or rounding, or like holes:
+
+```python
+result = analyze_file("particle.stl")
+result.warnings
+# ['Open surface: 96 boundary edges. All 96 boundary vertices lie within 0.000144
+#   (0.001 x the median edge length) of another boundary vertex: the openings are
+#   probably gaps left by export or rounding, which pyshape-repair can close ...']
+```
+
+The same text is in the CSV files (`warning` rows), the batch summary and
+both interfaces. `diagnose_mesh(nodes, faces)` returns the counts behind it.
+
+Small gaps can be closed by a separate step, which writes a new file that can
+be inspected, kept with the data and analysed like any other:
+
+```bash
+pyshape-repair particle.stl            # writes particle_repaired.stl and particle_repaired.json
+pyshape-repair --check *.stl           # only report; write nothing
+pyshape-repair particle.obj --tol 1e-4 -o particle_fixed.stl
+```
+
+It merges exactly coincident vertices, removes degenerate and duplicate
+triangles, and stitches the boundary: a boundary vertex within the tolerance
+(by default `--rel-tol 1e-3` times the median edge length, or an absolute
+`--tol` in file units) of another boundary vertex is moved onto it. Only
+boundary vertices move, by at most the tolerance; vertices joined by an edge
+are never merged, groups do not chain, and stitching is refused if it would
+create a non-manifold edge or a duplicate triangle. Holes wider than the
+tolerance stay open: holes are not filled, non-manifold edges are not split,
+T-junctions are not resolved, and the winding is left to `prepare_mesh`. For
+larger repairs, use a dedicated tool such as MeshLab, PyMeshFix or Blender's
+3D-Print toolbox, where the result can be checked. The report (also printed)
+gives the counts of every step, the tolerance, the largest displacement, the
+surface area before and after, the pySHAPE version and the SHA-256 of the
+input file. The input is never overwritten, and nothing is written when
+nothing changes. Output is STL (binary when lossless, otherwise ASCII with 17
+significant digits; `pyshape.write_stl`), or any format trimesh writes, by the
+extension of `-o`. In Python:
+
+```python
+from pyshape import load_geometry, repair_mesh, write_stl
+
+geometry = load_geometry("particle.stl")
+nodes, faces, report = repair_mesh(geometry.nodes, geometry.faces)
+print("\n".join(report.summary()))
+if report.closed:
+    write_stl("particle_repaired.stl", nodes, faces)
+```
+
 ### Input and result contract
 
 - `analyze_mesh` accepts nonempty `(N, 3)` vertex coordinates and `(M, 3)`
@@ -337,7 +398,8 @@ warning.
 - Closed, orientable mesh shells have their triangle winding corrected
   automatically by `prepare_mesh`, including wholly reversed shells; the original arrays/files
   are not changed. Volume requires nonzero enclosed volume. Open/non-manifold
-  meshes are not filled and still report unavailable volume-dependent metrics.
+  meshes are not filled and still report unavailable volume-dependent metrics;
+  their `warnings` carry a diagnosis (see "Open meshes and `pyshape-repair`").
 - Multi-sphere/multi-component particles are interpreted as a **solid union**:
   overlapping material counts once, and internal surfaces are excluded from
   area and orientation calculations. By default (`cavities="fill"`) nested
@@ -504,11 +566,11 @@ python examples/shapes_gallery.py
 
 The optional GUI viewer is in `examples/gui_shape_viewer.py`; it requires Tk and Matplotlib.
 
-`examples/assets/synthetic/` holds 13 synthetic particles (binary STL,
+`examples/assets/synthetic/` holds 14 synthetic particles (binary STL,
 dimensionless coordinates) for tests and for trying the interfaces: sphere,
 ellipsoid, cuboid, subdivided cube, regular tetrahedron, torus, rough
-particle, two overlapping spheres, an open surface, and four solids with
-cavities. `python examples/make_synthetic_assets.py` regenerates them; their
+particle, two overlapping spheres, two open surfaces (one with a hole, one
+with small gaps along a seam), and four solids with cavities. `python examples/make_synthetic_assets.py` regenerates them; their
 [README](examples/assets/synthetic/README.md) says what each is for.
 
 ## Desktop GUI
