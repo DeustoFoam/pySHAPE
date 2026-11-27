@@ -43,7 +43,10 @@ REFINEMENT_STARTS = 10
 class OrientedBox(NamedTuple):
     """Box edge lengths sorted as short, intermediate, long, with directions.
 
-    ``directions`` rows are unit vectors parallel to the S, I and L edges.
+    ``directions`` rows are unit vectors parallel to the S, I and L edges, and
+    ``center`` is the centre of the box in the coordinates of the mesh: the
+    midpoint of the vertex extents along the three directions. The box moves
+    with the particle; nothing depends on the coordinate origin.
     """
 
     short: float

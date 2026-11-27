@@ -284,7 +284,9 @@ AXES_METHODS: dict[str, dict[str, object]] = {
     "pca": _entry(
         "Box aligned with the principal directions of the vertices (fast).",
         "S, I, L are the extents of the vertices along the principal directions of their "
-        "covariance (SHAPE's PCA_points option). These directions are not unique for shapes "
+        "covariance (SHAPE's PCA_points option); the box is centred on the particle, so "
+        "the result does not depend on where the particle is. These directions are not "
+        "unique for shapes "
         "with isotropic vertex covariance (cubes, regular tetrahedra, octahedra, "
         "icosahedra, spheres), so the box then depends on how the mesh is oriented.",
         depends_on="NumPy only.", references=("shape2021",)),
@@ -298,9 +300,10 @@ AXES_METHODS: dict[str, dict[str, object]] = {
     "inertia_ellipsoid": _entry(
         "Full axes of the ellipsoid with the particle's volume and principal moments of inertia.",
         "S, I, L are the full axes 2c, 2b, 2a of the uniform ellipsoid that has the particle's "
-        "volume V and principal moments of inertia, along the principal directions of "
+        "volume V and principal moments of inertia, centred on the particle's barycentre "
+        "and along its principal directions of "
         "inertia. No fitting is involved: the result is unique, independent of the mesh "
-        "orientation and of how vertices are distributed, and gives equal lengths for the "
+        "position, orientation and of how vertices are distributed, and gives equal lengths for the "
         "Platonic solids. For a cuboid the ratios equal the box ratios. The axes are not "
         "enclosing dimensions: they differ from box dimensions by a factor that depends on "
         "the shape (for a cuboid, √(5/3) ≈ 1.29 times the sides), "
@@ -314,7 +317,9 @@ AXES_METHODS: dict[str, dict[str, object]] = {
         "Full axes of the ellipsoid fitted to the surface vertices by least squares.",
         "S, I, L are the full axes 2c, 2b, 2a of the ellipsoid fitted to the surface vertices "
         "by algebraic least squares with the constraint A + B + C = 3, as the fitted "
-        "ellipsoid of SHAPE. Unlike SHAPE, each vertex is weighted by its share of the "
+        "ellipsoid of SHAPE. Its centre is fitted too (it need not be the barycentre), so "
+        "the result does not depend on where the particle is. Unlike SHAPE, each vertex is "
+        "weighted by its share of the "
         "surface area, and the fitted quadric is checked: if it is not an ellipsoid (or the "
         "mesh has fewer than nine vertices), S, I, L and the indices derived from them are "
         "reported as unavailable. The axes are not enclosing dimensions, so Zingg classes "

@@ -256,11 +256,16 @@ def estimate_axes(nodes: np.ndarray) -> tuple[float, float, float, np.ndarray]:
 
 
 def convex_hull_volume(nodes: np.ndarray) -> float:
-    """Compute convex-hull volume with optional SciPy."""
+    """Compute convex-hull volume with optional SciPy.
+
+    The hull is built from coordinates relative to the vertex mean, so that its
+    precision does not depend on where the particle is (issue #32).
+    """
     from scipy.spatial import ConvexHull, QhullError
 
+    points = np.asarray(nodes, dtype=float)
     try:
-        return float(ConvexHull(nodes).volume)
+        return float(ConvexHull(points - points.mean(axis=0)).volume)
     except QhullError as exc:
         raise ValueError("Cannot construct a three-dimensional convex hull") from exc
 

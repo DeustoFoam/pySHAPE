@@ -26,6 +26,19 @@ https://doi.org/10.5281/zenodo.24004678).
 - `examples/assets/synthetic/sphere_with_gaps.stl`: a sphere whose
   hemispheres do not share their seam vertices (gaps of 1e-6).
 
+### Changed
+- Convexity: the convex hull is built from coordinates relative to the vertex
+  mean, so its precision no longer depends on how far the particle is from
+  the coordinate origin (#32; about 2e-12 relative at 1e6 particle sizes
+  before, round-off now). Values near the origin are unchanged.
+
+### Documentation
+- Where the boxes and ellipsoids of the principal dimensions are centred
+  (#32): box centre, barycentre (inertia-equivalent ellipsoid) or fitted
+  centre (fitted ellipsoid); never the coordinate origin. Docstrings, help
+  texts and README. New tests check that every result is invariant under
+  translation and that the centres move with the particle.
+
 ### Development
 - `tools/audit.py`: reference cases for the open synthetic files
   (`open_ellipsoid`, `sphere_with_gaps`), including their warnings.
