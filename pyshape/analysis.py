@@ -349,15 +349,20 @@ def compute_metrics(
 
     # Envelope (outer surface, cavities filled): the form descriptors use it.
     env_volume, env_centroid, env_moments, env_axes = volume, centroid, moments, principal_axes
+    envelope_error = volume_error
     if separate_envelope and volume is not None:
-        env_volume, env_centroid = mesh_volume_centroid(env_nodes, env_faces)
-        env_volume = abs(env_volume)
-        env_moments, env_axes = closed_surface_inertia_tensor(env_nodes, env_faces, env_centroid)[1:]
+        try:
+            env_volume, env_centroid = mesh_volume_centroid(env_nodes, env_faces)
+            env_volume = abs(env_volume)
+            env_moments, env_axes = closed_surface_inertia_tensor(
+                env_nodes, env_faces, env_centroid)[1:]
+        except ValueError as exc:  # reported on the envelope-based results, not raised
+            env_volume, envelope_error = None, f"envelope: {exc}"
     filled = "cavities are filled (cavities='fill')"
     if solid.n_cavities is None:
         cavity_rows = [(None, filled)] * 3
-    elif volume is None:
-        cavity_rows = [(solid.n_cavities, None), (None, volume_error), (None, volume_error)]
+    elif volume is None or env_volume is None:
+        cavity_rows = [(solid.n_cavities, None), (None, envelope_error), (None, envelope_error)]
     else:
         void = env_volume - volume
         cavity_rows = [(solid.n_cavities, None), (void, None), (void / env_volume, None)]
@@ -370,10 +375,10 @@ def compute_metrics(
 
     add("sphericity_wadell", "Sphericity (Wadell)",
         sphericity_wadell(env_volume, outer_area) if env_volume is not None else None,
-        GROUP_SURFACE_FORM, error=volume_error)
+        GROUP_SURFACE_FORM, error=envelope_error)
     convexity = None
-    hull_error = volume_error
-    if volume is not None:
+    hull_error = envelope_error
+    if env_volume is not None:
         try:
             hull_volume = convex_hull_volume(env_nodes)
             if hull_volume <= 0:
@@ -400,8 +405,8 @@ def compute_metrics(
 
     dims_error = None
     if axes == "inertia_ellipsoid":
-        if volume is None:
-            dims_error = f"inertia-equivalent ellipsoid unavailable: {volume_error}"
+        if env_volume is None:
+            dims_error = f"inertia-equivalent ellipsoid unavailable: {envelope_error}"
         else:
             try:
                 dims = inertia_ellipsoid_from_moments(env_volume, env_moments, env_axes, env_centroid)

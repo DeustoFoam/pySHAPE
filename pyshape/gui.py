@@ -728,8 +728,9 @@ class ShapeGUI(tk.Tk):
 
     def _tick_rotation(self):
         if self.nodes is not None and not self._rotating_paused:
-            self._azim = (self._azim + ROTATION_DEG_PER_TICK) % 360.0
-            self.ax.view_init(elev=20, azim=self._azim)
+            # Continue from the current view, so a manual drag is not undone.
+            self._azim = (float(self.ax.azim) + ROTATION_DEG_PER_TICK) % 360.0
+            self.ax.view_init(elev=float(self.ax.elev), azim=self._azim)
             self._recolor_mesh()
             self.canvas.draw_idle()
         self._rotation_job = self.after(ROTATION_INTERVAL_MS, self._tick_rotation)
